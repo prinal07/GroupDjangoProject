@@ -1,1 +1,1 @@
-# GSWEP---Django
+# Group Django Project
