@@ -1,7 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>
+    Registration
+</title>
+<script src = "register.js">
+</script>
+</head>
 
+
+</html>
 
 <h3>Register</h3>
 
 <form method="POST" action = "">
+    {% csrf_token %}
     {{form.as_p}}
+
+    <input type="submit" name="Create User">
 </form>
+
+{% if error_message %}
+    <div class="alert alert-danger">
+        {{ error_message }}
+    </div>
+{% endif %}

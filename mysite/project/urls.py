@@ -6,7 +6,8 @@ app_name = 'project'
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('register/',views.registerPage,name="register"),
+    # path('register/add/', view.register, name = addUser)
+    path('register/',views.registerPage.as_view(),name="register"),
     path('login/',views.loginPage,name="login")
 ]
 
