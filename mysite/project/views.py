@@ -7,7 +7,6 @@ from .forms import CreateUserForm
 
 from django.http import HttpResponse
 
-
 def index(request):
     return render(request, 'project/index.html')
 
