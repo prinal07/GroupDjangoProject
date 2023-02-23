@@ -9,9 +9,7 @@ from django.http import HttpResponse
 def index(request):
     return render(request, 'project/index.html')
 
+
 def registerPage(request):
-    form = UserCreationForm()
     context = {}
-    return render(request, 'project/register.html',context)
-
-
+    return render(request, 'project/register.html', context)
