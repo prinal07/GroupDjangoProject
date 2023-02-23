@@ -13,3 +13,8 @@ def index(request):
 def registerPage(request):
     context = {}
     return render(request, 'project/register.html', context)
+
+
+def loginPage(request):
+    context = {}
+    return render(request, 'project/login.html', context)
