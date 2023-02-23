@@ -1,92 +1,88 @@
-*{
-    background-color: rgb(202, 202, 202);
-  }
-  
-  body {
-    margin: 0;
-  }
-  
+
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 200px;
+  background-color: #348d5d;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.3s ease;
+}
+
+.sidebar.collapsed {
+  width: 50px;
+}
+
+.toggle-btn {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  cursor: pointer;
+  color: #fff;
+}
+
+.toggle-btn span {
+  width: 30px;
+  height: 3px;
+  margin: 3px 0;
+  background-color: #fff;
+  transition: all 0.3s ease;
+}
+
+.sidebar.collapsed .toggle-btn span {
+  width: 20px;
+}
+
+.btn {
+  padding: 16px;
+  text-align: center;
+  color: #fff;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.btn.active {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.sidebar.collapsed .btn {
+  padding: 16px 10px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.sidebar.collapsed .btn.active {
+  padding: 16px;
+}
+
+@media (max-width: 768px) {
   .sidebar {
-    position: fixed;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 200px;
-    background-color: #348d5d;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    transition: all 0.3s ease;
+    width: 100%;
   }
-  
+
   .sidebar.collapsed {
-    width: 50px;
+    width: 0;
   }
-  
-  .toggle-btn {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 50px;
-    cursor: pointer;
-    color: #fff;
-  }
-  
-  .toggle-btn span {
-    width: 30px;
-    height: 3px;
-    margin: 3px 0;
-    background-color: #fff;
-    transition: all 0.3s ease;
-  }
-  
+
   .sidebar.collapsed .toggle-btn span {
-    width: 20px;
+    display: none;
   }
-  
-  .btn {
-    padding: 16px;
-    text-align: center;
-    color: #fff;
-    text-decoration: none;
-    transition: all 0.3s ease;
-  }
-  
-  .btn:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-  }
-  
-  .btn.active {
-    background-color: rgba(255, 255, 255, 0.2);
-  }
-  
+
   .sidebar.collapsed .btn {
     padding: 16px 10px;
-    overflow: hidden;
-    white-space: nowrap;
   }
-  
+
   .sidebar.collapsed .btn.active {
     padding: 16px;
   }
-  
-  @media (max-width: 768px) {
-    .sidebar {
-      width: 100%;
-    }
-    .sidebar.collapsed {
-      width: 0;
-    }
-    .sidebar.collapsed .toggle-btn span {
-      display: none;
-    }
-    .sidebar.collapsed .btn {
-      padding: 16px 10px;
-    }
-    .sidebar.collapsed .btn.active {
-      padding: 16px;
-    }
-  }
-  
+}
