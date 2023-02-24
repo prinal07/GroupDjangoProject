@@ -3,4 +3,9 @@ from . models import User
 
 # Register your models here.
 
-admin.site.register(User)
+
+class UserAdmin(admin.ModelAdmin):
+    list_display = ('username', 'is_my_bool_field_true')
+
+admin.site.register(User, UserAdmin)
+
