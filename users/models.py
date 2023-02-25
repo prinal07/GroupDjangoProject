@@ -13,6 +13,15 @@ class User(models.Model):
     group = models.IntegerField(default=0)
     level = models.IntegerField(default=0)
     points = models.IntegerField(default=0)
+    staffCheck = models.BooleanField()
+
+    def is_my_bool_field_true(self):
+        if self.staffCheck:
+            return "Yes"
+        else:
+            return "No"
+
+    is_my_bool_field_true.short_description = "University Staff"
 
     def __str__(self):
         return self.username
