@@ -5,4 +5,5 @@ from users import views as user_views
 from player import views as player_views
 
 
-urlpatterns = [path('', player_views.home, name="overview")]
+urlpatterns = [path('', player_views.home, name="overview"),
+               path('leaderboard/',player_views.leaderboard,name="leaderboard")]

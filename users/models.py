@@ -13,7 +13,7 @@ class User(models.Model):
     group = models.IntegerField(default=0)
     level = models.IntegerField(default=0)
     points = models.IntegerField(default=0)
-    staffCheck = models.BooleanField()
+    staffCheck = models.BooleanField(default=False)
 
     def is_my_bool_field_true(self):
         if self.staffCheck:
