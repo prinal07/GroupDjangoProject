@@ -1,0 +1,16 @@
+{% extends "../../users/templates/users/playerbase.html" %}
+
+
+{% block content %}
+
+    <div class = main>
+
+         {% for user in leaderboard %}
+   <br> {{ user.username }} {{ user.points}}
+
+       {% endfor %}
+
+    </div>
+
+
+{% endblock %}
