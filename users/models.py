@@ -15,6 +15,8 @@ class User(models.Model):
     points = models.IntegerField(default=0)
     staffCheck = models.BooleanField(default=False)
 
+
+
     def is_my_bool_field_true(self):
         if self.staffCheck:
             return "Yes"
