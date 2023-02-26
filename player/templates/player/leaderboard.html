@@ -3,14 +3,18 @@
 
 {% block content %}
 
-    <div class = main>
+    <div class=leaderboards>
 
-         {% for user in user_acc_leaderboard %}
+        User Leaderboard:
+
+        {% for user in user_acc_leaderboard %}
    <br> {{ user.username }} {{ user.points}}
 
        {% endfor %}
 
-    {% for accom in acc_leaderboard %}
+        <br> Accommodation Leaderboard:
+
+        {% for accom in acc_leaderboard %}
         <br> {{ accom.accommodation }} {{ accom.points__sum }}
     {% endfor  %}
 

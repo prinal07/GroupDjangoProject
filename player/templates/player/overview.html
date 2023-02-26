@@ -1,22 +1,33 @@
 {% extends "player/playerbase.html" %}
 
+
+
 {% block content %}
 
-    <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+    <div class=main>
 
-Overview
+        Overview
 
-</body>
-</html>
+    </div>
+
+    <div class=leaderboards>
+
+        User Leaderboard Top 5:
+
+        {% for user in user_acc_leaderboard %}
+            <br> {{ user.username }} {{ user.points }}
+
+        {% endfor %}
+
+        <br> Accommodation Leaderboard Top 5:
+
+        {% for accom in acc_leaderboard %}
+            <br> {{ accom.accommodation }} {{ accom.points__sum }}
+        {% endfor %}
+
+    </div>
+
 
 {% endblock %}
-
-
 
 
