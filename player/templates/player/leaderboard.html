@@ -5,10 +5,14 @@
 
     <div class = main>
 
-         {% for user in leaderboard %}
+         {% for user in user_acc_leaderboard %}
    <br> {{ user.username }} {{ user.points}}
 
        {% endfor %}
+
+    {% for accom in acc_leaderboard %}
+        <br> {{ accom.accommodation }} {{ accom.points__sum }}
+    {% endfor  %}
 
     </div>
 
