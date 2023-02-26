@@ -1,4 +1,4 @@
-<style>@media screen and (max-width: 600px) {
+	<style>@media screen and (max-width: 600px) {
 	* {
 		display: block;
 	}
@@ -21,7 +21,6 @@
 
 
 body {
-	background-color: #4e4e4e;
 	margin: 0 0;
 	padding-right: 10px;
 }
@@ -31,8 +30,8 @@ body {
 	margin: 100px auto;
 	font-family: Raleway;
 	overflow: hidden;
-	padding: 40px;
-	max-width: 30%;
+	padding: 30px;
+	max-width: 60%;
 	min-width: 300px;
 	border-radius: 30px;
   min-height: 10%;
@@ -204,7 +203,9 @@ select.invalidSelect {
 
 </style>
 
-
+{% extends "sitePage/base.html" %}
+{% block content %}
+    {% csrf_token %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -219,13 +220,14 @@ select.invalidSelect {
 
 <body>
 
-    <form id="regForm" action="#" method="POST">
-        <h1>Register</h1>
+    <form id="regForm" method="POST">
+    {% csrf_token %}
 
+        <h1>Register</h1>
+		<br>
         <div>
             <div class="tab">
-				<p><input placeholder="E-mail..." type="email" oninput="this.className = ''" onblur="emailCheck()" name="email"></p>
-				<!-- <p><input placeholder="E-mail..." type="email" oninput="this.className = ''" name="email" onchange="emailCheck()"></p> -->
+				<p><input placeholder="E-mail..." type="email" oninput="this.className = ''" onblur="emailCheck()" name="email" id="emailInput"></p>
 				<div id="wrongemail" style="background-color:red; display:none">
 					wrong email
 				</div>
@@ -236,7 +238,7 @@ select.invalidSelect {
             <div class="tab">
                 <div class="container">
                     <table>
-                        <tr>
+                        <tr id="accomodationSelect" style="display: none;"">
                             <td id="question">Accomodation</td>
                             <td class="wide">
                                 <select name="S1Q1" required>
@@ -244,6 +246,18 @@ select.invalidSelect {
                                     <option value="lafrowda">Lafrowda</option>
                                     <option value="Moberly">Moberly</option>
                                     <option value="Picturehouse">Picturehouse</option>
+                                </select>
+                            </td>
+                        </tr>
+						
+						<tr id="departmentSelect" style="display: none;">
+                            <td id="question">Department</td>
+                            <td class="wide">
+                                <select name="S1Q1" required>
+                                    <option hidden disabled selected> -- Select an option -- </option>
+                                    <option value="lafrowda">Comp Sci</option>
+                                    <option value="Moberly">Buniss</option>
+                                    <option value="Picturehouse">Gender studies</option>
                                 </select>
                             </td>
                         </tr>
@@ -256,8 +270,8 @@ select.invalidSelect {
 
            <div class="tab">
             
-            <p><input placeholder="Password..." oninput="this.className = ''" name="password"></p>
-            <p><input placeholder="Confirm Password..." oninput="this.className = ''" name="password2"></p>
+            <p><input placeholder="Password..." oninput="this.className = ''" name="password" id="password" onblur="passwordCheck()"></p>
+            <p><input placeholder="Confirm Password..." oninput="this.className = ''" name="password2" id="password2" onblur="duplicatePasswords()">
                 
 
             </div>
@@ -273,6 +287,7 @@ select.invalidSelect {
                 <button type="button" id="nextBtn" style="width:100px" onclick="nextPrev(1)">Next</button>
             </div>
         </div>
+		<br>
         <div style="text-align:center;margin-top:0px;margin-bottom:0px;">
             <span class="step"></span>
             <span class="step"></span>
@@ -370,8 +385,7 @@ function validateForm() {
 	}
 	// If the valid status is true, mark the step as finished and valid:
 	if (valid) {
-		document.getElementsByClassName("step")[currentTab].className +=
-			" finish";
+		document.getElementsByClassName("step")[currentTab].className += " finish";
 	}
 	return valid; // return the valid status
 }
@@ -392,19 +406,28 @@ function fixStepIndicator(n) {
 function emailCheck() {
 
 
-	email = document.querySelector('#textbox_id').value
+	email = document.querySelector('#emailInput').value
 	address = email.split('@').pop()
 	dotCount = email.substring(0, email.indexOf("@")).split(".").length - 1;
 
 
   	if (address != "exeter.ac.uk"){
-  		toggleWrongEmail();
-  	}
+  		toggleWrongEmail(1);
+  	} else {
+  		toggleWrongEmail(2);
+	}
+
+	const departmentTR = document.getElementById('departmentSelect');
+	const accomodationTR = document.getElementById('accomodationSelect');
 
     if (dotCount == 0) {
-      // is a student - show accomodations - use python to pull from group list
+      	// is a student - show accomodations - use python to pull from group list
+  		accomodationTR.style.display = '';
+  		departmentTR.style.display = 'none';
     } else if(dotCount == 1) {
-      // is staff - show departments - use python to pull from group list
+      	// is staff - show departments - use python to pull from group list
+		  departmentTR.style.display = '';
+		accomodationTR.style.display = 'none';
     } else {
     	// invalid email - too many periods
     }
@@ -412,15 +435,42 @@ function emailCheck() {
 }
 
 
-function toggleWrongEmail() {
-	alert("nig")
-  const wrongEmailDiv = document.getElementById('wrongemail');
-  if (wrongEmailDiv.style.display === 'none') {
-    wrongEmailDiv.style.display = 'block';
-  } else {
-    wrongEmailDiv.style.display = 'none';
-  }
+function toggleWrongEmail(num) {
+	const wrongEmailDiv = document.getElementById('wrongemail');
+
+	if (num == 1){
+  		wrongEmailDiv.style.display = 'block';
+	} else {
+		wrongEmailDiv.style.display = 'none';
+	}
+  
 }
 
+ function passwordCheck(){
+	if (password1.length < 8) {
+      alert("Password must be at least 8 characters long!");
+    }
+
+    if (!/\d/.test(password1)) {
+      alert("Password must contain at least one number!");
+    }
+
+    if (/^\d+$/.test(password1)) {
+      alert("Password must contain at least one non-numeric character!");
+    }
+ }
+
+
+ function duplicatePasswords() {
+    var password1 = document.getElementById("password").value;
+    var password2 = document.getElementById("password2").value;
+
+    if (password1 != password2) {
+      alert("Passwords do not match!");
+    }
+
+  }
 
 </script>
+
+{% endblock content %}
