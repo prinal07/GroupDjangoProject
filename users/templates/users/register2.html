@@ -224,7 +224,8 @@ select.invalidSelect {
 
         <div>
             <div class="tab">
-				<p><input placeholder="E-mail..." type="email" oninput="this.className = ''" name="email" onchange="emailCheck()"></p>
+				<p><input placeholder="E-mail..." type="email" oninput="this.className = ''" onblur="emailCheck()" name="email"></p>
+				<!-- <p><input placeholder="E-mail..." type="email" oninput="this.className = ''" name="email" onchange="emailCheck()"></p> -->
 				<div id="wrongemail" style="background-color:red; display:none">
 					wrong email
 				</div>
@@ -398,7 +399,6 @@ function emailCheck() {
 
   	if (address != "exeter.ac.uk"){
   		toggleWrongEmail();
-
   	}
 
     if (dotCount == 0) {
@@ -413,6 +413,7 @@ function emailCheck() {
 
 
 function toggleWrongEmail() {
+	alert("nig")
   const wrongEmailDiv = document.getElementById('wrongemail');
   if (wrongEmailDiv.style.display === 'none') {
     wrongEmailDiv.style.display = 'block';
