@@ -116,6 +116,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 # Stores uploaded profile images
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 # how we will access image in browser
 MEDIA_URL = '/media/'
 
