@@ -2,15 +2,16 @@
 
 {% block content %}
 
+
     <div class=main>
         <h1>Overview</h1>
     </div>
 
     <div class=leaderboards>
 
-        <h2>User Leaderboard Top 5:</h2>
+        <h2 class="leaderboard-title">User Leaderboard Top 5:</h2>
 
-        <table>
+        <table id='user_leaderboard'>
             <thead>
             <tr>
                 <th>Username</th>
@@ -27,9 +28,9 @@
             </tbody>
         </table>
 
-        <h2>Accommodation Leaderboard Top 5:</h2>
+        <h2 class="leaderboard-title">Accommodation Leaderboard Top 5:</h2>
 
-        <table>
+        <table id='accommodation_leaderboard'>
             <thead>
             <tr>
                 <th>Accommodation</th>
