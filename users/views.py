@@ -4,8 +4,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import UserRegistrationForm
 from .models import User
-
-
+import re
 
 # Create your views here.
 def register(request):
@@ -51,4 +50,6 @@ def register(request):
         form = UserRegistrationForm()
     return render(request, 'users/register.html', {'form': form})
 
+def register2(request):
+    return render(request, 'users/register2.html')
 
