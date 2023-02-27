@@ -6,4 +6,4 @@ class PlayerConfig(AppConfig):
     name = 'player'
 
     def ready(self):
-        import player.signals
+        pass

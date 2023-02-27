@@ -1,7 +1,6 @@
 import re
 
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from .forms import UserRegistrationForm
 from .models import User
@@ -37,7 +36,9 @@ def register(request):
 
             if exeterCheck:
                 new_user = User(username=username, password=password, accommodation=accommodation, staffCheck = localStaffBool)
+                # Saves user to Users section of database
                 new_user.save()
+                #Saves user to Django validation and verification
                 form.save()
 
                 messages.success(request, f'Account created for {username} Staff status {localStaffBool}')

@@ -34,4 +34,3 @@ urlpatterns = [
 # Request is made to image location in media directory which means it should NOT be under 'player/' media url at top level
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    print(urlpatterns)
