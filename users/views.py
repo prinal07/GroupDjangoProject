@@ -1,5 +1,6 @@
+import re
+
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from .forms import UserRegistrationForm
 from .models import User
@@ -22,7 +23,7 @@ def register(request):
 
             # Check if the domain part matches the expected suffix
             if domain_part.endswith(expected_suffix):
-                exeterCheck = True 
+                exeterCheck = True
             # Can add a list of allowed domains to be checked.
             else:
                 exeterCheck = False
@@ -34,7 +35,9 @@ def register(request):
 
             if exeterCheck:
                 new_user = User(username=username, password=password, accommodation=accommodation, staffCheck = localStaffBool)
+                # Saves user to Users section of database
                 new_user.save()
+                #Saves user to Django validation and verification
                 form.save()
 
                 messages.success(request, f'Account created for {username} Staff status {localStaffBool}')
