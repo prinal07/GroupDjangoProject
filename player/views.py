@@ -16,7 +16,7 @@ def home(request):
 
     # annotate creates new field for each accomdation group
     # creating sum column for each accommodation
-    all_accommodations = User.objects.values('accommodation').annotate(Sum('points')).order_by()[:5]
+    all_accommodations = User.objects.values('accommodation').annotate(Sum('points')).order_by('-points__sum')[:5]
     print(all_accommodations)
     return render(request, 'player/overview.html',
                   {'title': 'Overview', 'user_acc_leaderboard': all_users_accommodation,
