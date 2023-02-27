@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import User as django_user
 
 # Create your models here.
 
@@ -28,7 +28,7 @@ class User(models.Model):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(django_user, on_delete=models.CASCADE)
     image = models.ImageField(default='default.jpg', upload_to='profile_pics')
 
     def __str__(self):
