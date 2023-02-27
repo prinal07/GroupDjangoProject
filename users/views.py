@@ -34,7 +34,7 @@ def register(request):
                 localStaffBool = False
 
             if exeterCheck:
-                new_user = Account(username=username, password=password, accommodation=accommodation,
+                new_user = Account(username=username, password=password, email=email, accommodation=accommodation,
                                    staffCheck=localStaffBool)
                 # Saves user to Users section of database
                 new_user.save()
