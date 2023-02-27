@@ -3,7 +3,7 @@ import re
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import UserRegistrationForm
-from .models import User
+from .models import Account
 import re
 
 # Create your views here.
@@ -34,7 +34,8 @@ def register(request):
                 localStaffBool = False
 
             if exeterCheck:
-                new_user = User(username=username, password=password, accommodation=accommodation, staffCheck = localStaffBool)
+                new_user = Account(username=username, password=password, accommodation=accommodation,
+                                   staffCheck=localStaffBool)
                 # Saves user to Users section of database
                 new_user.save()
                 #Saves user to Django validation and verification

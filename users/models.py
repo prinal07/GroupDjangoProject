@@ -4,7 +4,7 @@ from django.contrib.auth.models import User as django_user
 # Create your models here.
 
 # Store user information
-class User(models.Model):
+class Account(models.Model):
     profileClass = models.IntegerField(default=0)
     accommodation = models.CharField(max_length=30)
     email = models.CharField(max_length=30)
