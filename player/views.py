@@ -53,10 +53,20 @@ def home(request):
     if daily_points < 100:
         blur_strength = math.floor(10 - daily_points / 10)
 
+    # Compute progress bar for daily fact of day
+    fact_progress = daily_points
+    if fact_progress > 100:
+        fact_progress = 100
+
     return render(request, 'player/overview.html',
-                  {'title': 'Overview', 'user_points': user_points, 'daily_points': daily_points,
+                  {'title': 'Overview',
+                   'user_points': user_points,
+                   'daily_points': daily_points,
                    'user_acc_leaderboard': all_users_accommodation,
-                   'acc_leaderboard': all_accommodations, 'fact_today': fact_today, 'blur_strength': blur_strength})
+                   'acc_leaderboard': all_accommodations,
+                   'fact_today': fact_today,
+                   'blur_strength': blur_strength,
+                   'fact_progress': fact_progress})
 
 
 def leaderboard(request):
