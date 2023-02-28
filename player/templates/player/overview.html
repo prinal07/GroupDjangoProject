@@ -3,9 +3,27 @@
 {% block content %}
 
 
-    <div class=main>
+    <div class="overview" >
         <h1>Overview</h1>
     </div>
+    <br>
+
+    <div id="fotd-container">
+        <h2 class="leaderboard-title">
+            Fact of the day:
+        </h2>
+
+        <div class="fact-of-the-day">
+            <p>Unlocked soon</p>
+        </div>
+    </div>
+    
+    <div id="progress-container">
+        <div class="progress">
+            <div class="progress-bar" role="progressbar" style="width: 40%; background-color: rgb(170, 225, 170) !important;">40%</div>
+        </div>
+    </div>
+    <br>
 
     <div class=leaderboards>
 
@@ -48,5 +66,29 @@
         </table>
 
     </div>
+
+    <script>
+    // on page load...
+    moveProgressBar();
+    // on browser resize...
+    $(window).resize(function() {
+        moveProgressBar();
+    });
+
+    // SIGNATURE PROGRESS
+    function moveProgressBar() {
+      console.log("moveProgressBar");
+        var getPercent = ($('.progress-wrap').data('progress-percent') / 100);
+        var getProgressWrapWidth = $('.progress-wrap').width();
+        var progressTotal = getPercent * getProgressWrapWidth;
+        var animationLength = 2500;
+        
+        // on page load, animate percentage bar to data percentage length
+        // .stop() used to prevent animation queueing
+        $('.progress-bar').stop().animate({
+            left: progressTotal
+        }, animationLength);
+    }
+    </script>
 
 {% endblock %}
