@@ -28,8 +28,9 @@
 
 
     <div>
+
         <div id="fact-of-day" style="filter:blur({{ blur_strength }}px)">{{ fact_today }}</div>
-        <h3>Progress to fact of the day!</h3>
+        <h4 id="fact-progress-title">Progress to fact of the day!</h4>
         <div class="progress">
             <div class="progress-bar" role="progressbar" style="width:{{ fact_progress }}%"
                  aria-valuenow="{{ fact_progress }}" aria-valuemin="0" aria-valuemax="100"></div>
