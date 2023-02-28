@@ -1,5 +1,7 @@
 from django.shortcuts import render
 
+from challenges.templates import *
+
 
 # Create your views here.
 
