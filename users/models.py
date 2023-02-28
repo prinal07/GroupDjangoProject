@@ -1,5 +1,6 @@
 from datetime import date
 
+import math
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -19,6 +20,12 @@ class Account(models.Model):
     daily_points = models.IntegerField(default=0)
     last_day_accessed = models.DateField(default=date.today)
     staffCheck = models.BooleanField(default=False)
+
+    def current_level(self):
+        return math.ceil(self.points / 100)
+
+    def level_progress(self):
+        return self.points % 100
 
     def is_my_bool_field_true(self):
         if self.staffCheck:

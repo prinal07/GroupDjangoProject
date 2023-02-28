@@ -18,14 +18,30 @@
 
     </div>
 
-
-
-    <div id="fact-of-day" style="filter:blur({{ blur_strength }}px)">{{ fact_today }}</div>
-    <div class="progress">
-
-        <div class="progress-bar" role="progressbar" style="width:{{ fact_progress }}%"
-             aria-valuenow="{{ fact_progress }}" aria-valuemin="0" aria-valuemax="100"></div>
+    <div id='level-progress'>
+        <h3 id="current-level">Current Level: {{ current_level }}</h3>
+        <h3 id="level-progress-title">Progress to next Level</h3>
+        <div class="progress">
+            <div class="progress-bar" role="progressbar" style="width:{{ level_progress }}%"
+                 aria-valuenow="{{ level_progress }}" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
     </div>
+
+
+
+
+    <div>
+        <div id="fact-of-day" style="filter:blur({{ blur_strength }}px)">{{ fact_today }}</div>
+        <h3>Progress to fact of the day!</h3>
+        <div class="progress">
+            <div class="progress-bar" role="progressbar" style="width:{{ fact_progress }}%"
+                 aria-valuenow="{{ fact_progress }}" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+
+    </div>
+
+
+
 
 
 

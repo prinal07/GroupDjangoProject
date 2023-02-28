@@ -64,6 +64,8 @@ def home(request):
                    'daily_points': daily_points,
                    'user_acc_leaderboard': all_users_accommodation,
                    'acc_leaderboard': all_accommodations,
+                   'current_level': logged_account.current_level(),
+                   'level_progress': logged_account.level_progress(),
                    'fact_today': fact_today,
                    'blur_strength': blur_strength,
                    'fact_progress': fact_progress})
