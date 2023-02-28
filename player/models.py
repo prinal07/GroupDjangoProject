@@ -2,7 +2,7 @@ from django.db import models
 
 # Create your models here.
 
-class FactofDay(models.Model):
+class Fact(models.Model):
     date = models.DateField()
     fact = models.TextField()
 
