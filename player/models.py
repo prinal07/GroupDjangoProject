@@ -1,6 +1,7 @@
 from django.db import models
 
-# Create your models here.
+
+# Created a model here.
 
 class Fact(models.Model):
     date = models.DateField()
