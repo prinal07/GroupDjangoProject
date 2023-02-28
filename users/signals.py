@@ -2,7 +2,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import User as django_user
 
-from .models import Profile, User
+from .models import Profile, Account
 
 
 @receiver(post_save, sender=django_user)
