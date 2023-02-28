@@ -1,9 +1,12 @@
+from datetime import date
+
 from django.shortcuts import render, redirect
 from django.db.models import Sum
 from django.contrib import messages
 
 from player.forms import UserUpdateForm, ProfileUpdateForm, AccountUpdateForm
 from users.models import Account
+from .models import Fact
 
 
 # Create your views here.
@@ -21,9 +24,21 @@ def home(request):
     # creating sum column for each accommodation
     all_accommodations = Account.objects.values('accommodation').annotate(Sum('points')).order_by('-points__sum')[:5]
     print(all_accommodations)
+
+    # get fact of day
+    date_today = date.today()
+    fact_today = Fact.objects.filter(date=date_today).first().fact
+    print(fact_today)
+
+    # get user points
+
+    logged_username = request.user.username
+    logged_account = Account.objects.get(username=logged_username)
+    user_points = logged_account.points
+
     return render(request, 'player/overview.html',
-                  {'title': 'Overview', 'user_acc_leaderboard': all_users_accommodation,
-                   'acc_leaderboard': all_accommodations})
+                  {'title': 'Overview', 'user_points': user_points, 'user_acc_leaderboard': all_users_accommodation,
+                   'acc_leaderboard': all_accommodations, 'fact_today': fact_today})
 
 
 def leaderboard(request):
