@@ -1,8 +1,10 @@
 {% extends "player/playerbase.html" %}
 
+
 {% block content %}
     <script>
-
+        var dailyPoints =
+        {{ daily_points }}
     </script>
 
     <div class=main>
@@ -16,7 +18,9 @@
 
     </div>
 
-    <div id="fact-div" onload="setBlur({{ daily_points }})">{{ fact_today }}</div>
+
+    {#    <div id="fact-div" onload="setBlur()">{{ fact_today }}</div>#}
+    <div id="fact-div" style="filter:blur({{ blur_strength }}px)">{{ fact_today }}</div>
 
 
 

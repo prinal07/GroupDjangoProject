@@ -1,5 +1,6 @@
 from datetime import date
 
+import math
 from django.shortcuts import render, redirect
 from django.db.models import Sum
 from django.contrib import messages
@@ -46,10 +47,16 @@ def home(request):
 
     daily_points = logged_account.daily_points
 
+    # Calculate blur based on daily points
+
+    blur_strength = 0
+    if daily_points < 100:
+        blur_strength = math.floor(10 - daily_points / 10)
+
     return render(request, 'player/overview.html',
                   {'title': 'Overview', 'user_points': user_points, 'daily_points': daily_points,
                    'user_acc_leaderboard': all_users_accommodation,
-                   'acc_leaderboard': all_accommodations, 'fact_today': fact_today, 'progress': progress})
+                   'acc_leaderboard': all_accommodations, 'fact_today': fact_today, 'blur_strength': blur_strength})
 
 
 def leaderboard(request):
