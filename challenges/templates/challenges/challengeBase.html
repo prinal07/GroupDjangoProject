@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>EcoExeter</title>
+    <title>EcoExeter Challenges</title>
     <!-- bootstrap 5 css -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous"/>
@@ -22,22 +22,21 @@
 <div class="side-navbar active-nav d-flex justify-content-between flex-wrap flex-column" id="sidebar">
     <ul class="nav flex-column text-white w-100">
         <a href="#" class="nav-link h3 text-white my-2">
-            EcoExeter </br>SideBar
+            EcoExeter </br>Challenges
         </a>
         <li class="nav-link">
             <i class="bx bxs-dashboard"></i>
-            <a href="{% url 'overview' %}" class="mx-2">Overview</a>
+            <a href="{% url 'overview' %}" class="mx-2">Back</a>
+        </li>
+
+        <li class="nav-link">
+            <i class="bx bxs-dashboard"></i>
+            <a href="{% url 'challenge_overview' %}" class="mx-2">Challenge Manager</a>
         </li>
 
         <li class="nav-link">
             <i class="bx bx-user-check"></i>
             <a href="{% url 'collectibles' %}" class="mx-2">Collectibles</a>
-        </li>
-
-
-        <li class="nav-link">
-            <i class="bx bx-user-check"></i>
-            <a href="{% url 'QR Scanner' %}" class="mx-2">QR Scanner</a>
         </li>
 
         <li class="nav-link">
@@ -84,3 +83,5 @@
 </body>
 
 </html>
+
+

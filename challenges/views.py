@@ -13,5 +13,3 @@ def collectibles(request):
     return render(request, 'challenges/collectibles.html')
 
 
-def QRscan(request):
-    return render(request, 'challenges/QRscan.html')
