@@ -1,22 +1,23 @@
 {% extends "player/playerbase.html" %}
 
 {% block content %}
+    <script>
 
+    </script>
 
     <div class=main>
         <h1>Overview</h1>
     </div>
 
-    <div class="rectangular-box">
-        <div class="blurred-fact">
-            <p>{{ fact_today }}</p>
-        </div>
-        <div class="visible-fact">
-            <p>{{ fact_today }}</p>
-        </div>
+    <div class="user-points">
+
+        <h3 class="user-points-title"> User points: {{ user_points }}  </h3>
+        <h4 class="daily-user-points-title"> User points: {{ daily_points }}  </h4>
+
     </div>
 
-    <div class="progress-bar" style="width: {{ progress }}%"></div>
+    <div id="fact-div" onload="setBlur({{ daily_points }})">{{ fact_today }}</div>
+
 
 
     <div class=leaderboards>

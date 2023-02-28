@@ -1,5 +1,8 @@
+from datetime import date
+
 from django.db import models
 from django.contrib.auth.models import User
+
 
 # Create your models here.
 
@@ -13,6 +16,8 @@ class Account(models.Model):
     group = models.IntegerField(default=0)
     level = models.IntegerField(default=0)
     points = models.IntegerField(default=0)
+    daily_points = models.IntegerField(default=0)
+    last_day_accessed = models.DateField(default=date.today)
     staffCheck = models.BooleanField(default=False)
 
     def is_my_bool_field_true(self):

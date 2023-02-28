@@ -15,12 +15,18 @@ def home(request):
     # matching the username of Django User class with username our user class
     logged_username = request.user.username
     logged_user = Account.objects.get(username=logged_username)
-    print(logged_user.accommodation)
+    # collect time accessed
+    if logged_user.last_day_accessed.today() != date.today():
+        logged_user.daily_points = 0
+        logged_user.save()
+
+    logged_user.last_day_accessed = date.today()
+    logged_user.save()
 
     all_users_accommodation = Account.objects.all().filter(accommodation=logged_user.accommodation)
     all_users_accommodation = all_users_accommodation.order_by('-points')[:5]
 
-    # annotate creates new field for each accomdation group
+    # annotate creates new field for each accommodation group
     # creating sum column for each accommodation
     all_accommodations = Account.objects.values('accommodation').annotate(Sum('points')).order_by('-points__sum')[:5]
     print(all_accommodations)
@@ -36,9 +42,14 @@ def home(request):
     logged_account = Account.objects.get(username=logged_username)
     user_points = logged_account.points
 
+    # get daily user points
+
+    daily_points = logged_account.daily_points
+
     return render(request, 'player/overview.html',
-                  {'title': 'Overview', 'user_points': user_points, 'user_acc_leaderboard': all_users_accommodation,
-                   'acc_leaderboard': all_accommodations, 'fact_today': fact_today})
+                  {'title': 'Overview', 'user_points': user_points, 'daily_points': daily_points,
+                   'user_acc_leaderboard': all_users_accommodation,
+                   'acc_leaderboard': all_accommodations, 'fact_today': fact_today, 'progress': progress})
 
 
 def leaderboard(request):
