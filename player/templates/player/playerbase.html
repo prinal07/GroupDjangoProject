@@ -24,37 +24,22 @@
 <!-- Side-Nav -->
 <div class="side-navbar active-nav d-flex justify-content-between flex-wrap flex-column" id="sidebar">
     <ul class="nav flex-column text-white w-100">
-      <a href="#" class="nav-link h3 text-white my-2">
-        EcoExeter </br>SideBar
+      <a class="nav-link h3 text-white my-2">
+        <img src="{% static 'player/unilogo.png' %}" style="height: 40px;">
+        EcoExeter </br>
       </a>
-      <li class="nav-link">
-        <i class="bx bxs-dashboard"></i>
-        <a href="{% url 'overview' %}" class="mx-2">Home</a>
-      </li>
+      
+        <a href="{% url 'overview' %}" class="mx-2"><i class='bx bxs-home'></i>   Home</a>
 
-      <li  class="nav-link">
-        <i class="bx bxs-flag-alt"></i>
-        <a href="#" class="mx-2">Challenges</a>
-      </li>
+        <a href="#" class="mx-2"><i class="bx bxs-flag-alt"></i>   Challenges</a>
+           
+        <a href="{% url 'leaderboard' %}" class="mx-2"><i class="bx bxs-trophy"></i>   Leaderboard</a>
 
+        <a href="{% url 'profile' %}" class="mx-2"><i class="bx bxs-user"></i>   Profile</a>
 
-      <li  class="nav-link">
-        <i class="bx bxs-trophy"></i>
-        <a href="{% url 'leaderboard' %}" class="mx-2">Leaderboard</a>
-      </li>
-      <li  class="nav-link">
-        <i class="bx bxs-user"></i>
-        <a href="{% url 'profile' %}" class="mx-2">Profile</a>
-      </li>
-        <li  class="nav-link">
-        <i class="bx bxs-map"></i>
-        <a href="#" class="mx-2">Map</a>
-      </li>
+        <a href="#" class="mx-2"><i class="bx bxs-map"></i>   Map</a>
 
-      <li  class="nav-link">
-        <i class="bx bxs-log-out"></i>
-        <a href="{% url 'logout' %}" class="mx-2">Logout</a>
-      </li>
+        <a href="{% url 'logout' %}" class="mx-2"><i class="bx bxs-log-out"></i>   Logout</a>
 
     </ul>
     
@@ -66,9 +51,11 @@
   </div>
 
   <!-- Main Wrapper -->
-  <div class="p-1 my-container active-cont">
+  <div class="p-1 sidenav-container active-cont">
+    
+    
     <!-- Top Nav -->
-    <nav class="navbar top-navbar navbar-light bg-light px-5">
+    <nav class="navbar top-navbar navbar-light px-5">
       <a class="btn border-0" id="menu-btn"><i class="bx bx-menu"></i></a>
     </nav>
     <!--End Top Nav -->
@@ -85,7 +72,7 @@
 <script>
     var menu_btn = document.querySelector("#menu-btn");
     var sidebar = document.querySelector("#sidebar");
-    var container = document.querySelector(".my-container");
+    var container = document.querySelector(".sidenav-container");
     menu_btn.addEventListener("click", () => {
       sidebar.classList.toggle("active-nav");
       container.classList.toggle("active-cont");
