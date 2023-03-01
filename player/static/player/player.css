@@ -1,0 +1,113 @@
+body {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+  }
+  
+  .main {
+    padding: 20px 20px 20px 180px;
+  }
+  
+  /*profile  styling */
+  
+  .account-img {
+    height: 125px;
+    width: 125px;
+    margin-right: 20px;
+    margin-bottom: 16px;
+  }
+  
+  .account-heading {
+    font-size: 2.5rem;
+  }
+  
+  /*base 2 styling*/
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    min-height: 100vh;
+    background-color: #fff;
+  }
+  
+  .side-navbar {
+    width: 250px;
+    height: 100%;
+    position: fixed;
+    margin-left: -300px;
+    background-color: black;
+    transition: 0.5s;
+  }
+  
+  .sidenav-container {
+    transition: 0.4s;
+  }
+  
+  .side-navbar a {
+    padding: 10px;
+    font-size: large;
+    text-decoration: none;
+    color: #dedede
+  }
+  
+  .side-navbar a:hover {
+    background-color: rgb(137, 137, 137);
+  }
+  
+  .active-nav {
+    margin-left: 0;
+  }
+  
+  
+  .sidenav-container input {
+      border-radius: 2rem;
+      padding: 2px 20px;
+    }
+    
+    /* for main section */
+    .active-cont {
+      margin-left: 250px;
+    }
+    
+    #menu-btn {
+      background-color: black;
+      color: #fff;
+      margin-left: -62px;
+    }
+    
+  .overview {
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    margin-top: -3rem;
+    padding: 3px 0;
+    background-color: #dedede;
+  }
+  
+  .fact-of-the-day {
+    filter: blur(5px);
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  #fotd-container {
+    text-align: center;
+  }
+  
+  @import "compass/css3";
+  
+  .progress {
+    width: 100%;
+    height: 50px;
+    font-size: large;
+  }
+  
+  
+  #progress-container {
+    width: 100%;
+    margin: 0 auto;
+    max-width: 800px;
+  }

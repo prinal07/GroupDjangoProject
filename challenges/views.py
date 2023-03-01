@@ -5,7 +5,7 @@ from challenges.templates import *
 
 # Create your views here.
 
-def challengesOverview(request):
+def challengesBase(request):
     return render(request, 'challenges/challengeBase.html')
 
 def challengeManager(request):

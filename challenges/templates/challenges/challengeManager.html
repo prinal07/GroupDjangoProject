@@ -6,25 +6,28 @@
 <html>
   <head>
     <title>My Page</title>
-    {%load static%}
+    {% load static %}
     <style>
       body {
-            font-family: Arial, sans-serif;
-            font-size: 16px;
-            background-color: #d1e0d9;
-        }
+        font-family: Arial, sans-serif;
+        font-size: 16px;
+        background-color: #ffffff;
+      }
         
       h1 {
         text-align: center;
-        color: #3b5249;
+        color: #000000;
         margin-top: 50px;
+        font-size: 36px;
+        font-weight: bold;
+        text-transform: uppercase;
       } 
       
       .task {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        background-color: #3b5249;
+        background-color: #000000;
         padding: 10px;
         margin: 10px;
         border-radius: 5px;
@@ -35,55 +38,37 @@
         font-size: 24px;
         color: #f8f8f8;
         margin-right: 10px;
+        font-weight: bold;
       }
       
       .task button {
         font-size: 18px;
         color: #ffffff;
-        background-color: #333333;
+        background-color: #000000;
         border: none;
         border-radius: 5px;
         padding: 5px 10px;
         cursor: pointer;
+        transition: background-color 0.3s ease;
       }
       
       .task button:hover {
-        background-color: #3b5249;
+        background-color: #000000;
       }
       
       .task button:active {
-        background-color: #3b5249;
+        background-color: #000000;
       }
-      #bird {
-			position: absolute;
-			top: 50%;
-			left: 0;
-			width: 100px;
-			height: 100px;
-    
-			background-image: url('{% static "images/bird.png" %}');
-			background-repeat: no-repeat;
-			background-size: contain;
-			animation: fly 4s linear infinite;
-		}
-		@keyframes fly {
-			from {
-				transform: translateX(-100px) translateY(-50px) rotateY(180deg);
-			}
-			to {
-				transform: translateX(calc(100vw + 100px)) translateY(-50px) rotateY(0deg);
-			}
-		}
+      
+      
     </style>
-	{%load static%}
-    <script src ="{% static '/js/challenges.js'%}">
-     
-    </script>
+	{% load static %}
+    <script src="{% static '/js/challenges.js'%}"></script>
   </head>
+  
   <body onload="createTasks()">
     <h1>Challenges</h1>
     <div id="tasks"></div>
-    
   </body>
 </html>
 
