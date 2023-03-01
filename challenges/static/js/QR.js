@@ -23,20 +23,42 @@ const Bins = ['qjdkiivbbunmue625ljyjy04w941jy',
 function success(result) {
 
 for (i=0 ; i<Bins.length;i++){
-if (result == Bins[i]){
-    document.getElementById('result').innerHTML = `
-    <h2>Success!</h2>
-    <button onClick="window.location.reload();">Scan Again!</button>
     
-    `;
- 
 
-}
-else if(i==8){
-    document.getElementById('result').innerHTML = `
-    <h2>Invalid Qr Code!</h2>
-    <button onClick="window.location.reload();">Scan Again!</button>
-    `
+    if (result == Bins[i]) {
+        document.getElementById('result').innerHTML = `
+            <h2>Success!</h2>
+            <style> 
+        .btn {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #fff;
+            background-color: #333;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            position: absolute;
+            bottom: 550px;
+            left: 60%;
+            transform: translateX(-50%);
+        }
+    </style>
+        `
+      
+        
+    }
+    else if(i==8){
+        document.getElementById('result').innerHTML = `
+        <h2>Invalid Qr Code!</h2>
+        <form action="/update_points/" method="POST">
+        <button type="submit" name="update_points">Update Points</button>
+        </form>
+        `
     
 }}
     // Prints result as a link inside result element
