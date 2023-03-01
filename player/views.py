@@ -49,6 +49,9 @@ def leaderboard(request):
 
 def profile(request):
     if request.method == 'POST':
+        #u_form is django user update
+        # p_form is image update
+        #a_form is user account update
         u_form = UserUpdateForm(request.POST, instance=request.user)
         p_form = ProfileUpdateForm(request.POST,
                                    request.FILES,
