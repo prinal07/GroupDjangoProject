@@ -17,7 +17,8 @@ def home(request):
     logged_username = request.user.username
     logged_user = Account.objects.get(username=logged_username)
     # collect time accessed
-    if logged_user.last_day_accessed.today() != date.today():
+
+    if logged_user.last_day_accessed != date.today():
         logged_user.daily_points = 0
         logged_user.save()
 
