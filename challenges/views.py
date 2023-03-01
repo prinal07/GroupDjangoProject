@@ -1,8 +1,7 @@
 from django.shortcuts import render
 
 from challenges.templates import *
-from users.models import User
-
+from users.models import User, Account
 
 
 # Create your views here.
@@ -28,10 +27,11 @@ from django.contrib import messages
 def update_points(request):
     if request.method == 'POST' and 'update_points' in request.POST:
         # Get the current user and update their points field
-        user = request.account
-        user.points += 10
-        user.daily_points += 10
-        user.save()
+        logged_username = request.user.username
+        logged_user = Account.objects.get(username=logged_username)
+        logged_user.points += 10
+        logged_user.daily_points += 10
+        logged_user.save()
 
         # Show a success message to the user
         messages.success(request, 'Points updated successfully!')
