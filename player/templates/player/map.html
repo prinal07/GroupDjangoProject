@@ -44,6 +44,12 @@
         console.log(bin_info);
 
         var marker = null;
+
+        marker = new mapboxgl.Marker().setLngLat([-3.537214,50.738053]).addTo(map);
+        marker = new mapboxgl.Marker().setLngLat([-3.531119,50.738331]).addTo(map);
+        marker = new mapboxgl.Marker().setLngLat([-3.536073,50.736282]).addTo(map);
+        marker = new mapboxgl.Marker().setLngLat([-3.535,50.7391]).addTo(map);
+
         var popup = null;
         for (var i = 0; i < bin_info.length; i++) {
             let lat = parseFloat(bin_info[i][0]);
