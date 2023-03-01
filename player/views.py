@@ -118,3 +118,7 @@ def profile(request):
     }
 
     return render(request, 'player/profile.html', context)
+
+
+def map(request):
+    return render(request, 'player/map.html')
