@@ -33,7 +33,7 @@ if (result == Bins[i]){
 }
 else if(i==8){
     document.getElementById('result').innerHTML = `
-    <h2>Fuck you Cunt!</h2>
+    <h2>Warg!</h2>
     <button onClick="window.location.reload();">Try again</button>
     `
     
