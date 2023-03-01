@@ -37,6 +37,13 @@ class Account(models.Model):
 
     def __str__(self):
         return self.username
+    
+    def account_dailypoints(self):
+        return self.daily_points
+    
+        
+    def account_points(self):
+        return self.points
 
 
 class Profile(models.Model):

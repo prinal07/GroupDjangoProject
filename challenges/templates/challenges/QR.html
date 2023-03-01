@@ -69,11 +69,17 @@
     </style>
 </head>
 <body>
+    
     <h1>QR Scanner</h1>
     <main>
         <div id="reader"></div>
     </main>
     <div id="result"></div>
+
+    <form method="post" action="{% url 'update_points' %}">
+        {% csrf_token %}
+        <button type="submit" name="update_points">Update Points</button>
+    </form>
     <button class="btn" onclick="reset()">Reset</button>
     {% load static %}
 <script src="{% static '/js/QR.js'%}"></script>

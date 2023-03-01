@@ -19,15 +19,25 @@ def collectibles(request):
 def QR(request):
     return render(request, 'challenges/QR.html')
 
-# views.py
 
-from django.http import HttpResponse
-from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
-@csrf_exempt
-def scan_again(request):
-    account = request.account
-    points =  account.points
-    points = points + 10
-    account.save()
-    return HttpResponse('Counter incremented!')
+@login_required
+def update_points(request):
+    if request.method == 'POST' and 'update_points' in request.POST:
+        # Get the current user and update their points field
+        user = request.account
+        user.points += 10
+        user.daily_points += 10
+        user.save()
+
+        # Show a success message to the user
+        messages.success(request, 'Points updated successfully!')
+
+        # Redirect back to the current page
+        return redirect(request.META.get('HTTP_REFERER', '/'))
+
+    # If the form was not submitted, render a template with the form
+    return render(request, 'update_points.html')

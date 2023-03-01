@@ -34,32 +34,12 @@ for (i=0 ; i<Bins.length;i++){
     else if(i==8){
         document.getElementById('result').innerHTML = `
         <h2>Invalid Qr Code!</h2>
-        <button onClick="window.location.reload();">Scan Again!</button>
+        <form action="/update_points/" method="POST">
+        <button type="submit" name="update_points">Update Points</button>
+        </form>
         `
     
 }}
-
-// js code
-function scanAgain() {
-    // Make an Ajax request to your Django application's server
-    // to perform the desired action in your views.py file
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', '/scan_again/');
-    xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            // Handle the response from the server
-            console.log(xhr.responseText);
-        } else {
-            // Handle any errors that occurred during the request
-            console.error('Error occurred during request');
-        }
-    };
-    xhr.send();
-}
-
-
-
     // Prints result as a link inside result element
 
     scanner.clear();
