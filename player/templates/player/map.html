@@ -57,16 +57,6 @@
                 .addTo(map);
         }
 
-        // Create a default Marker and add it to the map.
-        const marker1 = new mapboxgl.Marker()
-            .setLngLat([-3.5356537, 50.7368255])
-            .addTo(map);
-
-        // Create a default Marker, colored black, rotated 45 degrees.
-        const marker2 = new mapboxgl.Marker({color: 'black', rotation: 45})
-            .setLngLat([12.65147, 55.608166])
-            .addTo(map);
-
         map.on('load', () => {
 // Add a data source containing GeoJSON data.
             map.addSource('maine', {
@@ -78,33 +68,33 @@
 // These coordinates outline Maine.
                         'coordinates': [
                             [
-                                [-67.13734, 45.13745],
-                                [-66.96466, 44.8097],
-                                [-68.03252, 44.3252],
-                                [-69.06, 43.98],
-                                [-70.11617, 43.68405],
-                                [-70.64573, 43.09008],
-                                [-70.75102, 43.08003],
-                                [-70.79761, 43.21973],
-                                [-70.98176, 43.36789],
-                                [-70.94416, 43.46633],
-                                [-71.08482, 45.30524],
-                                [-70.66002, 45.46022],
-                                [-70.30495, 45.91479],
-                                [-70.00014, 46.69317],
-                                [-69.23708, 47.44777],
-                                [-68.90478, 47.18479],
-                                [-68.2343, 47.35462],
-                                [-67.79035, 47.06624],
-                                [-67.79141, 45.70258],
-                                [-67.13734, 45.13745]
+                                [-2.58873,51.45495],
+                                [-1.40360,50.91027],
+                                [-2.45714,50.72602],
+                                [-2.58873,51.45495]
                             ]
                         ]
                     }
                 }
             });
-
-// Add a new layer to visualize the polygon.
+            map.addSource('exeter', {
+                'type': 'geojson',
+                'data': {
+                    'type':'Feature',
+                    'geometry': {
+                        'type': 'Polygon',
+                        'coordinates': [
+                            [
+                                [-3.54208,50.48673],
+                                [-3.40882,50.61530],
+                                [-4.18863,51.02687],
+                                [-3.54208,50.48673]
+                            ]
+                        ]
+                    }
+                }
+            });
+                // Add a new layer to visualize the polygon.
             map.addLayer({
                 'id': 'maine',
                 'type': 'fill',
@@ -115,18 +105,23 @@
                     'fill-opacity': 0.5
                 }
             });
-// Add a black outline around the polygon.
             map.addLayer({
-                'id': 'outline',
-                'type': 'line',
-                'source': 'maine',
+                'id': 'exeter',
+                'type': 'fill',
+                'source': 'exeter', // reference the data source
                 'layout': {},
                 'paint': {
-                    'line-color': '#000',
-                    'line-width': 3
+                    'fill-color': '#00ff00', // blue color fill
+                    'fill-opacity': 0.5
                 }
             });
-        });
+        })
+
+        map.on('load', () => {
+
+        })
+
+
     </script>
 
     </body>
