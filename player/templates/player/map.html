@@ -46,11 +46,17 @@
         var marker = null;
         var popup = null;
 
-        popup = new mapboxgl.Popup({offset: 25}).setText("PIN INFO");
+        popup = new mapboxgl.Popup({offset: 25}).setText("PIN INFO 1");
 
         marker = new mapboxgl.Marker().setLngLat([-3.537214,50.738053]).setPopup(popup).addTo(map);
+
+        popup = new mapboxgl.Popup({offset: 25}).setText("PIN INFO 2");
         marker = new mapboxgl.Marker().setLngLat([-3.531119,50.738331]).setPopup(popup).addTo(map);
+
+        popup = new mapboxgl.Popup({offset: 25}).setText("PIN INFO 3");
         marker = new mapboxgl.Marker().setLngLat([-3.536073,50.736282]).setPopup(popup).addTo(map);
+
+        popup = new mapboxgl.Popup({offset: 25}).setText("PIN INFO 4");
         marker = new mapboxgl.Marker().setLngLat([-3.535000,50.739100]).setPopup(popup).addTo(map);
 
         for (var i = 0; i < bin_info.length; i++) {
