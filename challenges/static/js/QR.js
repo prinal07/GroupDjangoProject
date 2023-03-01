@@ -27,8 +27,10 @@ if (result == Bins[i]){
     document.getElementById('result').innerHTML = `
     <h2>Success!</h2>
     <button onClick="window.location.reload();">Scan Again!</button>
-    
     `;
+    setTimeout(function() {
+        window.location.href = "example/directory/file.html";
+     }, 2000)
  
 
 }
