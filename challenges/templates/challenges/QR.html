@@ -2,6 +2,7 @@
 
 {% block content %}
 
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -39,6 +40,7 @@
         #reader {
             width: 100%;
             max-width: 400px;
+            position: relative;
         }
     
         #result {
@@ -49,7 +51,7 @@
         }
     
         .btn {
-            display: inline-block;
+            display: none;
             margin-top: 30px;
             padding: 10px 20px;
             font-size: 1.2rem;
@@ -61,6 +63,10 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            position: absolute;
+            bottom: 550px;
+            left: 60%;
+            transform: translateX(-50%);
         }
     
         .btn:hover {
@@ -73,16 +79,17 @@
     <h1>QR Scanner</h1>
     <main>
         <div id="reader"></div>
+        <form method="post" action="{% url 'update_points' %}">
+            {% csrf_token %}
+            <button class="btn" type="submit" name="update_points">Update Points</button>
+        </form>
     </main>
     <div id="result"></div>
-
-    <form method="post" action="{% url 'update_points' %}">
-        {% csrf_token %}
-        <button type="submit" name="update_points">Update Points</button>
-    </form>
-    <button class="btn" onclick="reset()">Reset</button>
+    
+    
     {% load static %}
 <script src="{% static '/js/QR.js'%}"></script>
 </body>
 </html>
+
 {% endblock %}

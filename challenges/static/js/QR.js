@@ -28,8 +28,29 @@ for (i=0 ; i<Bins.length;i++){
     if (result == Bins[i]) {
         document.getElementById('result').innerHTML = `
             <h2>Success!</h2>
-            <button onClick="scanAgain()">Scan Again!</button>
-        `;
+            <style> 
+        .btn {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #fff;
+            background-color: #333;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            position: absolute;
+            bottom: 550px;
+            left: 60%;
+            transform: translateX(-50%);
+        }
+    </style>
+        `
+      
+        
     }
     else if(i==8){
         document.getElementById('result').innerHTML = `
