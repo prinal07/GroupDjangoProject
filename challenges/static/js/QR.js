@@ -26,14 +26,14 @@ for (i=0 ; i<Bins.length;i++){
 if (result == Bins[i]){
     document.getElementById('result').innerHTML = `
     <h2>Success!</h2>
-    <p><a href="${result}">${result}</a></p>
+    
     `;
  
 
 }
 else if(i==8){
     document.getElementById('result').innerHTML = `
-    <h2>Warg!</h2>
+    <h2>Invalid Qr Code!</h2>
     <button onClick="window.location.reload();">Try again</button>
     `
     
