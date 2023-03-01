@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 from users.models import Profile, Account
 
-
+#Update Django's user
 class UserUpdateForm(forms.ModelForm):
     email = forms.EmailField()
 
@@ -11,7 +11,7 @@ class UserUpdateForm(forms.ModelForm):
         model = User
         fields = ['username', 'email']
 
-
+#Update User Account
 class AccountUpdateForm(forms.ModelForm):
     email = forms.EmailField()
 
@@ -19,7 +19,7 @@ class AccountUpdateForm(forms.ModelForm):
         model = Account
         fields = ['username', 'email']
 
-
+#Update profile pic
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
