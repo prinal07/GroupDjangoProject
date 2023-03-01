@@ -7,5 +7,5 @@ urlpatterns = [path('', player_views.home, name='overview'),
                path('leaderboard/', player_views.leaderboard, name="leaderboard"),
                path('profile/', player_views.profile, name='profile'),
                path('challenges/', include('challenges.urls')),
-               path('map/', player_views.map, name='map')
+               path('map/', player_views.map, name='map'),
                ]
