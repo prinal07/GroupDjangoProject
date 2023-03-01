@@ -23,24 +23,43 @@ const Bins = ['qjdkiivbbunmue625ljyjy04w941jy',
 function success(result) {
 
 for (i=0 ; i<Bins.length;i++){
-if (result == Bins[i]){
-    document.getElementById('result').innerHTML = `
-    <h2>Success!</h2>
-    <button onClick="window.location.reload();">Scan Again!</button>
-    `;
-    setTimeout(function() {
-        window.location.href = "example/directory/file.html";
-     }, 2000)
- 
+    
 
-}
-else if(i==8){
-    document.getElementById('result').innerHTML = `
-    <h2>Invalid Qr Code!</h2>
-    <button onClick="window.location.reload();">Scan Again!</button>
-    `
+    if (result == Bins[i]) {
+        document.getElementById('result').innerHTML = `
+            <h2>Success!</h2>
+            <button onClick="scanAgain()">Scan Again!</button>
+        `;
+    }
+    else if(i==8){
+        document.getElementById('result').innerHTML = `
+        <h2>Invalid Qr Code!</h2>
+        <button onClick="window.location.reload();">Scan Again!</button>
+        `
     
 }}
+
+// js code
+function scanAgain() {
+    // Make an Ajax request to your Django application's server
+    // to perform the desired action in your views.py file
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/scan_again/');
+    xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            // Handle the response from the server
+            console.log(xhr.responseText);
+        } else {
+            // Handle any errors that occurred during the request
+            console.error('Error occurred during request');
+        }
+    };
+    xhr.send();
+}
+
+
+
     // Prints result as a link inside result element
 
     scanner.clear();
