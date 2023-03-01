@@ -47,8 +47,7 @@
 </header>
 <div class="container">
     <main role="main" class="container">
-        <div class="row">
-            <div class="col-md-8">
+        <div>
                 {% if messages %}
                     {% for message in messages %}
                         <div class="alert alert-{{ message.tags }}">{{ message }}
@@ -56,7 +55,7 @@
                     {% endfor %}
                 {% endif %}
                 {% block content %}{% endblock %}
-            </div>
+
   </div>
 </main>
 </div>
