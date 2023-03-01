@@ -41,7 +41,7 @@ def register(request):
                 #Saves user to Django validation and verification
                 form.save()
 
-                messages.success(request, f'Account created for {username} Staff status {localStaffBool}')
+                messages.success(request, f'Account created for {username}')
                 # change to player-page when implemented
                 return redirect('site-home')
             else:
