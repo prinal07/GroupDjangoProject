@@ -1,9 +1,14 @@
+from datetime import date
+
+import math
 from django.shortcuts import render, redirect
 from django.db.models import Sum
 from django.contrib import messages
 
 from player.forms import UserUpdateForm, ProfileUpdateForm, AccountUpdateForm
 from users.models import Account
+from challenges.models import Bin
+from .models import Fact
 
 
 # Create your views here.
@@ -12,18 +17,60 @@ def home(request):
     # matching the username of Django User class with username our user class
     logged_username = request.user.username
     logged_user = Account.objects.get(username=logged_username)
-    print(logged_user.accommodation)
+    # collect time accessed
+
+    if logged_user.last_day_accessed != date.today():
+        logged_user.daily_points = 0
+        logged_user.save()
+
+    logged_user.last_day_accessed = date.today()
+    logged_user.save()
 
     all_users_accommodation = Account.objects.all().filter(accommodation=logged_user.accommodation)
     all_users_accommodation = all_users_accommodation.order_by('-points')[:5]
 
-    # annotate creates new field for each accomdation group
+    # annotate creates new field for each accommodation group
     # creating sum column for each accommodation
     all_accommodations = Account.objects.values('accommodation').annotate(Sum('points')).order_by('-points__sum')[:5]
     print(all_accommodations)
+
+    # get fact of day
+    date_today = date.today()
+    fact_today = Fact.objects.filter(date=date_today).first().fact
+    print(fact_today)
+
+    # get user points
+
+    logged_username = request.user.username
+    logged_account = Account.objects.get(username=logged_username)
+    user_points = logged_account.points
+
+    # get daily user points
+
+    daily_points = logged_account.daily_points
+
+    # Calculate blur based on daily points
+
+    blur_strength = 0
+    if daily_points < 100:
+        blur_strength = math.floor(10 - daily_points / 10)
+
+    # Compute progress bar for daily fact of day
+    fact_progress = daily_points
+    if fact_progress > 100:
+        fact_progress = 100
+
     return render(request, 'player/overview.html',
-                  {'title': 'Overview', 'user_acc_leaderboard': all_users_accommodation,
-                   'acc_leaderboard': all_accommodations})
+                  {'title': 'Overview',
+                   'user_points': user_points,
+                   'daily_points': daily_points,
+                   'user_acc_leaderboard': all_users_accommodation,
+                   'acc_leaderboard': all_accommodations,
+                   'current_level': logged_account.current_level(),
+                   'level_progress': logged_account.level_progress(),
+                   'fact_today': fact_today,
+                   'blur_strength': blur_strength,
+                   'fact_progress': fact_progress})
 
 
 def leaderboard(request):
@@ -75,3 +122,17 @@ def profile(request):
     }
 
     return render(request, 'player/profile.html', context)
+
+
+def map(request):
+    bins = Bin.objects.all()
+    
+    bin_info = []
+    for o in bins:
+        bin_info.append([o.latitude, o.longitude, o.bin_number])
+    
+    context = {
+        'bin_info': bin_info
+    }
+    
+    return render(request, 'player/map.html', context=context)

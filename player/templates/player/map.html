@@ -1,0 +1,146 @@
+{% extends "player/playerbase.html" %}
+
+
+{% block content %}
+
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <title>Add a default marker to a web map</title>
+        <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+        <link href="https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.css" rel="stylesheet">
+        <script src="https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.js"></script>
+        <script> 
+            console.log('{{bin_info}}')
+            var bin_info = JSON.parse('{{bin_info}}'); </script>
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+            }
+
+            #map {
+                position: absolute;
+                margin: 40px;
+                top: 0;
+                bottom: 0;
+                width: 80%;
+            }
+        </style>
+    </head>
+    <body>
+    <div id="map"></div>
+
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1Ijoic2MxMTMxIiwiYSI6ImNsZXBqYTNoNjBjcGIzdG81djdwazN4ZnoifQ.aUnfUV2U5KPxxgPni-Ma1Q';
+        const map = new mapboxgl.Map({
+            container: 'map',
+// Choose from Mapbox's core styles, or make your own style with Mapbox Studio
+            style: 'mapbox://styles/mapbox/streets-v12',
+            center: [-3.5356537, 50.7368255],
+            zoom: 16
+        });
+
+        console.log(bin_info);
+
+        var marker = null;
+        var popup = null;
+
+        popup = new mapboxgl.Popup({offset: 25}).setText("PIN INFO 1");
+
+        marker = new mapboxgl.Marker().setLngLat([-3.537214,50.738053]).setPopup(popup).addTo(map);
+
+        popup = new mapboxgl.Popup({offset: 25}).setText("PIN INFO 2");
+        marker = new mapboxgl.Marker().setLngLat([-3.531119,50.738331]).setPopup(popup).addTo(map);
+
+        popup = new mapboxgl.Popup({offset: 25}).setText("PIN INFO 3");
+        marker = new mapboxgl.Marker().setLngLat([-3.536073,50.736282]).setPopup(popup).addTo(map);
+
+        popup = new mapboxgl.Popup({offset: 25}).setText("PIN INFO 4");
+        marker = new mapboxgl.Marker().setLngLat([-3.535000,50.739100]).setPopup(popup).addTo(map);
+
+        for (var i = 0; i < bin_info.length; i++) {
+            let lat = parseFloat(bin_info[i][0]);
+            let lon = parseFloat(bin_info[i][1]);
+
+            popup = new mapboxgl.Popup({offset: 25}).setText(bin_info[i][2]);
+
+            marker = new mapboxgl.Marker()
+                .setLngLat([lon, lat])
+                .setPopup(popup)
+                .addTo(map);
+        }
+
+        map.on('load', () => {
+// Add a data source containing GeoJSON data.
+            map.addSource('maine', {
+                'type': 'geojson',
+                'data': {
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'Polygon',
+// These coordinates outline Maine.
+                        'coordinates': [
+                            [
+                                [-2.58873,51.45495],
+                                [-1.40360,50.91027],
+                                [-2.45714,50.72602],
+                                [-2.58873,51.45495]
+                            ]
+                        ]
+                    }
+                }
+            });
+            map.addSource('exeter', {
+                'type': 'geojson',
+                'data': {
+                    'type':'Feature',
+                    'geometry': {
+                        'type': 'Polygon',
+                        'coordinates': [
+                            [
+                                [-3.54208,50.48673],
+                                [-3.40882,50.61530],
+                                [-4.18863,51.02687],
+                                [-3.54208,50.48673]
+                            ]
+                        ]
+                    }
+                }
+            });
+                // Add a new layer to visualize the polygon.
+            map.addLayer({
+                'id': 'maine',
+                'type': 'fill',
+                'source': 'maine', // reference the data source
+                'layout': {},
+                'paint': {
+                    'fill-color': '#0080ff', // blue color fill
+                    'fill-opacity': 0.5
+                }
+            });
+            map.addLayer({
+                'id': 'exeter',
+                'type': 'fill',
+                'source': 'exeter', // reference the data source
+                'layout': {},
+                'paint': {
+                    'fill-color': '#00ff00', // blue color fill
+                    'fill-opacity': 0.5
+                }
+            });
+        })
+
+        map.on('load', () => {
+
+        })
+
+
+    </script>
+
+    </body>
+    </html>
+
+
+
+{% endblock content %}

@@ -1,0 +1,90 @@
+{% extends "challenges/challengeBase.html" %}
+
+{% block content %}
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>My Page</title>
+    {%load static%}
+    <style>
+      body {
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            background-color: #d1e0d9;
+        }
+        
+      h1 {
+        text-align: center;
+        color: #3b5249;
+        margin-top: 50px;
+      } 
+      
+      .task {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #3b5249;
+        padding: 10px;
+        margin: 10px;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+      
+      .task label {
+        font-size: 24px;
+        color: #f8f8f8;
+        margin-right: 10px;
+      }
+      
+      .task button {
+        font-size: 18px;
+        color: #ffffff;
+        background-color: #333333;
+        border: none;
+        border-radius: 5px;
+        padding: 5px 10px;
+        cursor: pointer;
+      }
+      
+      .task button:hover {
+        background-color: #3b5249;
+      }
+      
+      .task button:active {
+        background-color: #3b5249;
+      }
+      #bird {
+			position: absolute;
+			top: 50%;
+			left: 0;
+			width: 100px;
+			height: 100px;
+    
+			background-image: url('{% static "images/bird.png" %}');
+			background-repeat: no-repeat;
+			background-size: contain;
+			animation: fly 4s linear infinite;
+		}
+		@keyframes fly {
+			from {
+				transform: translateX(-100px) translateY(-50px) rotateY(180deg);
+			}
+			to {
+				transform: translateX(calc(100vw + 100px)) translateY(-50px) rotateY(0deg);
+			}
+		}
+    </style>
+	{%load static%}
+    <script src ="{% static '/js/challenges.js'%}">
+     
+    </script>
+  </head>
+  <body onload="createTasks()">
+    <h1>Challenges</h1>
+    <div id="tasks"></div>
+    
+  </body>
+</html>
+
+{% endblock %}

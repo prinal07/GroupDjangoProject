@@ -8,8 +8,11 @@ from challenges.templates import *
 def challengesOverview(request):
     return render(request, 'challenges/challengeBase.html')
 
+def challengeManager(request):
+    return render(request, 'challenges/challengeManager.html')
 
 def collectibles(request):
     return render(request, 'challenges/collectibles.html')
 
-
+def QR(request):
+    return render(request, 'challenges/QR.html')

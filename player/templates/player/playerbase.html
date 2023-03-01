@@ -31,16 +31,35 @@
       
         <a href="{% url 'overview' %}" class="mx-2"><i class='bx bxs-home'></i>   Home</a>
         </a>
+        <li class="nav-link">
+            <i class="bx bxs-dashboard"></i>
+            <a href="{% url 'overview' %}" class="mx-2">Home</a>
+        </li>
 
-        <a href="#" class="mx-2"><i class="bx bxs-flag-alt"></i>   Challenges</a>
-           
-        <a href="{% url 'leaderboard' %}" class="mx-2"><i class="bx bxs-trophy"></i>   Leaderboard</a>
+        <li class="nav-link">
+            <i class="bx bx-user-check"></i>
+            <a href="{% url 'challenge_overview' %}" class="mx-2">Challenges</a>
+        </li>
 
         <a href="{% url 'profile' %}" class="mx-2"><i class="bx bxs-user"></i>   Profile</a>
 
-        <a href="#" class="mx-2"><i class="bx bxs-map"></i>   Map</a>
+        <li class="nav-link">
+            <i class="bx bx-user-check"></i>
+            <a href="{% url 'leaderboard' %}" class="mx-2">Leaderboard</a>
+        </li>
+        <li class="nav-link">
+            <i class="bx bx-user-check"></i>
+            <a href="{% url 'profile' %}" class="mx-2">Profile</a>
+      </li>
+        <li  class="nav-link">
+        <i class="bx bx-user-check"></i>
+        <a href="#" class="mx-2">Map</a>
+      </li>
 
-        <a href="{% url 'logout' %}" class="mx-2"><i class="bx bxs-log-out"></i>   Logout</a>
+        <li  class="nav-link">
+        <i class="bx bx-conversation"></i>
+        <a href="{% url 'logout' %}" class="mx-2">Logout</a>
+      </li>
 
     </ul>
     
@@ -66,38 +85,20 @@
   </div>
 
   <!-- bootstrap js -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous">
-</script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous">
 
-<script>
-    var menu_btn = document.querySelector("#menu-btn");
-    var sidebar = document.querySelector("#sidebar");
-    var container = document.querySelector(".sidenav-container");
-    menu_btn.addEventListener("click", () => {
-      sidebar.classList.toggle("active-nav");
-      container.classList.toggle("active-cont");
-    });
+  </script>
 
-    // Updating page title depending on active page
-    let activeHref = window.location.href;
-    url = activeHref.split('/').filter(Boolean).pop();
-
-    function capitalizeFirstLetter(string) {
-      return string.charAt(0).toUpperCase() + string.slice(1);
-    }
-
-    if (url != "player") {
-      x = url.replace('-', ' ');
-      newUrl = "EcoExeter - ".concat(capitalizeFirstLetter(url))
-      document.title = newUrl
-    } else {
-      newUrl2 = "EcoExeter - ".concat("Home")
-      document.title = newUrl2
-    }
-
+ <script>
+        var menu_btn = document.querySelector("#menu-btn");
+var sidebar = document.querySelector("#sidebar");
+var container = document.querySelector(".my-container");
+menu_btn.addEventListener("click", () => {
+  sidebar.classList.toggle("active-nav");
+  container.classList.toggle("active-cont");
+});
     </script>
-
 </body>
 
 </html>

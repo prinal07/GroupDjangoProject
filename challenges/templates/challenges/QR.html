@@ -1,0 +1,41 @@
+{% extends "challenges/challengeBase.html" %}
+
+{% block content %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <TITle>QR SCANNER</TITle>
+        {% load static %}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.4/html5-qrcode.min.js" integrity="sha512-k/KAe4Yff9EUdYI5/IAHlwUswqeipP+Cp5qnrsUjTPCgl51La2/JhyyjNciztD7mWNKLSXci48m7cctATKfLlQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        
+<style>
+    main {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    #reader {
+        width: 300px;
+    }
+    #result {
+        text-align: center;
+        font-size: 1.5rem;
+    }
+</style>
+</head>
+<body>
+<main>
+    <div id="reader"></div>
+    <div id="result"></div>
+</main>
+{% load static %}
+    <script src="{% static '/js/QR.js'%}"></script>
+
+
+</body>
+</html>
+{% endblock %}
+
