@@ -7,6 +7,7 @@ from django.contrib import messages
 
 from player.forms import UserUpdateForm, ProfileUpdateForm, AccountUpdateForm
 from users.models import Account
+from challenges.models import Bin
 from .models import Fact
 
 
@@ -121,4 +122,14 @@ def profile(request):
 
 
 def map(request):
-    return render(request, 'player/map.html')
+    bins = Bin.objects.all()
+    
+    bin_info = []
+    for o in bins:
+        bin_info.append([o.latitude, o.longitude, o.bin_number])
+    
+    context = {
+        'bin_info': bin_info
+    }
+    
+    return render(request, 'player/map.html', context=context)

@@ -10,6 +10,9 @@
         <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
         <link href="https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.css" rel="stylesheet">
         <script src="https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.js"></script>
+        <script> 
+            console.log('{{bin_info}}')
+            var bin_info = JSON.parse('{{bin_info}}'); </script>
         <style>
             body {
                 margin: 0;
@@ -37,6 +40,22 @@
             center: [-3.5356537, 50.7368255],
             zoom: 16
         });
+
+        console.log(bin_info);
+
+        var marker = null;
+        var popup = null;
+        for (var i = 0; i < bin_info.length; i++) {
+            let lat = parseFloat(bin_info[i][0]);
+            let lon = parseFloat(bin_info[i][1]);
+
+            popup = new mapboxgl.Popup({offset: 25}).setText(bin_info[i][2]);
+
+            marker = new mapboxgl.Marker()
+                .setLngLat([lon, lat])
+                .setPopup(popup)
+                .addTo(map);
+        }
 
         // Create a default Marker and add it to the map.
         const marker1 = new mapboxgl.Marker()
