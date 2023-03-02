@@ -96,10 +96,12 @@ def leaderboard(request):
 
 
 def profile(request):
+    logged_username = request.user.username
+    logged_account = Account.objects.get(username=logged_username)
     if request.method == 'POST':
-        #u_form is django user update
+        # u_form is django user update
         # p_form is image update
-        #a_form is user account update
+        # a_form is user account update
         u_form = UserUpdateForm(request.POST, instance=request.user)
         p_form = ProfileUpdateForm(request.POST,
                                    request.FILES,
@@ -117,9 +119,13 @@ def profile(request):
         u_form = UserUpdateForm(instance=request.user)
         p_form = ProfileUpdateForm(instance=request.user.profile)
 
+
     context = {
         'u_form': u_form,
-        'p_form': p_form
+        'p_form': p_form,
+        'user_points': logged_account.points,
+        'current_level': logged_account.current_level,
+        'level_progress': logged_account.level_progress
     }
 
     return render(request, 'player/profile.html', context)
