@@ -32,7 +32,6 @@ INSTALLED_APPS = [
     'sitePage.apps.LayoutConfig',
     'users.apps.UsersConfig',
     'player.apps.PlayerConfig',
-    'challenges.apps.ChallengesConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
