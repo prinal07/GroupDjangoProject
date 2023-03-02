@@ -67,7 +67,7 @@ def home(request):
     if fact_progress > 100:
         fact_progress = 100
 
-    return render(request, 'player/overview.html',
+    return render(request, 'game/overview.html',
                   {'title': 'Overview',
                    'user_points': user_points,
                    'daily_points': daily_points,
@@ -95,7 +95,7 @@ def leaderboard(request):
     all_accommodations = Account.objects.values('accommodation').annotate(Sum('points')).order_by()
     print(all_accommodations)
 
-    return render(request, 'player/leaderboard.html',
+    return render(request, 'game/leaderboard.html',
                   {'title': 'Leaderboard', 'user_acc_leaderboard': all_users_accommodation,
                    'acc_leaderboard': all_accommodations}
                   )
@@ -134,7 +134,7 @@ def profile(request):
         'level_progress': logged_account.level_progress()
     }
 
-    return render(request, 'player/profile.html', context)
+    return render(request, 'game/profile.html', context)
 
 
 def map(request):
@@ -147,8 +147,8 @@ def map(request):
     context = {
         'bin_info': bin_info
     }
-    
-    return render(request, 'player/map.html', context=context)
+
+    return render(request, 'game/map.html', context=context)
 
               
 def news(request): 
@@ -168,15 +168,15 @@ def news(request):
     newsList = zip(title, summary, date, link)
     context = {'newsList': newsList}
 
-    return render(request, 'player/news.html', context)
+    return render(request, 'game/news.html', context)
 
 
 def challengeManager(request):
-    return render(request, 'player/challengeManager.html')
+    return render(request, 'game/challengeManager.html')
 
 
 def QR(request):
-    return render(request, 'player/QR.html')
+    return render(request, 'game/QR.html')
 
 
 @login_required
