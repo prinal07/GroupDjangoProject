@@ -54,11 +54,9 @@ function success(result) {
 
         } else if (i == 8) {
             document.getElementById('result').innerHTML = `
-        <h2>Invalid Qr Code!</h2>
-        <form action="/update_points/" method="POST">
-        <button type="submit" name="update_points">Update Points</button>
-        </form>
-        `
+            <h2>Invalid Qr code!</h2>
+            <button onClick="window.location.reload();">Try again</button>
+            `
 
         }
     }

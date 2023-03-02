@@ -142,6 +142,33 @@
                     }
                 }
             });
+            map.addSource('park5', {
+                'type': 'geojson',
+                'data': {
+                    'type':'Feature',
+                    'geometry': {
+                        'type': 'Polygon',
+                        'coordinates': [
+                            [
+                                [-3.5319415,50.7341617],
+                                [-3.5314349, 50.7340736],
+                                [-3.5324445,50.7332753],
+                                [-3.5319436,50.7330960 ]
+                            ]
+                        ]
+                    }
+                }
+            });
+            map.addLayer({
+                'id': 'park5',
+                'type': 'fill',
+                'source': 'park5', // reference the data source
+                'layout': {},
+                'paint': {
+                    'fill-color': '#0080ff', // blue color fill
+                    'fill-opacity': 0.5
+                }
+            });
                 // Add a new layer to visualize the polygon.
             map.addLayer({
                 'id': 'maine',
