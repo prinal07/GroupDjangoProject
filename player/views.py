@@ -8,8 +8,9 @@ import requests
 
 from player.forms import UserUpdateForm, ProfileUpdateForm, AccountUpdateForm
 from users.models import Account
-from challenges.models import Bin
+from player.models import Bin
 from .models import Fact
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
@@ -124,8 +125,8 @@ def profile(request):
         'u_form': u_form,
         'p_form': p_form,
         'user_points': logged_account.points,
-        'current_level': logged_account.current_level,
-        'level_progress': logged_account.level_progress
+        'current_level': logged_account.current_level(),
+        'level_progress': logged_account.level_progress()
     }
 
     return render(request, 'player/profile.html', context)
@@ -159,8 +160,35 @@ def news(request):
          title.append(x['title'])
          link.append(x['link'])
          date.append(x['retrieveddate'])
-    newsList = zip(title,summary,date,link)
-    context= {'newsList':newsList}
-    
-    
-    return render(request,'player/news.html',context)  
+    newsList = zip(title, summary, date, link)
+    context = {'newsList': newsList}
+
+    return render(request, 'player/news.html', context)
+
+
+def challengeManager(request):
+    return render(request, 'player/challengeManager.html')
+
+
+def QR(request):
+    return render(request, 'player/QR.html')
+
+
+@login_required
+def update_points(request):
+    if request.method == 'POST' and 'update_points' in request.POST:
+        # Get the current user and update their points field
+        logged_username = request.user.username
+        logged_user = Account.objects.get(username=logged_username)
+        logged_user.points += 10
+        logged_user.daily_points += 10
+        logged_user.save()
+
+        # Show a success message to the user
+        messages.success(request, 'Points updated successfully!')
+
+        # Redirect back to the current page
+        return redirect(request.META.get('HTTP_REFERER', '/'))
+
+    # If the form was not submitted, render a template with the form
+    return render(request, 'update_points.html')
