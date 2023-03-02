@@ -128,6 +128,7 @@ def profile(request):
         p_form = ProfileUpdateForm(instance=request.user.profile)
 
     logged_account.level = logged_account.current_level()
+    logged_account.save()
 
     context = {
         'u_form': u_form,
