@@ -1,0 +1,41 @@
+{% extends "game/playerbase.html" %}
+
+{% block content %}
+  <div class="leaderboards">
+    <h2 class="leaderboard-title">User Leaderboard:</h2>
+    <table id="user_leaderboard">
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Points</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in user_acc_leaderboard %}
+          <tr>
+            <td>{{ user.username }}</td>
+            <td>{{ user.points }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <h2 class="leaderboard-title">Accommodation Leaderboard:</h2>
+    <table id="accommodation_leaderboard">
+      <thead>
+        <tr>
+          <th>Accommodation</th>
+          <th>Points</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for accom in acc_leaderboard %}
+          <tr>
+            <td>{{ accom.accommodation }}</td>
+            <td>{{ accom.points__sum }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

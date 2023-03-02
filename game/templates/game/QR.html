@@ -1,0 +1,97 @@
+{% extends "game/playerbase.html" %}
+
+{% block content %}
+
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>QR Scanner</title>
+        {% load static %}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.4/html5-qrcode.min.js"
+                integrity="sha512-k/KAe4Yff9EUdYI5/IAHlwUswqeipP+Cp5qnrsUjTPCgl51La2/JhyyjNciztD7mWNKLSXci48m7cctATKfLlQ=="
+                crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <style>
+            body {
+                background-color: #f9f9f9;
+                font-family: Arial, sans-serif;
+                font-size: 16px;
+                color: #333;
+            }
+
+            h1 {
+                text-align: center;
+                margin: 50px 0 30px;
+                font-size: 36px;
+                font-weight: bold;
+                text-transform: uppercase;
+                color: #333;
+            }
+
+            main {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin: 50px auto;
+                max-width: 600px;
+            }
+
+            #reader {
+                width: 100%;
+                max-width: 400px;
+                position: relative;
+            }
+
+            #result {
+                text-align: center;
+                font-size: 1.5rem;
+                margin-top: 20px;
+                color: #333;
+            }
+
+            .btn {
+                display: none;
+                margin-top: 30px;
+                padding: 10px 20px;
+                font-size: 1.2rem;
+                font-weight: bold;
+                text-transform: uppercase;
+                color: #fff;
+                background-color: #333;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+                position: absolute;
+                bottom: 550px;
+                left: 60%;
+                transform: translateX(-50%);
+            }
+
+            .btn:hover {
+                background-color: #555;
+            }
+        </style>
+    </head>
+    <body>
+
+    <h1>QR Scanner</h1>
+    <main>
+        <div id="reader"></div>
+        <form method="post" action="{% url 'update_points' %}">
+            {% csrf_token %}
+            <button class="btn" type="submit" name="update_points">Update Points</button>
+        </form>
+    </main>
+    <div id="result"></div>
+
+
+    {% load static %}
+    <script src="{% static '/js/QR.js' %}"></script>
+    </body>
+    </html>
+
+{% endblock %}

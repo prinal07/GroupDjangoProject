@@ -1,0 +1,75 @@
+{% extends "game/playerbase.html" %}
+
+{% block content %}
+    <!DOCTYPE html>
+
+    <html>
+    <head>
+        <title>My Page</title>
+        {% load static %}
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                font-size: 16px;
+                background-color: #ffffff;
+            }
+
+            h1 {
+                text-align: center;
+                color: #000000;
+                margin-top: 50px;
+                font-size: 36px;
+                font-weight: bold;
+                text-transform: uppercase;
+            }
+
+            .task {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                background-color: #000000;
+                padding: 10px;
+                margin: 10px;
+                border-radius: 5px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            }
+
+            .task label {
+                font-size: 24px;
+                color: #f8f8f8;
+                margin-right: 10px;
+                font-weight: bold;
+            }
+
+            .task button {
+                font-size: 18px;
+                color: #ffffff;
+                background-color: #000000;
+                border: none;
+                border-radius: 5px;
+                padding: 5px 10px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+
+            .task button:hover {
+                background-color: #000000;
+            }
+
+            .task button:active {
+                background-color: #000000;
+            }
+
+
+        </style>
+        {% load static %}
+        <script src="{% static '/js/challenges.js' %}"></script>
+    </head>
+
+    <body onload="createTasks()">
+    <h1>Challenges</h1>
+    <div id="tasks"></div>
+    </body>
+    </html>
+
+{% endblock %}

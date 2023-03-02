@@ -1,0 +1,70 @@
+
+{% extends "game/playerbase.html" %}
+{%load widget_tweaks%}
+{% block content %}
+    <div class="main">
+        <table style="width:100%">
+            <td style="width:50%">
+                <div class="profile">
+                    <img class="rounded-circle account-img profile_image" src="{{ user.profile.image.url }}">
+                    <div class="media-body">
+                        <h2 class="account-heading" style="padding-bottom: 10px;">{{ user.username }}</h2>
+                        <h4 class="text-secondary">{{ user.email }}</h4>
+                    </div>
+                </div>
+            </td>
+            <td style="width:50%; vertical-align:middle;">
+                <h4 class="user-points-title"> User points: {{ user_points }}  </h4>
+
+
+                <div id='level-progress'>
+                    <h4 id="current-level">Level: {{ current_level }}</h4>
+                    <h4 id="level-progress-title">Progress to next level:</h4>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: {{ level_progress }}%; background-color: rgb(170, 225, 170) !important;">{{ level_progress }}%</div>
+                    </div>
+
+                </div>
+
+            </td>
+        </table>
+        <hr>
+        <table style="width:100%">
+            <td style="width:50%">
+                <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <fieldset class="form-group">
+                    <h3> Update Username: </h3>
+                    {% render_field u_form.username placeholder="username" id+="u_form"%} <br><br>
+                    <h3> Update Email: </h3>
+                    {% render_field u_form.email placeholder="email" id+="u_form"%} <br><br>
+                    <h3>
+                        Update Image:
+                    </h3>
+                    <div>
+                        {% render_field p_form.image id+="u_form"%}
+                    </div>
+                </fieldset>
+                <br><br>
+                <div class="form-group">
+                    <button id="uFormSubmitBtn" type="submit">Update</button>
+                </div>
+            </form>
+            </td>
+            <td style="width:50%">
+                <h3> Achievments: </h3>
+                <br><br>
+                <h5><i class="bx bxs-trophy"></i> Achievments 1</h5>
+                <br><br>
+                <h5><i class="bx bxs-trophy"></i> Achievments 2</h5>
+                <br><br>
+                <h5><i class="bx bxs-trophy"></i> Achievments 3</h5>
+                <br><br>
+                <h5><i class="bx bxs-trophy"></i> Achievments 4</h5>
+            </td>
+        </table>
+
+        <!-- FORM HERE -->
+    </div>
+{% endblock content %}
+
