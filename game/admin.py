@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from player.models import Fact, Bin
+from game.models import Fact, Bin
 
 admin.site.register(Fact)
 

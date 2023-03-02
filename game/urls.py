@@ -1,5 +1,5 @@
 from django.urls import path, include
-from player import views as player_views
+from game import views as player_views
 from django.conf import settings
 from django.conf.urls.static import static
 

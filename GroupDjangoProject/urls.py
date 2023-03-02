@@ -29,9 +29,9 @@ urlpatterns = [
     path('register2/', user_views.register2, name='register2'),
     path('login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
-    path('player/', include('player.urls')),
+    path('game/', include('game.urls')),
 ]
 
-# Request is made to image location in media directory which means it should NOT be under 'player/' media url at top level
+# Request is made to image location in media directory which means it should NOT be under 'game/' media url at top level
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

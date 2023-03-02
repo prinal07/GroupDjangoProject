@@ -6,9 +6,9 @@ from django.db.models import Sum
 from django.contrib import messages
 import requests
 
-from player.forms import UserUpdateForm, ProfileUpdateForm, AccountUpdateForm
+from game.forms import UserUpdateForm, ProfileUpdateForm, AccountUpdateForm
 from users.models import Account
-from player.models import Bin
+from game.models import Bin
 from .models import Fact
 from django.contrib.auth.decorators import login_required
 
@@ -38,7 +38,12 @@ def home(request):
 
     # get fact of day
     date_today = date.today()
-    fact_today = Fact.objects.filter(date=date_today).first().fact
+    # database object, not fact
+    fact_today = "There are no facts in DB"
+    fact_today_object = Fact.objects.filter(date=date_today).first()
+    if fact_today_object is not None:
+        fact_today = fact_today_object.fact
+
     print(fact_today)
 
     # get user points

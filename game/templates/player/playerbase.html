@@ -89,19 +89,19 @@
   url = activeHref.split('/').filter(Boolean).pop();
 
   function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+      return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
-  if (url != "player") {
-    x = url.replace('-', ' ');
-    newUrl = "EcoExeter - ".concat(capitalizeFirstLetter(url))
-    document.title = newUrl
+  if (url != "game") {
+      x = url.replace('-', ' ');
+      newUrl = "EcoExeter - ".concat(capitalizeFirstLetter(url))
+      document.title = newUrl
   } else {
-    newUrl2 = "EcoExeter - ".concat("Home")
-    document.title = newUrl2
+      newUrl2 = "EcoExeter - ".concat("Home")
+      document.title = newUrl2
   }
 
-  </script>
+</script>
 </body>
 
 </html>

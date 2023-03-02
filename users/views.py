@@ -42,7 +42,7 @@ def register(request):
                 form.save()
 
                 messages.success(request, f'Account created for {username}')
-                # change to player-page when implemented
+                # change to game-page when implemented
                 return redirect('site-home')
             else:
                 messages.warning(request, f'Please enter an email address with exeter domain (XYZ.exeter.ac.uk)')

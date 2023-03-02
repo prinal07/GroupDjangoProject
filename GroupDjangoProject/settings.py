@@ -31,7 +31,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'sitePage.apps.LayoutConfig',
     'users.apps.UsersConfig',
-    'player.apps.PlayerConfig',
+    'game.apps.PlayerConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
