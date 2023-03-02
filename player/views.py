@@ -4,6 +4,7 @@ import math
 from django.shortcuts import render, redirect
 from django.db.models import Sum
 from django.contrib import messages
+import requests
 
 from player.forms import UserUpdateForm, ProfileUpdateForm, AccountUpdateForm
 from users.models import Account
@@ -136,3 +137,24 @@ def map(request):
     }
     
     return render(request, 'player/map.html', context=context)
+
+              
+def news(request): 
+    url = 'https://www.climateark.org/api/searchv1/?search=latest&size=3&feed=climate'    
+    environment_news = requests.get(url).json()
+    articles= environment_news['ecosearch_results']
+    summary= []
+    title =[]
+    link =[]
+    date=[]
+    for i in range(len(articles)):
+         x = source = articles[i]['_source']
+         summary.append(x['news_summary'])
+         title.append(x['title'])
+         link.append(x['link'])
+         date.append(x['retrieveddate'])
+    newsList = zip(title,summary,date,link)
+    context= {'newsList':newsList}
+    
+    
+    return render(request,'player/news.html',context)  
