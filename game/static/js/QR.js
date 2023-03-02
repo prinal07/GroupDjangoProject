@@ -28,7 +28,7 @@ function success(result) {
 
         if (result == Bins[i]) {
             document.getElementById('result').innerHTML = `
-            <h2>Success!</h2>
+          
             <style> 
         .btn {
             display: inline-block;

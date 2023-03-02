@@ -60,10 +60,12 @@ def home(request):
 
     blur_strength = 0
     if daily_points < 100:
-        blur_strength = math.floor(10 - daily_points / 10)
+        blur_strength = 10
+        # blur_strength = math.floor(10 - daily_points / 10)
 
     # Compute progress bar for daily fact of day
     fact_progress = daily_points
+    # Fact progress remains at 100 once 100 daily points acquired
     if fact_progress > 100:
         fact_progress = 100
 
