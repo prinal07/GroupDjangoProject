@@ -1,0 +1,28 @@
+	.news-title {
+	    font-size: 2rem;
+	}
+
+	.news-summary {
+	    font-size: 1.5rem;
+	    text-justify: distribute;
+	}
+
+	.news-link {
+	    font-size: 1.2rem;
+	    /* border: 1px solid red; */
+	    padding: 15px;
+	    background-color: #00ca96;
+	    border-radius: 10px;
+	    color: white;
+	    text-align: center;
+	}
+
+	.newsBlock {
+
+	    background-color: rgb(241, 241, 241);
+	    padding: 25px;
+	    border-radius: 20px;
+	    margin: 20px auto;
+	    width: 80%;
+	    max-width: 2000px;
+	}
