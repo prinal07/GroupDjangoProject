@@ -118,6 +118,7 @@ def profile(request):
         if u_form.is_valid() and p_form.is_valid() and a_form.is_valid():
             u_form.save()
             p_form.save()
+            # uses info from u_form passed to profile.html; a_form is same as u_form
             a_form.save()
             messages.success(request, f'Your account has been updated!')
             return redirect('profile')
