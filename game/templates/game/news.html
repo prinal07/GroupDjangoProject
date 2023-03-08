@@ -1,6 +1,7 @@
 {% extends "game/playerbase.html" %}
 
 {% block content %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,26 +11,23 @@
 	<link rel="stylesheet" href="/storefront//playground//static/style.css">
 </head>
 <body>
-	<div class="news"  style="padding-left:20px">
+	<div class="news">
+		<h1 style="margin-left:20px; text-align: center;" >Environment News</h1><br>
+
 		<div class="news-item">
-            <h1> Environment News </h1>
             {% for title, summary, date, i in newsList %}
     
 
-    
-			<h2 class="news-title">{{ title }}</h2>
-			<p class="news-summary"><b>Summary:</b> {{ summary }}</p> 
-			<div class="news-meta">
-				<span class="news-date">{{ date }}</span>
-				
-			</div>
-            <div><span><a class="news-link" href="{{i}}">Read more...</a></span></div>
+			<div class="newsBlock">
+				<p class="news-title"><b>{{ title }}</b></p>
+				<span class="news-date">{{ date }}</span><br><br>
+				<p class="news-summary">{{ summary }}</p> <br>
+				<a class="news-link" href="{{i}}">Read more...</a>
+			</div><br>
 			{% endfor %}
 		</div>
 	</div>
 </body>
 </html>
-
-   
-   
+  
 {% endblock %}

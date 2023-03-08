@@ -1,25 +1,118 @@
+
+
 {% extends "sitePage/base.html" %}
+{%load widget_tweaks%}
+
 {% block content %}
     {% csrf_token %}
-<div class="content-section">
-<form method="POST">
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>EcoExeter - Register</title>
+</head>
+
+<body>
+
+        
+
+    <form id="regForm" method="POST">
     {% csrf_token %}
-    <fieldset class = "form-group">
-        <legend class="border-bottom mb-4">Join the fight today!</legend>
-{#        form presented as paragraph tags #}
-        {{ form.as_p  }}
-    </fieldset>
-    <div class="form-group">
-        <button class="btn btn-outline-info" type="submit">Submit
-        </button>
-    </div>
-</form>
-<div class="border-top pt-3">
-            <small class="text-muted">
-                Already Have An Account? <a class="ml-2" href="{% url 'login' %}">Sign In</a>
-            </small>
+
+        <h1>Register</h1>
+		<br>
+        <div>
+            <div class="tab">
+				<p>
+                    {% render_field form.email placeholder="Email" id="emailInput" onblur="emailCheck()" %}
+                </p>
+				<div id="wrongemail" style="background-color:red; display:none">
+					wrong email
+				</div>
+				<p>
+				{% render_field form.username placeholder="Username" %}
+				</p>
+            </div>
+
+
+            <div class="tab">
+                {% render_field form.accommodation placeholder="Accommodation" %} <br><br>
+
+                <!-- <div class="container">
+                    <table>
+                        <tr id="accomodationSelect" style="display: none;"">
+                            <td id="question">Accomodation</td>
+                            <td class="wide">
+                                <select name="S1Q1" required>
+                                    <option hidden disabled selected> -- Select an option -- </option>
+                                    <option value="lafrowda">Lafrowda</option>
+                                    <option value="Moberly">Moberly</option>
+                                    <option value="Picturehouse">Picturehouse</option>
+                                </select>
+                            </td>
+                        </tr>
+						
+						<tr id="departmentSelect" style="display: none;">
+                            <td id="question">Department</td>
+                            <td class="wide">
+                                <select name="S1Q1" required>
+                                    <option hidden disabled selected> -- Select an option -- </option>
+                                    <option value="lafrowda">Comp Sci</option>
+                                    <option value="Moberly">Buniss</option>
+                                    <option value="Picturehouse">Gender studies</option>
+                                </select>
+                            </td>
+                        </tr>
+
+                    </table>
+                </div> -->
+            </div>
+
+  
+
+           <div class="tab">
+            <p>
+                {% render_field form.password1 placeholder="Password" id="password" onblur="passwordCheck()" %}
+            </p>
+            <p>
+                {% render_field form.password2 placeholder="Confirm Password" id="password2" onblur="duplicatePasswords()" %} 
+            </p>              
+
+            </div>
+
+
         </div>
-</div>
+
+
+        <div style="overflow:auto;" class="buttons">
+            <br>
+            <div style="float:right;">
+                <button type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
+                <button type="button" id="nextBtn" style="width:100px" onclick="nextPrev(1)">Next</button>
+            </div>
+        </div>
+		<br>
+        <div style="text-align:center;margin-top:0px;margin-bottom:0px;">
+            <span class="step"></span>
+            <span class="step"></span>
+            <span class="step"></span>
+
+        </div>
+        <div> 
+			<br>
+          <a href="/login" style="float:right">Already have an account? </a>
+        </div>
+        
+    </form>
+
+</body>
+{%load static%}
+    <script src="{% static '/js/form.js' %}"></script>
+
+</html>
+
+
+
+
 {% endblock content %}
-
-

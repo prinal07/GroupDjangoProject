@@ -51,6 +51,4 @@ def register(request):
         form = UserRegistrationForm()
     return render(request, 'users/register.html', {'form': form})
 
-def register2(request):
-    return render(request, 'users/register2.html')
 
