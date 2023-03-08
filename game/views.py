@@ -107,16 +107,13 @@ def profile(request):
     logged_username = request.user.username
     logged_account = Account.objects.get(username=logged_username)
 
-    u_form = UserUpdateForm(request.POST, instance=request.user)
-    p_form = ProfileUpdateForm(request.POST,
-                               request.FILES,
-                               instance=request.user.profile)
-    # Find account in database to update it
-    a_form = AccountUpdateForm(request.POST, instance=Account.objects.get(username=request.user.username))
-
-    d_form = DeleteAccountForm()
-
     if request.method == 'POST':
+        u_form = UserUpdateForm(request.POST, instance=request.user)
+        p_form = ProfileUpdateForm(request.POST,
+                                   request.FILES,
+                                   instance=request.user.profile)
+        # Find account in database to update it
+        a_form = AccountUpdateForm(request.POST, instance=Account.objects.get(username=request.user.username))
 
         if u_form.is_valid() and p_form.is_valid() and a_form.is_valid():
             u_form.save()
@@ -125,21 +122,22 @@ def profile(request):
             messages.success(request, f'Your account has been updated!')
             return redirect('profile')
 
-        else:
-            u_form = UserUpdateForm(instance=request.user)
-            p_form = ProfileUpdateForm(instance=request.user.profile)
-            d_form = DeleteAccountForm()
+    else:
+        u_form = UserUpdateForm(instance=request.user)
+        p_form = ProfileUpdateForm(instance=request.user.profile)
 
-        if 'delete' in request.POST:
-            d_form = DeleteAccountForm(request.POST)
-            if d_form.is_valid() and d_form.cleaned_data['confirm_delete'] == True:
-                user = request.user
-                # delete account entity
-                logged_account.delete()
-                # delete django account, linked to profile
-                user.delete()
-                messages.success(request, f'Your account has been deleted!')
-                return redirect('site-home')
+    d_form = DeleteAccountForm()
+
+    if 'delete' in request.POST:
+        d_form = DeleteAccountForm(request.POST)
+        if d_form.is_valid() and d_form.cleaned_data['confirm_delete'] == True:
+            user = request.user
+            # delete account entity
+            logged_account.delete()
+            # delete django account, linked to profile
+            user.delete()
+            messages.success(request, f'Your account has been deleted!')
+            return redirect('site-home')
 
         # u_form is django user update
         # p_form is image update
