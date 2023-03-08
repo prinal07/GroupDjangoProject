@@ -32,5 +32,5 @@ class DeleteAccountForm(forms.Form):
     confirm_delete = forms.BooleanField(
         required=True,
         label='Confirm deletion',
-        help_text="Type 'DELETE' to confirm that you want to delete your account."
+        help_text="Tick the box to confirm account deletion."
     )
