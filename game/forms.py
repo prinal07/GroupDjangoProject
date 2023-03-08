@@ -19,8 +19,18 @@ class AccountUpdateForm(forms.ModelForm):
         model = Account
         fields = ['username', 'email']
 
-#Update profile pic
+
+# Update profile pic
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['image']
+
+
+# delete account
+class DeleteAccountForm(forms.Form):
+    confirm_delete = forms.BooleanField(
+        required=True,
+        label='Confirm deletion',
+        help_text="Type 'DELETE' to confirm that you want to delete your account."
+    )

@@ -6,7 +6,7 @@ from django.db.models import Sum
 from django.contrib import messages
 import requests
 
-from game.forms import UserUpdateForm, ProfileUpdateForm, AccountUpdateForm
+from game.forms import UserUpdateForm, ProfileUpdateForm, AccountUpdateForm, DeleteAccountForm
 from users.models import Account
 from game.models import Bin
 from .models import Fact
@@ -107,32 +107,48 @@ def profile(request):
     logged_username = request.user.username
     logged_account = Account.objects.get(username=logged_username)
     if request.method == 'POST':
+
+        if 'delete' in request.POST:
+            d_form = DeleteAccountForm(request.POST)
+            if d_form.is_valid() and d_form.cleaned_data['confirm_delete'] == True:
+                user = request.user
+                logged_account.delete()
+                user.delete()
+                messages.success(request, f'Your account has been deleted!')
+                return redirect('site-home')
+
         # u_form is django user update
         # p_form is image update
         # a_form is user account update
-        u_form = UserUpdateForm(request.POST, instance=request.user)
-        p_form = ProfileUpdateForm(request.POST,
-                                   request.FILES,
-                                   instance=request.user.profile)
-        # Find account in database to update it
-        a_form = AccountUpdateForm(request.POST, instance=Account.objects.get(username=request.user.username))
-        if u_form.is_valid() and p_form.is_valid() and a_form.is_valid():
-            u_form.save()
-            p_form.save()
-            a_form.save()
-            messages.success(request, f'Your account has been updated!')
-            return redirect('profile')
+        # d_form is delete user from db
+
+        else:
+            u_form = UserUpdateForm(request.POST, instance=request.user)
+            p_form = ProfileUpdateForm(request.POST,
+                                       request.FILES,
+                                       instance=request.user.profile)
+            # Find account in database to update it
+            a_form = AccountUpdateForm(request.POST, instance=Account.objects.get(username=request.user.username))
+            if u_form.is_valid() and p_form.is_valid() and a_form.is_valid():
+                u_form.save()
+                p_form.save()
+                a_form.save()
+                messages.success(request, f'Your account has been updated!')
+                return redirect('profile')
 
     else:
         u_form = UserUpdateForm(instance=request.user)
         p_form = ProfileUpdateForm(instance=request.user.profile)
+        d_form = DeleteAccountForm()
 
+    # ensure new level stored in account db each time
     logged_account.level = logged_account.current_level()
     logged_account.save()
 
     context = {
         'u_form': u_form,
         'p_form': p_form,
+        'd_form': d_form,
         'user_points': logged_account.points,
         'current_level': logged_account.current_level(),
         'level_progress': logged_account.level_progress()
