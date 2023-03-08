@@ -50,9 +50,12 @@
                         <button id="uFormSubmitBtn" type="submit">Update</button>
                     </div>
 
-                    {{ d_form.as_p }}
-                    <input type="submit" name="delete" value="Delete">
+                </form>
 
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="submit" name="delete" value="Delete">
+                    {{ d_form.as_p }}
                 </form>
             </td>
             <td style="width:50%">
