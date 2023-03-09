@@ -1,5 +1,7 @@
 from django.db import models
-from django.db.models import Max, Q
+from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import RegexValidator
+
 
 
 # Created a model here.
@@ -37,50 +39,19 @@ class Suspect(models.Model):
         super().save(*args, **kwargs)
 
 
-
-
-#     MAX_SUSPECTS = 5
-    
-#     def limit_suspect_choices():
-#         return Q(story_suspect1__isnull=True) | \
-#                Q(story_suspect2__isnull=True) | \
-#                Q(story_suspect3__isnull=True) | \
-#                Q(story_suspect4__isnull=True) | \
-#                Q(story_suspect5__isnull=True)
-    
-#     suspect1 = models.ForeignKey(Suspect, on_delete=models.CASCADE, related_name='story_suspect1')
-#     suspect2 = models.ForeignKey(Suspect, on_delete=models.CASCADE, related_name='story_suspect2', blank=True, null=True)
-#     suspect3 = models.ForeignKey(Suspect, on_delete=models.CASCADE, related_name='story_suspect3', blank=True, null=True)
-#     suspect4 = models.ForeignKey(Suspect, on_delete=models.CASCADE, related_name='story_suspect4', blank=True, null=True)
-#     suspect5 = models.ForeignKey(Suspect, on_delete=models.CASCADE, related_name='story_suspect5', blank=True, null=True)
-
-#     suspects = [suspect1, suspect2, suspect3, suspect4, suspect5]
-
-#     spriteCodes = models.TextField(max_length=5)
-
-
-#     description = [suspect1.brief, suspect2.brief, suspect3.brief, suspect4.brief, suspect5.brief]
-    
-#     clue1 = models.TextField(max_length=100, default="")
-#     clue2 = models.TextField(max_length=100, default="")
-#     clue3 = models.TextField(max_length=100, default="")
-#     clue4 = models.TextField(max_length=100, default="")
-#     clue5 = models.TextField(max_length=100, default="")
-#     clue6 = models.TextField(max_length=100, default="")
-#     clue7 = models.TextField(max_length=100, default="")
-#     clue8 = models.TextField(max_length=100, default="")
-#     clue9 = models.TextField(max_length=100, default="")
-#     clue10 = models.TextField(max_length=100, default="")
-
-#     clues = [clue1, clue2, clue3, clue4, clue5, clue6, clue7, clue8, clue9, clue10]
-#     culprit = models.CharField(max_length=1)
-
 class Story(models.Model):
     MAX_SUSPECTS = 5
     
     story_number = models.IntegerField(default=1)
-    sprite_codes = models.TextField(max_length=5, default="")
-    
+
+    sprite_1 = models.CharField(max_length=1, validators=[RegexValidator(r'^[0-9]+$')])
+    sprite_2 = models.CharField(max_length=1, validators=[RegexValidator(r'^[0-9]+$')])
+    sprite_3 = models.CharField(max_length=1, validators=[RegexValidator(r'^[0-9]+$')])
+    sprite_4 = models.CharField(max_length=1, validators=[RegexValidator(r'^[0-9]+$')])
+    sprite_5 = models.CharField(max_length=1, validators=[RegexValidator(r'^[0-9]+$')])
+
+    sprite_codes = str(sprite_1) + str(sprite_2) + str(sprite_3) + str(sprite_4) + str(sprite_5)
+
     clue1 = models.TextField(max_length=400, default="")
     clue2 = models.TextField(max_length=400, default="")
     clue3 = models.TextField(max_length=400, default="")
@@ -94,7 +65,7 @@ class Story(models.Model):
     
     clues = [clue1, clue2, clue3, clue4, clue5, clue6, clue7, clue8, clue9, clue10]
     
-    culprit = models.CharField(max_length=1, default='')
+    culprit = models.CharField(max_length=1, validators=[RegexValidator(r'^[0-9]$')])
     
     def can_add_suspect(self):
         return self.suspects.count() < self.MAX_SUSPECTS
@@ -107,4 +78,17 @@ class Story(models.Model):
     
     def get_description(self):
         return [suspect.brief for suspect in self.get_suspects()]
+    
+    def getCulprit(self):
+        return self.culprit
+    
+    def getSpritesCodes(self):
+        return self.sprite_codes
+    
+    def getAllClues(self):
+        return self.clues
+    
+
+
+
 
