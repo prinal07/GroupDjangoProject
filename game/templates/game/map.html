@@ -289,20 +289,48 @@
             });
         })
 
-
+        var geolocate = new mapboxgl.GeolocateControl({
+            positionOptions: {
+                enableHighAccuracy: true
+            },
+// When active the map will receive updates to the device's location as it changes.
+            trackUserLocation: true,
+// Draw an arrow next to the location dot to indicate which direction the device is heading.
+            showUserHeading: true
+        })
         // Add geolocate control to the map.
         map.addControl(
-            new mapboxgl.GeolocateControl({
-                positionOptions: {
-                    enableHighAccuracy: true
-                },
-// When active the map will receive updates to the device's location as it changes.
-                trackUserLocation: true,
-// Draw an arrow next to the location dot to indicate which direction the device is heading.
-                showUserHeading: true
-            })
+            geolocate
         );
 
+        geolocate.on('geolocate', function (e) {
+            var lon = e.coords.longitude;
+            var lat = e.coords.latitude
+            var currentPosition = [lon, lat];
+            console.log(currentPosition);
+            let xhr = new XMLHttpRequest();
+
+            xhr.open("POST", "{% url 'map' %}");
+            xhr.setRequestHeader("Accept", "application/json");
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}')
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    console.log(xhr.status);
+                    console.log(xhr.responseText);
+                    var data = JSON.parse(xhr.responseText)
+                    document.getElementById('green-message').innerHTML = data['message']
+                }
+            };
+
+            let data = `{"lon": ` + lon + `, "lat":` + lat + `}`;
+
+
+            xhr.send(data);
+
+
+        });
         // add markers to map
 
         map.on('load', function () {
@@ -328,13 +356,10 @@
         });
 
 
-        map.on('load', () => {
-
-
-        })
-
-
     </script>
+
+
+    <div id='green-message'></div>
 
     </body>
     </html>

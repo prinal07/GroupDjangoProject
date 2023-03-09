@@ -5,12 +5,17 @@ from django.shortcuts import render, redirect
 from django.db.models import Sum
 from django.contrib import messages
 import requests
+import json
+from django.http import JsonResponse
 
 from game.forms import UserUpdateForm, ProfileUpdateForm, AccountUpdateForm, DeleteAccountForm
 from users.models import Account
 from game.models import Bin
 from .models import Fact
 from django.contrib.auth.decorators import login_required
+
+from turfpy.measurement import boolean_point_in_polygon
+from geojson import Point, MultiPolygon, Feature
 
 
 # Create your views here.
@@ -162,14 +167,44 @@ def profile(request):
 
 
 def map(request):
-    bins = Bin.objects.all()
+    message = ""
 
+    logged_username = request.user.username
+    logged_user = Account.objects.get(username=logged_username)
+
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        lat = data.get("lat")
+        lon = data.get("lon")
+        print(data)
+
+        print(lat, lon)
+
+        point = Feature(geometry=Point([lat, lon]))
+        polygon = Feature(geometry=MultiPolygon(
+            [([(lat + 1, lon + 1), (lat - 1, lon - 1), (lat - 1, lon + 1), (lat + 1, lon - 1)],), ]))
+        print(boolean_point_in_polygon(point, polygon))
+        if (boolean_point_in_polygon(point, polygon)):
+            logged_user.points += 10
+            logged_user.save()
+            message = {'message': 'You have entered green area!'}
+            return JsonResponse(message)
+
+    # 50.7283775,-3.5228209
+    # 50.7283775,-3.5228209
+
+    # 50.7283568, -3.5229058
+
+    # 50.7282447,-3.522881
+
+    bins = Bin.objects.all()
     bin_info = []
     for o in bins:
         bin_info.append([o.latitude, o.longitude, o.bin_number])
 
     context = {
-        'bin_info': bin_info
+        'bin_info': bin_info,
+        'message': message
     }
 
     return render(request, 'game/map.html', context=context)
