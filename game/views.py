@@ -276,8 +276,19 @@ def QR(request):
 
 @login_required
 def update_points(request):
+    """Update the Database record for the current User
+
+    Args:
+        request (_type_): _description_
+
+    Returns:
+        HttpResponse: Serves two different options:
+            - A redirect to page <url>/
+            - A webpage to page <url>/game/ 
+    """
+    
     if request.method == 'POST' and 'update_points' in request.POST:
-        # Get the current user and update their points field
+        # Get the current user and update their points field in the Database record
         logged_username = request.user.username
         logged_user = Account.objects.get(username=logged_username)
         logged_user.points += 10
@@ -294,4 +305,13 @@ def update_points(request):
     return render(request, 'update_points.html')
 
 def unity(request):
+    """Serves the Unity Game at <url>/game/unity>
+    Uses the pre-built Unity WebGL html file to load a gameInstance and serve a project to the user
+
+    Args:
+        request (_type_): _description_
+
+    Returns:
+        HttpResponse: Webpage at ./templates/game/unity.html
+    """
     return render(request, template_name="game/unity.html")

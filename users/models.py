@@ -12,10 +12,15 @@ class Account(models.Model):
     """Account model used by Django to populate the db.sqlite3 database, and store information of individual users
 
     Args:
-        models (super): A built-in Django model structure, that is adapted by this Class
+        models.Model (super): A built-in Django model structure, that is adapted by this Class
 
-    Returns:
-        No return. Registered to the Admin Page in ./admin.py
+    Methods:
+        current_level(): Returns the current level of the user
+        level_progress(): Returns the percentage progress to the next level (every 100 points)
+        is_my_bool_field_true(): Returns the boolean if the user is Staff
+        __str__(): Represents the model as a string in a specfied format
+        account_dailypoints(): Returns the number of points achieved by the account today
+        account_points(): Returns the number of points achieved in total
     """
     
     # Model Fields, to be populated and used within the database. Using Django model types to collect preferred data
@@ -94,7 +99,11 @@ class Profile(models.Model):
     """Profile model, to store information related to a User for use in representation
 
     Args:
-        models (super): Django's built in Model structure, to be adapted by the attributes of this class
+        models.Model (super): Django's built in Model structure, to be adapted by the attributes of this class
+    
+    Methods:
+        __str__(): String Representation of the Model Function
+    
     """
     
     # Attributes (Columns) of the Model
