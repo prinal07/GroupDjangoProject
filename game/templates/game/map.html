@@ -37,7 +37,7 @@
             container: 'map',
 // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
             style: 'mapbox://styles/mapbox/streets-v12',
-            center: [-3.5356537, 50.7368255],
+            center: [-3.5352823, 50.7371627],
             zoom: 16
         });
 
@@ -46,18 +46,18 @@
         var marker = null;
         var popup = null;
 
-        popup = new mapboxgl.Popup({offset: 25}).setText("PIN INFO 1");
+        popup = new mapboxgl.Popup({offset: 25}).setText("Bin");
 
-        marker = new mapboxgl.Marker().setLngLat([-3.537214,50.738053]).setPopup(popup).addTo(map);
+        marker = new mapboxgl.Marker().setLngLat([-3.537214, 50.738053]).setPopup(popup).addTo(map);
 
-        popup = new mapboxgl.Popup({offset: 25}).setText("PIN INFO 2");
-        marker = new mapboxgl.Marker().setLngLat([-3.531119,50.738331]).setPopup(popup).addTo(map);
+        popup = new mapboxgl.Popup({offset: 25}).setText("Bin");
+        marker = new mapboxgl.Marker().setLngLat([-3.531119, 50.738331]).setPopup(popup).addTo(map);
 
         popup = new mapboxgl.Popup({offset: 25}).setText("PIN INFO 3");
-        marker = new mapboxgl.Marker().setLngLat([-3.536073,50.736282]).setPopup(popup).addTo(map);
+        marker = new mapboxgl.Marker().setLngLat([-3.536073, 50.736282]).setPopup(popup).addTo(map);
 
         popup = new mapboxgl.Popup({offset: 25}).setText("PIN INFO 4");
-        marker = new mapboxgl.Marker().setLngLat([-3.535000,50.739100]).setPopup(popup).addTo(map);
+        marker = new mapboxgl.Marker().setLngLat([-3.535000, 50.739100]).setPopup(popup).addTo(map);
 
         for (var i = 0; i < bin_info.length; i++) {
             let lat = parseFloat(bin_info[i][0]);
@@ -211,6 +211,19 @@
                 }
             });
         })
+
+        // Add geolocate control to the map.
+        map.addControl(
+            new mapboxgl.GeolocateControl({
+                positionOptions: {
+                    enableHighAccuracy: true
+                },
+// When active the map will receive updates to the device's location as it changes.
+                trackUserLocation: true,
+// Draw an arrow next to the location dot to indicate which direction the device is heading.
+                showUserHeading: true
+            })
+        );
 
         map.on('load', () => {
 
