@@ -42,14 +42,21 @@
                         Update Image:
                     </h3>
                     <div>
-                        {% render_field p_form.image id+="u_form"%}
+                        {% render_field p_form.image id+="u_form" %}
                     </div>
                 </fieldset>
-                <br><br>
-                <div class="form-group">
-                    <button id="uFormSubmitBtn" type="submit">Update</button>
-                </div>
-            </form>
+                    <br><br>
+                    <div class="form-group">
+                        <button id="uFormSubmitBtn" type="submit">Update</button>
+                    </div>
+
+                </form>
+
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="submit" name="delete" value="Delete">
+                    {{ d_form.as_p }}
+                </form>
             </td>
             <td style="width:50%">
                 <h3> Achievments: </h3>

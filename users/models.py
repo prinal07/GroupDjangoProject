@@ -15,7 +15,7 @@ class Account(models.Model):
     username = models.CharField(max_length=20)
     password = models.CharField(max_length=20)
     group = models.IntegerField(default=0)
-    level = models.IntegerField(default=0)
+    level = models.IntegerField(default=1)
     points = models.IntegerField(default=0)
     daily_points = models.IntegerField(default=0)
     last_day_accessed = models.DateField(default=date.today)
