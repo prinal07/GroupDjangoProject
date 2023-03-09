@@ -38,3 +38,4 @@ class StoryAdmin(admin.ModelAdmin):
         inlines (list): A list of inline forms to display in the admin interface.
     """
     inlines = [SuspectInline]
+

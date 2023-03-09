@@ -1,6 +1,10 @@
 from django.db import models
 from django.core.validators import RegexValidator
 
+class Challenege(models.Model):
+    challengeId = models.IntegerField(default=1)
+    challengeDesc = models.TextField(default="", max_length=400)
+
 
 class Fact(models.Model):
     """
