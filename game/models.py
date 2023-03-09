@@ -52,16 +52,16 @@ class Story(models.Model):
 
     sprite_codes = str(sprite_1) + str(sprite_2) + str(sprite_3) + str(sprite_4) + str(sprite_5)
 
-    clue1 = models.TextField(max_length=400, default="")
-    clue2 = models.TextField(max_length=400, default="")
-    clue3 = models.TextField(max_length=400, default="")
-    clue4 = models.TextField(max_length=400, default="")
-    clue5 = models.TextField(max_length=400, default="")
-    clue6 = models.TextField(max_length=400, default="")
-    clue7 = models.TextField(max_length=400, default="")
-    clue8 = models.TextField(max_length=400, default="")
-    clue9 = models.TextField(max_length=400, default="")
-    clue10 = models.TextField(max_length=400, default="")
+    clue1 = models.TextField(max_length=1000, default="")
+    clue2 = models.TextField(max_length=1000, default="")
+    clue3 = models.TextField(max_length=1000, default="")
+    clue4 = models.TextField(max_length=1000, default="")
+    clue5 = models.TextField(max_length=1000, default="")
+    clue6 = models.TextField(max_length=1000, default="")
+    clue7 = models.TextField(max_length=1000, default="")
+    clue8 = models.TextField(max_length=1000, default="")
+    clue9 = models.TextField(max_length=1000, default="")
+    clue10 = models.TextField(max_length=1000, default="")
     
     clues = [clue1, clue2, clue3, clue4, clue5, clue6, clue7, clue8, clue9, clue10]
     
