@@ -66,19 +66,41 @@
                         'coordinates': [-3.537214, 50.738053]
                     },
                     'properties': {
-                        'title': 'Mapbox',
-                        'description': 'Washington, D.C.'
+                        'title': 'Bin 1',
+                        'description': 'Recycle now!'
                     }
                 },
                 {
                     'type': 'Feature',
                     'geometry': {
                         'type': 'Point',
-                        'coordinates': [-122.414, 37.776]
+                        'coordinates': [-3.531119, 50.738331]
                     },
                     'properties': {
-                        'title': 'Mapbox',
-                        'description': 'San Francisco, California'
+                        'title': 'Bin 2',
+                        'description': 'Recycle now!'
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [-3.536073, 50.736282]
+                    },
+                    'properties': {
+                        'title': 'Bin 3',
+                        'description': 'Recycle now!'
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [-3.535000, 50.739100]
+                    },
+                    'properties': {
+                        'title': 'Bin 4',
+                        'description': 'Recycle now!'
                     }
                 }
             ]
@@ -113,21 +135,6 @@
 
         console.log(bin_info);
 
-        var marker = null;
-        var popup = null;
-
-        popup = new mapboxgl.Popup({offset: 25}).setText("Bin");
-
-        marker = new mapboxgl.Marker().setLngLat([-3.537214, 50.738053]).setPopup(popup).addTo(map);
-
-        popup = new mapboxgl.Popup({offset: 25}).setText("Bin");
-        marker = new mapboxgl.Marker().setLngLat([-3.531119, 50.738331]).setPopup(popup).addTo(map);
-
-        popup = new mapboxgl.Popup({offset: 25}).setText("PIN INFO 3");
-        marker = new mapboxgl.Marker().setLngLat([-3.536073, 50.736282]).setPopup(popup).addTo(map);
-
-        popup = new mapboxgl.Popup({offset: 25}).setText("PIN INFO 4");
-        marker = new mapboxgl.Marker().setLngLat([-3.535000, 50.739100]).setPopup(popup).addTo(map);
 
         for (var i = 0; i < bin_info.length; i++) {
             let lat = parseFloat(bin_info[i][0]);
