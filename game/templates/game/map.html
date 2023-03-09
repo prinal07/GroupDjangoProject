@@ -8,9 +8,11 @@
         <meta charset="utf-8">
         <title>Add a default marker to a web map</title>
         <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet"/>
         <link href="https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.css" rel="stylesheet">
         <script src="https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.js"></script>
-        <script> 
+        <script>
             console.log('{{bin_info}}')
             var bin_info = JSON.parse('{{bin_info}}'); </script>
         <style>
@@ -26,13 +28,61 @@
                 bottom: 0;
                 width: 80%;
             }
+
+            .marker {
+                background-image: url('../../static/bin.png');
+                background-size: cover;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                cursor: pointer;
+            }
+
+            .mapboxgl-popup {
+                max-width: 200px;
+            }
+
+            .mapboxgl-popup-content {
+                text-align: center;
+                font-family: 'Open Sans', sans-serif;
+            }
         </style>
+
     </head>
+
     <body>
     <div id="map"></div>
 
     <script>
         mapboxgl.accessToken = 'pk.eyJ1Ijoic2MxMTMxIiwiYSI6ImNsZXBqYTNoNjBjcGIzdG81djdwazN4ZnoifQ.aUnfUV2U5KPxxgPni-Ma1Q';
+
+        const geojson = {
+            'type': 'FeatureCollection',
+            'features': [
+                {
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [-3.537214, 50.738053]
+                    },
+                    'properties': {
+                        'title': 'Mapbox',
+                        'description': 'Washington, D.C.'
+                    }
+                },
+                {
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [-122.414, 37.776]
+                    },
+                    'properties': {
+                        'title': 'Mapbox',
+                        'description': 'San Francisco, California'
+                    }
+                }
+            ]
+        };
         const map = new mapboxgl.Map({
             container: 'map',
 // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
@@ -40,6 +90,26 @@
             center: [-3.5352823, 50.7371627],
             zoom: 16
         });
+
+
+        for (const feature of geojson.features) {
+            // create a HTML element for each feature
+            const el = document.createElement('div');
+            el.className = 'marker';
+
+            // make a marker for each feature and add it to the map
+            new mapboxgl.Marker(el)
+                .setLngLat(feature.geometry.coordinates)
+                .setPopup(
+                    new mapboxgl.Popup({offset: 25}) // add popups
+                        .setHTML(
+                            `<h3>${feature.properties.title}</h3>
+            <p>${feature.properties.description}</p>`
+                        )
+                )
+                .addTo(map);
+        }
+
 
         console.log(bin_info);
 
@@ -212,6 +282,7 @@
             });
         })
 
+
         // Add geolocate control to the map.
         map.addControl(
             new mapboxgl.GeolocateControl({
@@ -225,7 +296,33 @@
             })
         );
 
+        // add markers to map
+
+        map.on('load', function () {
+            // Add a new GeoJSON source with the geojson object
+            map.addSource('markers', {
+                type: 'geojson',
+                data: geojson
+            });
+
+            // Add markers to the map using the GeoJSON source
+            map.addLayer({
+                id: 'markers',
+                type: 'symbol',
+                source: 'markers',
+                layout: {
+                    'icon-image': 'bin.png', // Use the 'bin' image for markers
+                    'icon-size': 0.5,
+                    'text-field': '{title}',
+                    'text-offset': [0, 1],
+                    'text-anchor': 'top'
+                }
+            });
+        });
+
+
         map.on('load', () => {
+
 
         })
 
