@@ -47,16 +47,12 @@
                 </fieldset>
                     <br><br>
                     <div class="form-group">
-                        <button id="uFormSubmitBtn" type="submit">Update</button>
+                        <button id="uFormSubmitBtn" type="submit" style="background-color: #4CAF50; border: 1.5px solid green;">Update</button>
                     </div>
 
                 </form>
-
-                <form method="POST">
-                    {% csrf_token %}
-                    <input type="submit" name="delete" value="Delete">
-                    {{ d_form.as_p }}
-                </form>
+                <br>
+                
             </td>
             <td style="width:50%">
                 <h3> Achievments: </h3>
@@ -68,6 +64,18 @@
                 <h5><i class="bx bxs-trophy"></i> Achievments 3</h5>
                 <br><br>
                 <h5><i class="bx bxs-trophy"></i> Achievments 4</h5>
+
+                <br><br>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div>
+                        <h4><input type="submit" name="delete" value="Delete" id="uFormSubmitBtn" style="background-color: red; border: 1.5px solid maroon;"> Confirm Deletion {% render_field d_form.confirm_delete id+="deleteTick"%} </h4>
+                    </div>
+                    
+                    
+
+                </form>
+
             </td>
         </table>
 
