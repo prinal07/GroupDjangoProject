@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import Account, Profile
-
+from game.models import Bin, Challenge
 
 class UserAdmin(admin.ModelAdmin):
     """
@@ -8,7 +8,6 @@ class UserAdmin(admin.ModelAdmin):
 
     """
     list_display = ('username', 'is_my_bool_field_true')
-
 
 admin.site.register(Account, UserAdmin)
 
@@ -19,3 +18,12 @@ class ChallengesInLine(admin.TabularInline):
     Creates an inline form for the Suspect model to be displayed within the Account model's admin interface
     """
     model = Account
+
+class BinInLine(admin.TabularInline):
+    model = Bin
+    extra = 0
+
+@admin.register(Challenge)
+class ChallengeAdmin(admin.ModelAdmin):
+    inlines = [BinInLine]
+

@@ -1,10 +1,16 @@
+
 from django.db import models
 from django.core.validators import RegexValidator
 
-class Challenege(models.Model):
+class Challenge(models.Model):
     challengeId = models.IntegerField(default=1)
     challengeDesc = models.TextField(default="", max_length=400)
-
+    CHALLENGE_CHOICES = (
+        ('Bin', 'Bin'),
+        ('GreenAreas', 'GreenAreas'),
+        ('Walking', 'Walking')
+    )
+    challengeType = models.TextField(choices=CHALLENGE_CHOICES, default='')
 
 class Fact(models.Model):
     """
@@ -32,7 +38,6 @@ class Fact(models.Model):
         """
         return f"{self.date} - {self.fact}"
 
-
 class Bin(models.Model):
     """
     A class representing a recycling bin to be used in challenges and identified on the map.
@@ -58,13 +63,13 @@ class Bin(models.Model):
     latitude = models.FloatField()
     longitude = models.FloatField()
     poi_info = models.TextField(max_length=30)
+    challenge = models.ForeignKey(Challenge, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         """
         Returns a string representation of the object.
         """
         return f'{self.latitude}, {self.longitude}'
-
 
 class Suspect(models.Model):
     """
@@ -109,7 +114,6 @@ class Suspect(models.Model):
             # get the maximum number currently in the database and increment it by 1
             self.number = self.story.suspects.count() + 1
         super().save(*args, **kwargs)
-
 
 class Story(models.Model):
     """
@@ -227,5 +231,3 @@ class Story(models.Model):
         Returns a list of all ten clue strings.
         """
         return self.clues
-
-
