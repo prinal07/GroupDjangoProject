@@ -1,5 +1,5 @@
 from django.contrib import admin
-from game.models import Fact, Bin, Story, Suspect
+from game.models import Fact, Bin, Story, Suspect, Challenge
 
 admin.site.register(Fact)
 

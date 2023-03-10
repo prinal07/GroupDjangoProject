@@ -5,12 +5,14 @@ from django.core.validators import RegexValidator
 class Challenge(models.Model):
     challengeId = models.IntegerField(default=1)
     challengeDesc = models.TextField(default="", max_length=400)
-    CHALLENGE_CHOICES = (
+    CHALLENGE_TYPES = (
         ('Bin', 'Bin'),
         ('GreenAreas', 'GreenAreas'),
         ('Walking', 'Walking')
     )
-    challengeType = models.TextField(choices=CHALLENGE_CHOICES, default='')
+    challengeType = models.TextField(choices=CHALLENGE_TYPES, default='')    
+
+    
 
 class Fact(models.Model):
     """

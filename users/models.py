@@ -3,6 +3,7 @@ from datetime import date
 import math
 from django.db import models
 from django.contrib.auth.models import User
+from game.models import Challenge
 
 
 # Store user information
@@ -62,6 +63,8 @@ class Account(models.Model):
     daily_points = models.IntegerField(default=0)
     last_day_accessed = models.DateField(default=date.today)
     staffCheck = models.BooleanField(default=False)
+    challenges = models.ManyToManyField(Challenge, related_name='accounts')
+
 
     def current_level(self):
         """
