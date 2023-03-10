@@ -314,4 +314,5 @@ def unity(request):
     Returns:
         HttpResponse: Webpage at ./templates/game/unity.html
     """
+        
     return render(request, template_name="game/unity.html")
