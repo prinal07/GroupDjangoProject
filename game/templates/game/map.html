@@ -51,7 +51,27 @@
     </head>
 
     <body>
+
+    <style type="text/css">
+        #info {
+            display: table;
+            position: relative;
+            margin: 0px auto;
+            word-wrap: anywhere;
+            white-space: pre-wrap;
+            padding: 10px;
+            border: none;
+            border-radius: 3px;
+            font-size: 12px;
+            text-align: center;
+            color: #222;
+            background: #fff;
+        }
+    </style>
+
+
     <div id="map"></div>
+    <pre id="info"></pre>
 
     <script>
         mapboxgl.accessToken = 'pk.eyJ1Ijoic2MxMTMxIiwiYSI6ImNsZXBqYTNoNjBjcGIzdG81djdwazN4ZnoifQ.aUnfUV2U5KPxxgPni-Ma1Q';
@@ -227,10 +247,31 @@
                         'type': 'Polygon',
                         'coordinates': [
                             [
-                                [-3.5319415,50.7341617],
+                                [-3.5319415, 50.7341617],
                                 [-3.5314349, 50.7340736],
-                                [-3.5324445,50.7332753],
-                                [-3.5319436,50.7330960 ]
+                                [-3.5324445, 50.7332753],
+                                [-3.5319436, 50.7330960]
+                            ]
+                        ]
+                    }
+                }
+            });
+
+
+            map.addSource('park6', {
+                'type': 'geojson',
+                'data': {
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'Polygon',
+                        'coordinates': [
+                            [
+
+                                {#[-3.5327185,50.7359713],#}
+                                {#[-3.534087, 50,736645],#}
+                                {#[-3.532315,50.735743],#}
+                                {#[-3.532135,50.735780]#}
+
                             ]
                         ]
                     }
@@ -246,7 +287,18 @@
                     'fill-opacity': 0.5
                 }
             });
-                // Add a new layer to visualize the polygon.
+
+            map.addLayer({
+                'id': 'park6',
+                'type': 'fill',
+                'source': 'park6', // reference the data source
+                'layout': {},
+                'paint': {
+                    'fill-color': '#0080ff', // blue color fill
+                    'fill-opacity': 0.5
+                }
+            });
+            // Add a new layer to visualize the polygon.
             map.addLayer({
                 'id': 'maine',
                 'type': 'fill',
@@ -352,6 +404,17 @@
                     'text-anchor': 'top'
                 }
             });
+        });
+
+
+        map.on('mousemove', (e) => {
+            document.getElementById('info').innerHTML =
+// `e.point` is the x, y coordinates of the `mousemove` event
+// relative to the top-left corner of the map.
+                JSON.stringify(e.point) +
+                '<br />' +
+                // `e.lngLat` is the longitude, latitude geographical position of the event.
+                JSON.stringify(e.lngLat.wrap());
         });
 
 
