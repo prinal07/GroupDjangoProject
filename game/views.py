@@ -5,6 +5,8 @@ from django.shortcuts import render, redirect
 from django.db.models import Sum
 from django.contrib import messages
 import requests
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
 
 from game.forms import UserUpdateForm, ProfileUpdateForm, AccountUpdateForm
 from users.models import Account
@@ -147,6 +149,7 @@ def map(request):
     context = {
         'bin_info': bin_info
     }
+    
 
     return render(request, 'game/map.html', context=context)
 
@@ -179,21 +182,96 @@ def QR(request):
     return render(request, 'game/QR.html')
 
 
+
 @login_required
 def update_points(request):
     if request.method == 'POST' and 'update_points' in request.POST:
-        # Get the current user and update their points field
+
         logged_username = request.user.username
         logged_user = Account.objects.get(username=logged_username)
         logged_user.points += 10
         logged_user.daily_points += 10
         logged_user.save()
 
-        # Show a success message to the user
         messages.success(request, 'Points updated successfully!')
 
-        # Redirect back to the current page
+
         return redirect(request.META.get('HTTP_REFERER', '/'))
 
-    # If the form was not submitted, render a template with the form
+ 
     return render(request, 'update_points.html')
+
+
+
+
+@csrf_exempt
+def your_view(request):
+    """
+    A sample view that receives a POST request with 'latitude' and 'longitude' parameters.
+    This view is CSRF exempt.
+
+    Args:
+        request (HttpRequest): The request object sent by the client.
+
+    Returns:
+        HttpResponse: A simple response confirming that data was received.
+    """
+    if request.method == 'POST':
+
+        # Get the 'latitude' and 'longitude' parameters from the POST request
+        latitude = request.POST.get('latitude')
+        longitude = request.POST.get('longitude')
+
+        # Return a simple response confirming that data was received
+        return HttpResponse('Data received')
+
+    else:
+        # Return an error message if the request method is not POST
+        return HttpResponse('Invalid request method')
+
+def get_directions(request):
+    """
+    A view function that retrieves walking/cycling directions between two coordinates using the Mapbox API and returns the
+    results as an HTTP response.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: The HTTP response object containing the cycling directions.
+
+    """
+    
+    ACCESS_TOKEN = "YOUR_MAPBOX_ACCESS_TOKEN"
+
+
+    start_coord = ",37.78"
+    end_coord = "-77.03,38.91"
+
+    url = f"https://api.mapbox.com/directions/v5/mapbox/cycling/{start_coord};{end_coord}?access_token={ACCESS_TOKEN}"
+
+    response = requests.get(url)
+
+
+    if response.status_code == 200:
+
+        data = response.json()
+   
+        duration = data["routes"][0]["duration"]
+        distance = data["routes"][0]["distance"]
+
+        steps = data["routes"][0]["legs"][0]["steps"]
+        
+        context = {
+            "duration": duration,
+            "distance": distance,
+            "steps": steps,
+        }
+        return render(request, "directions.html", context)
+    else:
+        
+        context = {
+            "error": f"Request failed with status code {response.status_code}",
+        }
+        return render(request, "error.html", context)
+
