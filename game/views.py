@@ -207,12 +207,6 @@ def map(request):
             message = {'message': 'You have entered green area!'}
             return JsonResponse(message)
 
-    # 50.7283775,-3.5228209
-    # 50.7283775,-3.5228209
-
-    # 50.7283568, -3.5229058
-
-    # 50.7282447,-3.522881
 
     bins = Bin.objects.all()
     bin_info = []
