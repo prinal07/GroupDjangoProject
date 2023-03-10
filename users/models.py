@@ -35,6 +35,8 @@ class Account(models.Model):
         Last day the account was accessed.
     staffCheck : bool
         Check whether the user is a student or a university staff member.
+    challenges : ManyToMany Relationship
+        Many to many relationship between Account and Challenge
 
     Methods:
     --------- 

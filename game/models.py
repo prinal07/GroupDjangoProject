@@ -3,16 +3,18 @@ from django.db import models
 from django.core.validators import RegexValidator
 
 class Challenge(models.Model):
+
     challengeId = models.IntegerField(default=1)
     challengeDesc = models.TextField(default="", max_length=400)
     CHALLENGE_TYPES = (
         ('Bin', 'Bin'),
-        ('GreenAreas', 'GreenAreas'),
+        ('Green Areas', 'Green Areas'),
         ('Walking', 'Walking')
     )
-    challengeType = models.TextField(choices=CHALLENGE_TYPES, default='')    
+    challengeType = models.TextField(choices=CHALLENGE_TYPES, default='')             
 
-    
+    def __str__(self):
+        return self.challengeDesc
 
 class Fact(models.Model):
     """
