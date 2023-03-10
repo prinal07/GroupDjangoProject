@@ -182,7 +182,12 @@ def map(request):
 
         point = Feature(geometry=Point([lat, lon]))
         polygon = Feature(geometry=MultiPolygon(
-            [([(lat + 1, lon + 1), (lat - 1, lon - 1), (lat - 1, lon + 1), (lat + 1, lon - 1)],), ]))
+            [([(lat + 1, lon + 1), (lat - 1, lon - 1), (lat - 1, lon + 1), (lat + 1, lon - 1)],),
+             ([(lat + 1, lon + 1), (lat - 1, lon - 1), (lat - 1, lon + 1), (lat + 1, lon - 1)],), ]))
+
+        # [-3.54012113,50.7393587],
+        #                                 [-3.5382954,50.7381304],
+        #                                 [-3.5372081,50.7394105 ]
         print(boolean_point_in_polygon(point, polygon))
         if (boolean_point_in_polygon(point, polygon)):
             logged_user.points += 10

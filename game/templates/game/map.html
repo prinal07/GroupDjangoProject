@@ -156,7 +156,7 @@
                     'type': 'Feature',
                     'geometry': {
                         'type': 'Polygon',
-// These coordinates outline Maine.
+
                         'coordinates': [
                             [
                                 [-3.54012113,50.7393587],
@@ -314,6 +314,9 @@
             xhr.setRequestHeader("Accept", "application/json");
             xhr.setRequestHeader("Content-Type", "application/json");
             xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}')
+            let data = `{"lon": ` + lon + `, "lat":` + lat + `}`;
+            xhr.send(data);
+
 
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4) {
@@ -324,10 +327,6 @@
                 }
             };
 
-            let data = `{"lon": ` + lon + `, "lat":` + lat + `}`;
-
-
-            xhr.send(data);
 
 
         });
