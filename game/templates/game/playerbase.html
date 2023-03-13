@@ -44,9 +44,9 @@
       <a href="{% url 'QR' %}" class="mx-2"><i class="bx bxs-trash"></i> Bin Discovery</a>
 
       <a href="{% url 'news' %}" class="mx-2"><i class="bx bx-news"></i> Environment News</a>
-
+      {% if user.is_authenticated %}
       <a href="{% url 'logout' %}" class="mx-2"><i class="bx bxs-log-out"></i> Logout</a>
-
+      {% endif %}
   </ul>
 
     <span href="#" class="nav-link h4 w-100 mb-5">

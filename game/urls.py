@@ -13,5 +13,6 @@ urlpatterns = [path('', player_views.home, name='overview'),
                path('challenges/', player_views.challengeManager, name='challengeManager'),
                path('QR/', player_views.QR, name='QR'),
                path('update_points/', player_views.update_points, name='update_points'),
-               path('unity/', player_views.unity, name='unity')
+               path('unity/', player_views.unity, name='unity'),
+               
                ]
