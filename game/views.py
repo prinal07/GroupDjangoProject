@@ -4,8 +4,6 @@ from django.shortcuts import render, redirect
 from django.db.models import Sum
 from django.contrib import messages
 import requests
-import json
-from django.http import JsonResponse
 
 from game.forms import UserUpdateForm, ProfileUpdateForm, AccountUpdateForm, DeleteAccountForm
 from users.models import Account
@@ -13,6 +11,8 @@ from game.models import Bin
 from .models import Fact
 from django.contrib.auth.decorators import login_required
 
+import json
+from django.http import JsonResponse
 from turfpy.measurement import boolean_point_in_polygon
 from geojson import Point, MultiPolygon, Feature
 
