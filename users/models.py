@@ -8,52 +8,22 @@ from game.models import Challenge
 
 # Store user information
 class Account(models.Model):
-    """
-    A class representing the Account of a registered and authenticated user. 
+    """Account model used by Django to populate the db.sqlite3 database, and store information of individual users
 
-    Attributes:
-    ------------ 
-    profileClass : int 
-        Profile class of the user.
-    accommodation : str 
-        Accommodation the user is staying at.
-    email : str 
-        Email address of the user.
-    username : str 
-        Username of the user whose account this represents.
-    password : str 
-        Password of the corresponding user.
-    group : int 
-        The group of the account.
-    level : int 
-        The current level of the user's account
-    points : int
-        Total points earned by the account.
-    daily_points : int
-        Daily points earned by the account.
-    last_day_accessed : date
-        Last day the account was accessed.
-    staffCheck : bool
-        Check whether the user is a student or a university staff member.
-    challenges : ManyToMany Relationship
-        Many to many relationship between Account and Challenge
+    Args:
+        models.Model (super): A built-in Django model structure, that is adapted by this Class
 
     Methods:
-    --------- 
-    current_level(): 
-        Returns the current level of the account based on the points earned.
-    level_progress(): 
-        Returns the progress towards the next level based on the points earned.
-    is_my_bool_field_true(): 
-        Checks whether the staffCheck field is True or False and returns "Yes" or "No" accordingly. Used to display the same in the admin.py file.
-    __str__(): 
-        Returns the username of the account.
-    account_dailypoints(): 
-        Returns the daily points of the account.
-    account_points(): 
-        Returns the total points of the account.
-        
+        current_level(): Returns the current level of the user
+        level_progress(): Returns the percentage progress to the next level (every 100 points)
+        is_my_bool_field_true(): Returns the boolean if the user is Staff
+        __str__(): Represents the model as a string in a specfied format
+        account_dailypoints(): Returns the number of points achieved by the account today
+        account_points(): Returns the number of points achieved in total
     """
+    
+    # Model Fields, to be populated and used within the database. Using Django model types to collect preferred data
+    # type information from the user
     profileClass = models.IntegerField(default=0)
     accommodation = models.CharField(max_length=30)
     email = models.CharField(max_length=30)
@@ -69,66 +39,85 @@ class Account(models.Model):
 
 
     def current_level(self):
+        """Returns the level of an individual account
+
+        Returns:
+            int: To reflect 100 points a level, division and round up, Levels possible == [1..]
         """
-        Returns the current level of the account based on the points earned.
-        """
-        return math.ceil(self.points / 100)
+        return math.ceil(self.points / 100) 
 
     def level_progress(self):
-        """
-        Returns the progress towards the next level based on the points earned.
+        """Returns the percentage of progress to the next level of an individual account
+
+        Returns:
+            int: The remainder of the current points to the next 100 (level threshold)
         """
         return self.points % 100
 
+    ######################################## TODO: Rename the function throughout the code base to make sense:
+    ######################################## is_account_staff perhaps
     def is_my_bool_field_true(self):
-        """
-        Checks whether the staffCheck field is True or False and returns "Yes" or "No" accordingly. Used to display the same in the admin.py file.
+        """Determine if the Account is designated as a staff or student
+
+        Returns:
+            string: String boolean representation, "Yes"/"No", to represent
         """
         if self.staffCheck:
             return "Yes"
         else:
             return "No"
 
+    # Provide a description of the functions purpose to be represented when in use
     is_my_bool_field_true.short_description = "University Staff"
 
     def __str__(self):
-        """
-        Returns the username of the account.
+        """Chosen string representation format of an individual model
+
+        Returns:
+            string: The model username
         """
         return self.username
     
     def account_dailypoints(self):
-        """
-        Returns the daily points of the account.
+        """Return the amount of points received today by an individual account
+
+        Returns:
+            int: The amount of points received today
         """
         return self.daily_points
     
         
     def account_points(self):
-        """
-        Returns the total points of the account.
+        """Return the total number of points owned by an individual account
+
+        Returns:
+            int: The number of points achieved
         """
         return self.points
 
 
 class Profile(models.Model):
-    """
-    A class representing a user profile.
+    """Profile model, to store information related to a User for use in representation
 
-    Attributes:
-    ------------ 
-    user : User
-        A one-to-one relationship with the User object.
-    image : ImageField
-        An image field that stores the profile picture of the user.
-        If no image is uploaded, the default image 'default.jpg' will be used.
-        The images will be uploaded to a directory named 'profile_pics'.
+    Args:
+        models.Model (super): Django's built in Model structure, to be adapted by the attributes of this class
+    
+    Methods:
+        __str__(): String Representation of the Model Function
+    
     """
+    
+    # Attributes (Columns) of the Model
+    # Foreign Key of an existing User Model stored in the table
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    
+    # Picture that can be submitted to the database in User Creation
     image = models.ImageField(default='default.jpg', upload_to='profile_pics')
 
     def __str__(self):
-        """
-        Returns the username of the associated user followed by 'Profile'.
+        """Chosen string representation format of an individual model
+
+        Returns:
+            string: The Username of the user attribute foreign key
         """
         return f'{self.user.username}Profile'

@@ -49,7 +49,29 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'GroupDjangoProject.settings.MimeTypeMiddleware'
 ]
+
+MIMETYPE_FILE_EXTENSION_MAP = {
+    ".js": "text/javascript",
+    ".loader.js": "text/javascript"
+}
+
+class MimeTypeMiddleware:
+    def __init__(self, get_response) -> None:
+        self.get_response = get_response
+    
+    def __call__(self, request):
+        response = self.get_response(request)
+        ext = ""
+
+        if ".js" in request.path_info:
+            ext = ".js"
+        
+        mimetype = MIMETYPE_FILE_EXTENSION_MAP.get(ext)
+        if mimetype:
+            response['Content-Type'] = mimetype
+        return response 
 
 ROOT_URLCONF = 'GroupDjangoProject.urls'
 
@@ -113,8 +135,8 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
-
 STATIC_URL = 'static/'
+
 # Stores uploaded profile images
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 

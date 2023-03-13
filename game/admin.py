@@ -4,14 +4,16 @@ from game.models import Fact, Bin, Story, Suspect, Challenge
 admin.site.register(Fact)
 
 class BinAdmin(admin.ModelAdmin):
-    """
-    Customizes the Bin model's admin interface to display specific fields in the list view.
+    """Model detailing the configuration of the Django Admin page
 
-    Attributes:
-        list_display (tuple): A tuple of field names to display in the list view.
+    Args:
+        admin.ModelAdmin (super): Built-in Django admin structure, adapted by the attributes of this class
     """
+    
+    # Sets the arrangement of the attributes on the Django Admin page
     list_display = ('bin_number', 'latitude', 'longitude')
 
+# Register the Bin model using the BinAdmin config class
 admin.site.register(Bin, BinAdmin)
 
 class SuspectInline(admin.TabularInline):

@@ -51,7 +51,27 @@
     </head>
 
     <body>
+
+    <style type="text/css">
+        #info {
+            display: table;
+            position: relative;
+            margin: 0px auto;
+            word-wrap: anywhere;
+            white-space: pre-wrap;
+            padding: 10px;
+            border: none;
+            border-radius: 3px;
+            font-size: 12px;
+            text-align: center;
+            color: #222;
+            background: #fff;
+        }
+    </style>
+
+
     <div id="map"></div>
+    <pre id="info"></pre>
 
     <script>
         mapboxgl.accessToken = 'pk.eyJ1Ijoic2MxMTMxIiwiYSI6ImNsZXBqYTNoNjBjcGIzdG81djdwazN4ZnoifQ.aUnfUV2U5KPxxgPni-Ma1Q';
@@ -156,7 +176,7 @@
                     'type': 'Feature',
                     'geometry': {
                         'type': 'Polygon',
-// These coordinates outline Maine.
+
                         'coordinates': [
                             [
                                 [-3.54012113,50.7393587],
@@ -227,10 +247,31 @@
                         'type': 'Polygon',
                         'coordinates': [
                             [
-                                [-3.5319415,50.7341617],
+                                [-3.5319415, 50.7341617],
                                 [-3.5314349, 50.7340736],
-                                [-3.5324445,50.7332753],
-                                [-3.5319436,50.7330960 ]
+                                [-3.5324445, 50.7332753],
+                                [-3.5319436, 50.7330960]
+                            ]
+                        ]
+                    }
+                }
+            });
+
+
+            map.addSource('park6', {
+                'type': 'geojson',
+                'data': {
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'Polygon',
+                        'coordinates': [
+                            [
+
+                                [-3.532288932448523, 50.7359873845501],
+                                [-3.5334667225815792, 50.73694531506939],
+                                [-3.5340531117119554, 50.736653497251154],
+
+
                             ]
                         ]
                     }
@@ -246,7 +287,18 @@
                     'fill-opacity': 0.5
                 }
             });
-                // Add a new layer to visualize the polygon.
+
+            map.addLayer({
+                'id': 'park6',
+                'type': 'fill',
+                'source': 'park6', // reference the data source
+                'layout': {},
+                'paint': {
+                    'fill-color': '#0080ff', // blue color fill
+                    'fill-opacity': 0.5
+                }
+            });
+            // Add a new layer to visualize the polygon.
             map.addLayer({
                 'id': 'maine',
                 'type': 'fill',
@@ -289,20 +341,47 @@
             });
         })
 
-
+        var geolocate = new mapboxgl.GeolocateControl({
+            positionOptions: {
+                enableHighAccuracy: true
+            },
+// When active the map will receive updates to the device's location as it changes.
+            trackUserLocation: true,
+// Draw an arrow next to the location dot to indicate which direction the device is heading.
+            showUserHeading: true
+        })
         // Add geolocate control to the map.
         map.addControl(
-            new mapboxgl.GeolocateControl({
-                positionOptions: {
-                    enableHighAccuracy: true
-                },
-// When active the map will receive updates to the device's location as it changes.
-                trackUserLocation: true,
-// Draw an arrow next to the location dot to indicate which direction the device is heading.
-                showUserHeading: true
-            })
+            geolocate
         );
 
+        geolocate.on('geolocate', function (e) {
+            var lon = e.coords.longitude;
+            var lat = e.coords.latitude
+            var currentPosition = [lon, lat];
+            console.log(currentPosition);
+            let xhr = new XMLHttpRequest();
+
+            xhr.open("POST", "{% url 'map' %}");
+            xhr.setRequestHeader("Accept", "application/json");
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}')
+            let data = `{"lon": ` + lon + `, "lat":` + lat + `}`;
+            xhr.send(data);
+
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    console.log(xhr.status);
+                    console.log(xhr.responseText);
+                    var data = JSON.parse(xhr.responseText)
+                    document.getElementById('green-message').innerHTML = data['message']
+                }
+            };
+
+
+
+        });
         // add markers to map
 
         map.on('load', function () {
@@ -328,13 +407,28 @@
         });
 
 
-        map.on('load', () => {
-
-
-        })
+        map.on('mousemove', (e) => {
+            document.getElementById('info').innerHTML =
+// `e.point` is the x, y coordinates of the `mousemove` event
+// relative to the top-left corner of the map.
+                JSON.stringify(e.point) +
+                '<br />' +
+                // `e.lngLat` is the longitude, latitude geographical position of the event.
+                JSON.stringify(e.lngLat.wrap());
+        });
 
 
     </script>
+
+    <style>
+        #green-message {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+
+    <div id='green-message'></div>
 
     </body>
     </html>

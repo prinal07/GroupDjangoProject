@@ -4,30 +4,41 @@ from django.contrib import messages
 from .forms import UserRegistrationForm
 from .models import Account
 
-def register(request):
-    """
-    Renders the user registration page and handles form submission.
+# Create your views here.
 
-    GET: Renders the registration page with a blank form.
-    POST: Validates the submitted form and creates a new user account if the form is valid.
+def register(request):
+    """Serves the webpage for <url>/register.html
+
+    Handles a POST request, submitted from the Form passed in the context to the site
+    POST request handles:
+        - Cleaning data for Username, Password, Email, and Accomodation
+        - Validating the provided email is of domain @exeter.ac.uk
+        - Validates if the user is staff using Regular Expressions
+        
+        - If Validation is Complete, create a new record for the Registration and save the User to the table
 
     Args:
-        request (HttpRequest): The HTTP request object.
+        request (_type_): _description_
 
     Returns:
-        HttpResponse: A response containing the rendered registration page or a redirect to the home page upon successful account creation.
+        HttpResponse: Serves ./templates/users/register.html due to Django's file structure
+        Passes context of an instantiation of the UserRegistrationForm class located in ./forms.py if GET request
     """
+
     if request.method == 'POST':
         # Create a form instance with the submitted data.
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
-            # Extract data from the valid form.
+            # Collect cleaned data submitted in the UserRegistrationForm
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password1')
             email = form.cleaned_data.get('email')
             accommodation = form.cleaned_data.get('accommodation')
 
+            # Initialise values to compare collected data against
+            # Regex expression deciding if an email is staff (Only Alphabetical, not Alphaneumeric)
             staff_pattern = r'^[A-Za-z]\.'
+            # The expected domain for provided email addresses
             expected_suffix = "exeter.ac.uk"
 
             local_part, domain_part = email.split("@")
@@ -39,13 +50,14 @@ def register(request):
             else:
                 exeterCheck = False
 
+            # Check if the email username provided matches the staff_pattern regular expression
             if re.match(staff_pattern, local_part):
                 localStaffBool = True
             else:
                 localStaffBool = False
 
             if exeterCheck:
-                # Create a new user instance with the extracted data.
+                # Instantiate new user object
                 new_user = Account(username=username, password=password, email=email, accommodation=accommodation,
                                    staffCheck=localStaffBool)
                 # Saves user to Users section of database
