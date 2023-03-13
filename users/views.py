@@ -1,5 +1,4 @@
 import re
-
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import UserRegistrationForm
@@ -27,6 +26,7 @@ def register(request):
     """
 
     if request.method == 'POST':
+        # Create a form instance with the submitted data.
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
             # Collect cleaned data submitted in the UserRegistrationForm
@@ -72,7 +72,6 @@ def register(request):
                 messages.warning(request, f'Please enter an email address with exeter domain (XYZ.exeter.ac.uk)')
 
     else:
+        # Create a blank form instance for rendering the registration page.
         form = UserRegistrationForm()
     return render(request, 'users/register.html', {'form': form})
-
-

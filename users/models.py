@@ -3,9 +3,8 @@ from datetime import date
 import math
 from django.db import models
 from django.contrib.auth.models import User
+from game.models import Challenge
 
-
-# Create your models here.
 
 # Store user information
 class Account(models.Model):
@@ -36,6 +35,8 @@ class Account(models.Model):
     daily_points = models.IntegerField(default=0)
     last_day_accessed = models.DateField(default=date.today)
     staffCheck = models.BooleanField(default=False)
+    challenges = models.ManyToManyField(Challenge, related_name='accounts')
+
 
     def current_level(self):
         """Returns the level of an individual account

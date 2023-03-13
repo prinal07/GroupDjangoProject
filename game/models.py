@@ -1,10 +1,20 @@
+
 from django.db import models
-from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.validators import RegexValidator
 
+class Challenge(models.Model):
 
+    challengeId = models.IntegerField(default=1)
+    challengeDesc = models.TextField(default="", max_length=400)
+    CHALLENGE_TYPES = (
+        ('Bin', 'Bin'),
+        ('Green Areas', 'Green Areas'),
+        ('Walking', 'Walking')
+    )
+    challengeType = models.TextField(choices=CHALLENGE_TYPES, default='')             
 
-# Created a model here.
+    def __str__(self):
+        return self.challengeDesc
 
 class Fact(models.Model):
     """Fact model used to store the fact of the day.
@@ -28,7 +38,6 @@ class Fact(models.Model):
         """
         return f"{self.date} - {self.fact}"
 
-
 class Bin(models.Model):
     """Bin model to store information to be presented on the map at <url>/game/map/
     Stores Longitude/Latitude floats, a string for information, and an Integer to identify
@@ -44,6 +53,7 @@ class Bin(models.Model):
     latitude = models.FloatField()
     longitude = models.FloatField()
     poi_info = models.TextField(max_length=30)
+    challenge = models.ForeignKey(Challenge, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         """Method to represent the model to the user within the program
@@ -70,13 +80,13 @@ class Suspect(models.Model):
     number = models.IntegerField(default=1)
     name = models.TextField(max_length=30, default="")
     brief = models.TextField(max_length=500, default="")
-    
+
     class Meta:
         """Django admin metadata class
         """
         # Tells Django admin to order by the number attribute value in descending order
         ordering = ['number']
-    
+
     def save(self, *args, **kwargs):
         """Saves the Suspect model to the Database as a new record
         Overloads the existing models.Model.save() function
@@ -85,7 +95,6 @@ class Suspect(models.Model):
             # get the maximum number currently in the database and increment it by 1
             self.number = self.story.suspects.count() + 1
         super().save(*args, **kwargs)
-
 
 class Story(models.Model):
     """Story model to be passed into the Mystery game at <url>/game/unity/
@@ -162,7 +171,7 @@ class Story(models.Model):
             [Suspect]: Members of the suspect_set list in the current model
         """
         return self.suspect_set.all()
-    
+
     def get_description(self):
         """Function to return the descriptions of each Suspect attached to an individual Story object
 
@@ -170,7 +179,7 @@ class Story(models.Model):
             [string]: Descriptions of Story suspects
         """
         return [suspect.brief for suspect in self.get_suspects()]
-    
+
     def getCulprit(self):
         """Function to return the character that signifies the Culprit of the story
 
@@ -178,7 +187,7 @@ class Story(models.Model):
             string: Index of the culprit within this story model 
         """
         return self.culprit
-    
+
     def getSpritesCodes(self):
         """Function to return the sprite codes string to use in the Unity Game, to customise the appearance of suspects
 
@@ -186,7 +195,7 @@ class Story(models.Model):
             string: Sprite code representation of the appearance in this Story model
         """
         return self.sprite_codes
-    
+
     def getAllClues(self):
         """Function to return all supplied clues for this story, to be presented to the user
 
@@ -194,8 +203,3 @@ class Story(models.Model):
             [string]: List of clue descriptions, for use in the Unity Game 
         """
         return self.clues
-    
-
-
-
-
