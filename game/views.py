@@ -3,6 +3,7 @@ from datetime import date
 from django.shortcuts import render, redirect
 from django.db.models import Sum
 from django.contrib import messages
+from game.models import Story, Suspect
 import requests
 
 from game.forms import UserUpdateForm, ProfileUpdateForm, AccountUpdateForm, DeleteAccountForm
@@ -364,11 +365,34 @@ def unity(request):
         HttpResponse: Webpage at ./templates/game/unity.html
     """
     
+    description = []
+    culprit = ""
+
+    # story = Story.objects.get(story_number = 1)
+    # suspects = story.suspects.all()
+    # for suspect in suspects:
+    #     description.append(suspect.getDescription())
+    # desc_str = "[SPLIT]".join(description)
+    # clues = story.getAllClues()
+    # culprit = story.getCulprit()
+    # clues_str = "[SPLIT]".join(clues)
+    # sprites = story.getSpritesCodes()
+
+    story = Story.objects.get(story_number = 1)
+    suspects = story.suspects.all()
+    for suspect in suspects:
+        description.append(suspect.brief)
+    desc_str = "[SPLIT]".join(description)
+    clues = [story.clue1, story.clue2, story.clue3, story.clue4, story.clue5, story.clue6, story.clue7, story.clue8, story.clue9, story.clue10]
+    culprit = story.culprit
+    clues_str = "[SPLIT]".join(clues)
+    sprites = [story.sprite_1, story.sprite_2, story.sprite_3, story.sprite_4, story.sprite_5]
+
     context = {
-        "spriteCodes": "54321",
-        "culprit": "5",
-        "descriptions": "WAHOO,BLARGH,WALLOP,BLAM,SPLOOSH",
-        "clues": "BLOP,BLOOP,WOOP,SCOOP,DOOP,TROUP,COUPE,FLOOF,CHUFF,WALL"
+        "spriteCodes": sprites,
+        "culprit": culprit,
+        "descriptions": desc_str,
+        "clues": clues_str
     }    
         
     return render(request, template_name="game/unity.html", context=context)
