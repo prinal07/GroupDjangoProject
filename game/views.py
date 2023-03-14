@@ -3,6 +3,7 @@ from datetime import date
 from django.shortcuts import render, redirect
 from django.db.models import Sum
 from django.contrib import messages
+from game.models import Story, Suspect
 import requests
 
 from game.forms import UserUpdateForm, ProfileUpdateForm, AccountUpdateForm, DeleteAccountForm
@@ -364,11 +365,26 @@ def unity(request):
         HttpResponse: Webpage at ./templates/game/unity.html
     """
     
+    description = []
+    spriteCodes = []
+    culprit = ""
+
+    story = Story.objects.get(story_number = 1)
+    suspects = story.suspects.all()
+    for suspect in suspects:
+        description.append(suspect.getDescription())
+    desc_str = "[SPLIT]".join(description)
+    clues = story.getAllClues()
+    culprit = story.getCulprit()
+    clues_str = "[SPLIT]".join(clues)
+    sprites = story.getSpritesCodes()
+
+
     context = {
-        "spriteCodes": "54321",
-        "culprit": "5",
-        "descriptions": "WAHOO,BLARGH,WALLOP,BLAM,SPLOOSH",
-        "clues": "BLOP,BLOOP,WOOP,SCOOP,DOOP,TROUP,COUPE,FLOOF,CHUFF,WALL"
+        "spriteCodes": sprites,
+        "culprit": culprit,
+        "descriptions": desc_str,
+        "clues": clues_str
     }    
         
     return render(request, template_name="game/unity.html", context=context)
