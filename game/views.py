@@ -11,6 +11,11 @@ from game.models import Bin
 from .models import Fact
 from django.contrib.auth.decorators import login_required
 
+import json
+from django.http import JsonResponse
+from turfpy.measurement import boolean_point_in_polygon
+from geojson import Point, MultiPolygon, Feature
+
 
 # Create your views here.
 def home(request):
@@ -212,6 +217,49 @@ def profile(request):
 
 
 def map(request):
+    message = ""
+
+    logged_username = request.user.username
+    logged_user = Account.objects.get(username=logged_username)
+
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        lat = data.get("lat")
+        lon = data.get("lon")
+        print(data)
+
+        print(lat, lon)
+
+        point = Feature(geometry=Point([lat, lon]))
+        polygon = Feature(geometry=MultiPolygon(
+            [([(50.7393587, -3.54012113), (50.7381304, -3.5382954), (50.7394105, -3.537208)],),
+             (
+                 [(50.7418840, -3.5341631), (50.7403587, -3.5335790), (50.7410841, -3.5312515),
+                  (50.7422746, -3.5324632)],),
+             (
+                 [(50.7364445, -3.5293083), (50.7358839, -3.5291410), (50.7360017, -3.5298109),
+                  (50.7363348, -3.5299208)],),
+             (
+                 [(50.7287101, -3.5374679), (50.7280259, -3.5364497), (50.7280361, -3.5353282),
+                  (50.7289626, -3.5356284)],),
+             ([(50.7341617, -3.5319415), (50.7340736, -3.5314349), (50.7332753, -3.5324445),
+               (50.7330960, -3.5319436)],),
+             ([(50.7359873845501, -3.532288932448523), (50.73694531506939, -3.5334667225815792),
+               (50.736653497251154, -3.5340531117119554)],)
+
+             ]))
+        # ([(lat + 1, lon + 1), (lat - 1, lon - 1), (lat - 1, lon + 1), (lat + 1, lon - 1)],),
+
+        print(boolean_point_in_polygon(point, polygon))
+
+        if (boolean_point_in_polygon(point, polygon)):
+            logged_user.points += 10
+            logged_user.save()
+            message = {'message': 'You have entered green area!'}
+            return JsonResponse(message)
+
+
+    bins = Bin.objects.all()
     """Supplies coordinates of bins to the mapbxo representation in <url>/game/map/
     
     Args:
@@ -231,7 +279,8 @@ def map(request):
         bin_info.append([o.latitude, o.longitude, o.bin_number])
 
     context = {
-        'bin_info': bin_info
+        'bin_info': bin_info,
+        'message': message
     }
 
     # Serve game/map.html 

@@ -1,14 +1,26 @@
 from django.contrib import admin
-from .models import Account, Profile
+from .models import Account
+from game.models import Challenge
+from django.db import models
+from users.models import Account
+from game.models import Challenge
+from django.db.models.signals import pre_delete
+from django.dispatch import receiver
+from users.models import Account
+from django.contrib.auth.models import User
+from django.contrib import admin
+from .models import Account, Challenge, Profile, ChallengeStatus
 
+class ChallengeStatusInLine(admin.TabularInline):
+    model = ChallengeStatus
+    extra = 1
 
-# Register your models here.
-
-# Defines a representation of a model for the Django Admin site
-class UserAdmin(admin.ModelAdmin):
+class AccountAdmin(admin.ModelAdmin):
     list_display = ('username', 'is_my_bool_field_true')
+    inlines = [ChallengeStatusInLine]
+    exclude = ('challenges',)
 
-# Registers models to be visible on the site
-# Registers Account model using the UserAdmin config
-admin.site.register(Account, UserAdmin)
+    
+admin.site.register(Account, AccountAdmin)
+admin.site.register(Challenge)
 admin.site.register(Profile)
