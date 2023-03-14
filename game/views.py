@@ -363,5 +363,12 @@ def unity(request):
     Returns:
         HttpResponse: Webpage at ./templates/game/unity.html
     """
+    
+    context = {
+        "spriteCodes": "54321",
+        "culprit": "5",
+        "descriptions": "WAHOO,BLARGH,WALLOP,BLAM,SPLOOSH",
+        "clues": "BLOP,BLOOP,WOOP,SCOOP,DOOP,TROUP,COUPE,FLOOF,CHUFF,WALL"
+    }    
         
-    return render(request, template_name="game/unity.html")
+    return render(request, template_name="game/unity.html", context=context)

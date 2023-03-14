@@ -4,7 +4,7 @@
 <html lang="en-us">
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/javascript; charset=utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Unity WebGL Player | ECM2434_Prototype_2</title>
     <link rel="shortcut icon" href="{% static 'unity/TemplateData/favicon.ico' %}">
     <link rel="stylesheet" href="{% static 'unity/TemplateData/style.css' %}">
@@ -59,9 +59,9 @@
 
       var loaderUrl = "{% static 'unity/Build/Build.loader.js' %}";
       var config = {
-        dataUrl: "{% static 'unity/Build/Build.data.br' %}",
-        frameworkUrl: "{% static 'unity/Build/Build.framework.js.br' %}",
-        codeUrl: "{% static 'unity/Build/Build.wasm.br' %}",
+        dataUrl: "{% static 'unity/Build/Build.data' %}",
+        frameworkUrl: "{% static 'unity/Build/Build.framework.js' %}",
+        codeUrl: "{% static 'unity/Build/Build.wasm' %}",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "DefaultCompany",
         productName: "EcoDetective",
@@ -104,12 +104,20 @@
       script.setAttribute("src", "{% static 'unity/Build/Build.loader.js' %}");
       script.setAttribute("type", "text/javascript");
       script.onload = () => {
-        console.log("BUILD LOADER");
+        console.log("SCRIPT load");
 
         createUnityInstance(canvas, config, (progress) => {
           progressBarFull.style.width = 100 * progress + "%";
         }).then((unityInstance) => {
           loadingBar.style.display = "none";
+          
+          console.log("UNITY INSTANCE");
+
+          unityInstance.SendMessage('LogicObject','SetSuspectSprites', String("{{spriteCodes}}"));
+          unityInstance.SendMessage('LogicObject','SetCorrectSuspect', String("{{culprit}}"));
+          unityInstance.SendMessage('LogicObject','SetClueDescriptions', String("{{clues}}"));
+          unityInstance.SendMessage('LogicObject','SetSuspectDescriptions', String("{{descriptions}}"));
+
           fullscreenButton.onclick = () => {
             unityInstance.SetFullscreen(1);
           };
@@ -117,8 +125,7 @@
           alert(message);
         });
       };
-
-      document.body.appendChild(script);    
+      document.body.appendChild(script);
     </script>
   </body>
 </html>
