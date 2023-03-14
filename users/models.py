@@ -36,7 +36,9 @@ class Account(models.Model):
     last_day_accessed = models.DateField(default=date.today)
     staffCheck = models.BooleanField(default=False)
     challenges = models.ManyToManyField(Challenge, related_name='accounts')
-
+    greenCounter = models.IntegerField(default=0)
+    binCounter = models.IntegerField(default=0)
+    walkCounter = models.IntegerField(default=0)
 
     def current_level(self):
         """Returns the level of an individual account

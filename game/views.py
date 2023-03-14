@@ -35,7 +35,7 @@ def home(request):
         HttpResponse: Serves the webpage stored at ./templates/game/index.html because of Django's file structure
         Passes context to the webpage in JSON format, to record values for use in JavaScript or HTML formatting
     """
-    
+
     # leaderboard of everyone in given accommodation
     # matching the username of Django User class with username our user class
     logged_username = request.user.username
@@ -53,7 +53,7 @@ def home(request):
 
     # Collects all stored accounts that share the current user's accomodation cell value
     all_users_accommodation = Account.objects.all().filter(accommodation=logged_user.accommodation)
-    
+
     # Sorts the accomodations collected on the line above by the points cell value
     all_users_accommodation = all_users_accommodation.order_by('-points')[:5]
 
@@ -64,13 +64,13 @@ def home(request):
 
     # Gets today's date for fetching today's fact
     date_today = date.today()
-    
+
     # Default fact value
     fact_today = "There are no facts in DB"
-    
+
     # Fetch the Fact Record from the Database with shared date
     fact_today_object = Fact.objects.filter(date=date_today).first()
-    
+
     # Replaces default fact with any found fact
     if fact_today_object is not None:
         fact_today = fact_today_object.fact
@@ -156,7 +156,7 @@ def profile(request):
             - A Profile overview page stored at ./templates/game/profile.html due to Django's file structure
                 Pass the context of all possible forms, to be issued on button request
     """
-    
+
     # Fetches current username and account record
     logged_username = request.user.username
     logged_account = Account.objects.get(username=logged_username)
@@ -165,10 +165,10 @@ def profile(request):
     if request.method == 'POST':
         user_update_form = UserUpdateForm(request.POST, instance=request.user)
         picture_update_form = ProfileUpdateForm(request.POST,
-                                   request.FILES,
-                                   instance=request.user.profile)
+                                                request.FILES,
+                                                instance=request.user.profile)
         # Find account in database to update it
-        account_update_form = AccountUpdateForm(request.POST, 
+        account_update_form = AccountUpdateForm(request.POST,
                                                 instance=Account.objects.get(username=request.user.username))
 
         if user_update_form.is_valid() and picture_update_form.is_valid() and account_update_form.is_valid():
@@ -259,7 +259,6 @@ def map(request):
             message = {'message': 'You have entered green area!'}
             return JsonResponse(message)
 
-
     bins = Bin.objects.all()
     """Supplies coordinates of bins to the mapbxo representation in <url>/game/map/
     
@@ -317,6 +316,11 @@ def news(request):
 
 
 def challengeManager(request):
+    logged_username = request.user.username
+    logged_user = Account.objects.get(username=logged_username)
+
+    logged_user.challengestatus_set
+
     return render(request, 'game/challengeManager.html')
 
 
@@ -336,7 +340,7 @@ def update_points(request):
             - A redirect to page <url>/
             - A webpage to page <url>/game/ 
     """
-    
+
     if request.method == 'POST' and 'update_points' in request.POST:
         # Get the current user and update their points field in the Database record
         logged_username = request.user.username
@@ -354,6 +358,7 @@ def update_points(request):
     # If the form was not submitted, render a template with the form
     return render(request, 'update_points.html')
 
+
 def unity(request):
     """Serves the Unity Game at <url>/game/unity>
     Uses the pre-built Unity WebGL html file to load a gameInstance and serve a project to the user
@@ -364,7 +369,7 @@ def unity(request):
     Returns:
         HttpResponse: Webpage at ./templates/game/unity.html
     """
-    
+
     description = []
     culprit = ""
 
@@ -378,12 +383,13 @@ def unity(request):
     # clues_str = "[SPLIT]".join(clues)
     # sprites = story.getSpritesCodes()
 
-    story = Story.objects.get(story_number = 1)
+    story = Story.objects.get(story_number=1)
     suspects = story.suspects.all()
     for suspect in suspects:
         description.append(suspect.brief)
     desc_str = "[SPLIT]".join(description)
-    clues = [story.clue1, story.clue2, story.clue3, story.clue4, story.clue5, story.clue6, story.clue7, story.clue8, story.clue9, story.clue10]
+    clues = [story.clue1, story.clue2, story.clue3, story.clue4, story.clue5, story.clue6, story.clue7, story.clue8,
+             story.clue9, story.clue10]
     culprit = story.culprit
     clues_str = "[SPLIT]".join(clues)
     sprites = [story.sprite_1, story.sprite_2, story.sprite_3, story.sprite_4, story.sprite_5]
@@ -393,6 +399,6 @@ def unity(request):
         "culprit": culprit,
         "descriptions": desc_str,
         "clues": clues_str
-    }    
-        
+    }
+
     return render(request, template_name="game/unity.html", context=context)
