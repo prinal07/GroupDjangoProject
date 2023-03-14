@@ -206,3 +206,4 @@ class Story(models.Model):
             [string]: List of clue descriptions, for use in the Unity Game 
         """
         return self.clues
+
