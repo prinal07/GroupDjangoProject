@@ -366,7 +366,6 @@ def unity(request):
     """
     
     description = []
-    spriteCodes = []
     culprit = ""
 
     story = Story.objects.get(story_number = 1)
