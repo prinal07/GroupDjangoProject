@@ -46,7 +46,10 @@ class Account(models.Model):
         Returns:
             int: To reflect 100 points a level, division and round up, Levels possible == [1..]
         """
-        return math.ceil(self.points / 100) 
+        if self.points == 0:
+            return 1
+
+        return math.ceil(self.points / 100)
 
     def level_progress(self):
         """Returns the percentage of progress to the next level of an individual account

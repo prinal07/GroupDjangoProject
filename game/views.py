@@ -318,8 +318,8 @@ def news(request):
 def challengeManager(request):
     logged_username = request.user.username
     logged_user = Account.objects.get(username=logged_username)
-
-    logged_user.challengestatus_set
+    print("Hey!")
+    print(logged_user.challenges)
 
     return render(request, 'game/challengeManager.html')
 
