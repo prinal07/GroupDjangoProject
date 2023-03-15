@@ -1,0 +1,56 @@
+#challenge-title {
+    text-align: center;
+    color: #000000;
+    margin-top: 50px;
+    font-size: 36px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+
+#challenge-body {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    background-color: #ffffff;
+    text-align: center;
+}
+
+
+.challenge-container {
+    background-color: #8B4513;
+    padding: 20px;
+}
+
+.challenge {
+    margin-bottom: 20px;
+    background-color: #F5DEB3;
+    padding: 20px;
+    position: relative; /* to make the bar positioning relative to this element */
+}
+
+.challenge:before { /* create the brown bar */
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 10px;
+    background-color: #8B4513;
+}
+
+.challenge-desc {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.challenge-status {
+    font-size: 20px;
+}
+
+.completed {
+    color: green;
+}
+
+.todo {
+    color: red;
+}

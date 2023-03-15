@@ -32,22 +32,24 @@
         <table style="width:100%">
             <td style="width:50%">
                 <form method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
-                <fieldset class="form-group">
-                    <h3> Update Username: </h3>
-                    {% render_field u_form.username placeholder="username" id+="u_form"%} <br><br>
-                    <h3> Update Email: </h3>
-                    {% render_field u_form.email placeholder="email" id+="u_form"%} <br><br>
-                    <h3>
-                        Update Image:
-                    </h3>
-                    <div>
-                        {% render_field p_form.image id+="u_form" %}
-                    </div>
-                </fieldset>
+                    {% csrf_token %}
+                    <fieldset class="form-group">
+                        <h3> Update Username: </h3>
+                        {% render_field user_update_form.username placeholder="username" id+="u_form" %} <br><br>
+                        <h3> Update Email: </h3>
+                        {% render_field user_update_form.email placeholder="email" id+="u_form" %} <br><br>
+                        <h3>
+                            Update Image:
+                        </h3>
+                        <div>
+                            {% render_field picture_update_form.image id+="u_form" %}
+                        </div>
+                    </fieldset>
                     <br><br>
                     <div class="form-group">
-                        <button id="uFormSubmitBtn" type="submit" style="background-color: #4CAF50; border: 1.5px solid green;">Update</button>
+                        <button id="uFormSubmitBtn" type="submit"
+                                style="background-color: #4CAF50; border: 1.5px solid green;">Update
+                        </button>
                     </div>
 
                 </form>
@@ -69,10 +71,11 @@
                 <form method="POST">
                     {% csrf_token %}
                     <div>
-                        <h4><input type="submit" name="delete" value="Delete" id="uFormSubmitBtn" style="background-color: red; border: 1.5px solid maroon;"> Confirm Deletion {% render_field d_form.confirm_delete id+="deleteTick"%} </h4>
+                        <h4><input type="submit" name="delete" value="Delete" id="uFormSubmitBtn"
+                                   style="background-color: red; border: 1.5px solid maroon;"> Confirm
+                            Deletion {% render_field user_delete_form.confirm_delete id+="deleteTick" %} </h4>
                     </div>
-                    
-                    
+
 
                 </form>
 

@@ -4,6 +4,9 @@ import math
 from django.db import models
 from django.contrib.auth.models import User
 from game.models import Challenge
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 
 
 # Store user information
@@ -36,7 +39,9 @@ class Account(models.Model):
     last_day_accessed = models.DateField(default=date.today)
     staffCheck = models.BooleanField(default=False)
     challenges = models.ManyToManyField(Challenge, related_name='accounts')
-
+    greenCounter = models.IntegerField(default=0)
+    binCounter = models.IntegerField(default=0)
+    walkCounter = models.IntegerField(default=0)
 
     def current_level(self):
         """Returns the level of an individual account
@@ -44,7 +49,10 @@ class Account(models.Model):
         Returns:
             int: To reflect 100 points a level, division and round up, Levels possible == [1..]
         """
-        return math.ceil(self.points / 100) 
+        if self.points == 0:
+            return 1
+
+        return math.ceil(self.points / 100)
 
     def level_progress(self):
         """Returns the percentage of progress to the next level of an individual account
@@ -94,6 +102,8 @@ class Account(models.Model):
             int: The number of points achieved
         """
         return self.points
+    
+
 
 
 class Profile(models.Model):
@@ -106,7 +116,6 @@ class Profile(models.Model):
         __str__(): String Representation of the Model Function
     
     """
-    
     # Attributes (Columns) of the Model
     # Foreign Key of an existing User Model stored in the table
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -122,14 +131,13 @@ class Profile(models.Model):
         """
         return f'{self.user.username}Profile'
     
-class ChallengeStatus(models.Model):
+class ChallengeTracker(models.Model):
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
     challenge = models.ForeignKey(Challenge, on_delete=models.CASCADE)
     completed = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.account.username} - {self.challenge.challengeDesc}"
-    
+
     def isCompleted(self):
         return self.completed
-

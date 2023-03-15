@@ -37,7 +37,7 @@ def home(request):
         HttpResponse: Serves the webpage stored at ./templates/game/index.html because of Django's file structure
         Passes context to the webpage in JSON format, to record values for use in JavaScript or HTML formatting
     """
-    
+
     # leaderboard of everyone in given accommodation
     # matching the username of Django User class with username our user class
     logged_username = request.user.username
@@ -55,7 +55,7 @@ def home(request):
 
     # Collects all stored accounts that share the current user's accomodation cell value
     all_users_accommodation = Account.objects.all().filter(accommodation=logged_user.accommodation)
-    
+
     # Sorts the accomodations collected on the line above by the points cell value
     all_users_accommodation = all_users_accommodation.order_by('-points')[:5]
 
@@ -66,13 +66,13 @@ def home(request):
 
     # Gets today's date for fetching today's fact
     date_today = date.today()
-    
+
     # Default fact value
     fact_today = "There are no facts in DB"
-    
+
     # Fetch the Fact Record from the Database with shared date
     fact_today_object = Fact.objects.filter(date=date_today).first()
-    
+
     # Replaces default fact with any found fact
     if fact_today_object is not None:
         fact_today = fact_today_object.fact
@@ -158,7 +158,7 @@ def profile(request):
             - A Profile overview page stored at ./templates/game/profile.html due to Django's file structure
                 Pass the context of all possible forms, to be issued on button request
     """
-    
+
     # Fetches current username and account record
     logged_username = request.user.username
     logged_account = Account.objects.get(username=logged_username)
@@ -167,10 +167,10 @@ def profile(request):
     if request.method == 'POST':
         user_update_form = UserUpdateForm(request.POST, instance=request.user)
         picture_update_form = ProfileUpdateForm(request.POST,
-                                   request.FILES,
-                                   instance=request.user.profile)
+                                                request.FILES,
+                                                instance=request.user.profile)
         # Find account in database to update it
-        account_update_form = AccountUpdateForm(request.POST, 
+        account_update_form = AccountUpdateForm(request.POST,
                                                 instance=Account.objects.get(username=request.user.username))
 
         if user_update_form.is_valid() and picture_update_form.is_valid() and account_update_form.is_valid():
@@ -261,7 +261,6 @@ def map(request):
             message = {'message': 'You have entered green area!'}
             return JsonResponse(message)
 
-
     bins = Bin.objects.all()
     """Supplies coordinates of bins to the mapbxo representation in <url>/game/map/
     
@@ -319,7 +318,30 @@ def news(request):
 
 
 def challengeManager(request):
-    return render(request, 'game/challengeManager.html')
+    logged_username = request.user.username
+    logged_user = Account.objects.get(username=logged_username)
+
+    completed_green_tasks = logged_user.greenCounter
+    completed_bin_tasks = logged_user.binCounter
+    completed_walk_tasks = logged_user.walkCounter
+
+    # challenge_list = []
+    # for challenge_status in logged_user.challengetracker_set.all():
+    #     challenge_list.append(challenge_status.challenge.challengeDesc)
+
+    challenge_list = []
+    for challenge_info in logged_user.challengetracker_set.all():
+        challenge_dict = {}
+        challenge_dict['description'] = challenge_info.challenge.challengeDesc
+        challenge_dict['status'] = challenge_info.isCompleted()
+        challenge_list.append(challenge_dict)
+
+    print(challenge_list)
+
+    return render(request, 'game/challengeManager2.html', {'challenge_list': challenge_list,
+                                                           'green_counter': completed_green_tasks,
+                                                           'bin_counter': completed_bin_tasks,
+                                                           'walk_counter': completed_walk_tasks})
 
 @login_required
 def QR(request):
@@ -338,7 +360,7 @@ def update_points(request):
             - A redirect to page <url>/
             - A webpage to page <url>/game/ 
     """
-    
+
     if request.method == 'POST' and 'update_points' in request.POST:
         # Get the current user and update their points field in the Database record
         logged_username = request.user.username
@@ -357,6 +379,7 @@ def update_points(request):
     return render(request, 'update_points.html')
 
 @login_required
+
 def unity(request):
     """Serves the Unity Game at <url>/game/unity>
     Uses the pre-built Unity WebGL html file to load a gameInstance and serve a project to the user

@@ -12,36 +12,40 @@
     <!-- BOX ICONS CSS-->
     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.0.5/css/boxicons.min.css" rel="stylesheet"/>
     <!-- custom css -->
-    <link rel="stylesheet" href="{% static 'player/player.css' %}" />
-  <link rel="stylesheet" href="{% static 'player/leaderboard.css' %}">
-  <link rel="stylesheet" href="{% static 'player/profile.css' %}">
-  <link rel="stylesheet" href="{% static 'player/news.css' %}">
-  <link rel="shortcut icon" href="{% static 'player/unilogo.png' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'player/player.css' %}"/>
+    <link rel="stylesheet" href="{% static 'player/leaderboard.css' %}">
+    <link rel="stylesheet" href="{% static 'player/profile.css' %}">
+    <link rel="stylesheet" href="{% static 'player/news.css' %}">
+    <link rel="stylesheet" href="{% static 'player/challengeManager.css' %}">
+
+    <link rel="shortcut icon" href="{% static 'player/unilogo.png' %}" type="image/x-icon">
 
 
 </head>
 
 <body>
- <!-- Side-Nav -->
+<!-- Side-Nav -->
 <div class="side-navbar active-nav d-flex justify-content-between flex-wrap flex-column" id="sidebar">
-  <ul class="nav flex-column text-white w-100">
-    <a class="nav-link h3 text-white my-2">
-      <img src="{% static 'player/unilogo.png' %}" style="height: 40px;">
-        Eco-Detective </br>
-    </a>
+    <ul class="nav flex-column text-white w-100">
+        <a class="nav-link h3 text-white my-2">
+            <img src="{% static 'player/unilogo.png' %}" style="height: 40px;">
+            Eco-Detective </br>
+        </a>
 
-      <a href="{% url 'overview' %}" class="mx-2"><i class='bx bxs-home'></i> Home</a>
-      </a>
+        <a href="{% url 'overview' %}" class="mx-2"><i class='bx bxs-home'></i> Home</a>
+        </a>
 
-      <a href="{% url 'challengeManager' %}" class="mx-2"><i class="bx bxs-flag-alt"></i> Challenges</a>
+        <a href="{% url 'unity' %}" class="mx-2"><i class="bx bxs-flag-alt"></i> Accuse </a>
 
-      <a href="{% url 'leaderboard' %}" class="mx-2"><i class="bx bxs-trophy"></i> Leaderboard</a>
+        <a href="{% url 'challengeManager' %}" class="mx-2"><i class="bx bxs-flag-alt"></i> Challenges</a>
 
-      <a href="{% url 'profile' %}" class="mx-2"><i class="bx bxs-user"></i> Profile</a>
+        <a href="{% url 'leaderboard' %}" class="mx-2"><i class="bx bxs-trophy"></i> Leaderboard</a>
 
-      <a href="{% url 'map' %}" class="mx-2"><i class="bx bxs-map"></i> Map</a>
+        <a href="{% url 'profile' %}" class="mx-2"><i class="bx bxs-user"></i> Profile</a>
 
-      <a href="{% url 'QR' %}" class="mx-2"><i class="bx bxs-trash"></i> Bin Discovery</a>
+        <a href="{% url 'map' %}" class="mx-2"><i class="bx bxs-map"></i> Map</a>
+
+        <a href="{% url 'QR' %}" class="mx-2"><i class="bx bxs-trash"></i> Bin Discovery</a>
 
       <a href="{% url 'news' %}" class="mx-2"><i class="bx bx-news"></i> Environment News</a>
 
