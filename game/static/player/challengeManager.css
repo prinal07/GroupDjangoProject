@@ -16,9 +16,10 @@
 }
 
 
-.challenge-container {
-    background-color: black;
-    color: white;
-    padding: 10px;
-    margin-bottom: 10px;
+.completed {
+    background-color: green;
+}
+
+.todo {
+    background-color: red;
 }
