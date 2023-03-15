@@ -323,13 +323,23 @@ def challengeManager(request):
     completed_bin_tasks = logged_user.binCounter
     completed_walk_tasks = logged_user.walkCounter
 
+    # challenge_list = []
+    # for challenge_status in logged_user.challengestatus_set.all():
+    #     challenge_list.append(challenge_status.challenge.challengeDesc)
+
     challenge_list = []
-    for challenge_status in logged_user.challengestatus_set.all():
-        challenge_list.append(challenge_status.challenge.challengeDesc)
+    for challenge_info in logged_user.challengetracker_set.all():
+        challenge_dict = {}
+        challenge_dict['description'] = challenge_info.challenge.challengeDesc
+        challenge_dict['status'] = challenge_info.isCompleted()
+        challenge_list.append(challenge_dict)
 
     print(challenge_list)
 
-    return render(request, 'game/challengeManager.html', {'challenge_list': challenge_list})
+    return render(request, 'game/challengeManager2.html', {'challenge_list': challenge_list,
+                                                           'green_counter': completed_green_tasks,
+                                                           'bin_counter': completed_bin_tasks,
+                                                           'walk_counter': completed_walk_tasks})
 
 
 def QR(request):

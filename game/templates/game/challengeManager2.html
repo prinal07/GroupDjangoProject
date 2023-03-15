@@ -1,0 +1,20 @@
+{% extends "game/playerbase.html" %}
+
+
+{% block content %}
+    <!DOCTYPE html>
+
+    <body id="challenge-body">
+
+    <h1 id="challenge-title"> Challenges</h1>
+
+    {% for challenge in challenge_list %}
+        <div class="challenge-container">
+            <p>Challenge Description: {{ challenge.description }}</p>
+            <p>{% if challenge.status %}Challenge Status: Complete!{% else %}Challenge Status: To do{% endif %}</p>
+        </div>
+    {% endfor %}
+
+    </body>
+
+{% endblock %}
