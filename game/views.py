@@ -319,6 +319,10 @@ def challengeManager(request):
     logged_username = request.user.username
     logged_user = Account.objects.get(username=logged_username)
 
+    completed_green_tasks = logged_user.greenCounter
+    completed_bin_tasks = logged_user.binCounter
+    completed_walk_tasks = logged_user.walkCounter
+
     challenge_list = []
     for challenge_status in logged_user.challengestatus_set.all():
         challenge_list.append(challenge_status.challenge.challengeDesc)
