@@ -7,7 +7,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Unity WebGL Player | ECM2434_Prototype_2</title>
     <link rel="shortcut icon" href="{% static 'unity/TemplateData/favicon.ico' %}">
-    <link rel="stylesheet" href="{% static 'unity/TemplateData/style.css' %}">
+    <link rel="stylesheet" href="{% static 'unity/TemplateData/style.css' %}">  
   </head>
   <body>
     <div id="unity-container" class="unity-desktop">
@@ -24,8 +24,20 @@
         <div id="unity-fullscreen-button"></div>
         <div id="unity-build-title">ECM2434_Prototype_2</div>
       </div>
+      <div id="end-status" style="visibility: hidden"></div>
+      <br>
+      <br>
+      <button id="end-game-button" onclick="checkState()">End Game</button>
     </div>
     <script>
+      function checkState() {
+	  const status = document.getElementById("end-status");
+	  if (status.innerHTML == "CORRECT") { console.log("FOUND"); }
+	  else if (status.innerHTML == "INCORRECT") { console.log("NOT FOUND");  }
+	  else {}
+      }
+      
+      
       var container = document.querySelector("#unity-container");
       var canvas = document.querySelector("#unity-canvas");
       var loadingBar = document.querySelector("#unity-loading-bar");
@@ -126,6 +138,10 @@
         });
       };
       document.body.appendChild(script);
+
+      var endStatus = document.querySelector("end-status");
+      endStatus.addEventListener('click', function (e) {});
+      
     </script>
   </body>
 </html>
