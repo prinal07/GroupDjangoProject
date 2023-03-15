@@ -4,6 +4,9 @@ import math
 from django.db import models
 from django.contrib.auth.models import User
 from game.models import Challenge
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 
 
 # Store user information
@@ -99,6 +102,8 @@ class Account(models.Model):
             int: The number of points achieved
         """
         return self.points
+    
+
 
 
 class Profile(models.Model):
@@ -111,7 +116,6 @@ class Profile(models.Model):
         __str__(): String Representation of the Model Function
     
     """
-    
     # Attributes (Columns) of the Model
     # Foreign Key of an existing User Model stored in the table
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -137,3 +141,4 @@ class ChallengeStatus(models.Model):
 
     def isCompleted(self):
         return self.completed
+
