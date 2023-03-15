@@ -324,11 +324,11 @@ def challengeManager(request):
     completed_walk_tasks = logged_user.walkCounter
 
     # challenge_list = []
-    # for challenge_status in logged_user.challengestatus_set.all():
+    # for challenge_status in logged_user.challengetracker_set.all():
     #     challenge_list.append(challenge_status.challenge.challengeDesc)
 
     challenge_list = []
-    for challenge_info in logged_user.challengestatus_set.all():
+    for challenge_info in logged_user.challengetracker_set.all():
         challenge_dict = {}
         challenge_dict['description'] = challenge_info.challenge.challengeDesc
         challenge_dict['status'] = challenge_info.isCompleted()

@@ -9,10 +9,10 @@ from django.dispatch import receiver
 from users.models import Account
 from django.contrib.auth.models import User
 from django.contrib import admin
-from .models import Account, Challenge, Profile, ChallengeStatus
+from .models import Account, Challenge, Profile, ChallengeTracker
 
 class ChallengeStatusInLine(admin.TabularInline):
-    model = ChallengeStatus
+    model = ChallengeTracker
     extra = 1
 
 class AccountAdmin(admin.ModelAdmin):
