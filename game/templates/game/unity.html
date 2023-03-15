@@ -25,19 +25,33 @@
         <div id="unity-build-title">ECM2434_Prototype_2</div>
       </div>
       <div id="end-status" style="visibility: hidden"></div>
-      <br>
-      <br>
-      <button id="end-game-button" onclick="checkState()">End Game</button>
     </div>
     <script>
       function checkState() {
 	  const status = document.getElementById("end-status");
-	  if (status.innerHTML == "CORRECT") { console.log("FOUND"); }
-	  else if (status.innerHTML == "INCORRECT") { console.log("NOT FOUND");  }
+	  if (status.innerHTML == "CORRECT") {
+	      let xhr = new XMLHttpRequest();
+	      xhr.open("POST", "{% url 'unity' %}");
+	      xhr.setRequestHeader("Accept", "application/json");
+	      xhr.setRequestHeader("Content-Type", "application/json");
+	      xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+
+	      let data = '{"give_points": "true"}';
+	      xhr.send(data);
+	  }
+	  else if (status.innerHTML == "INCORRECT") {
+	      let xhr = new XMLHttpRequest();
+	      xhr.open("POST", "{% url 'unity' %}");
+	      xhr.setRequestHeader("Accept", "application/json");
+	      xhr.setRequestHeader("Content-Type", "application/json");
+	      xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+
+	      let data = '{"give_points": "false"}';
+	      xhr.send(data);
+	  }
 	  else {}
       }
-      
-      
+        
       var container = document.querySelector("#unity-container");
       var canvas = document.querySelector("#unity-canvas");
       var loadingBar = document.querySelector("#unity-loading-bar");
@@ -137,11 +151,7 @@
           alert(message);
         });
       };
-      document.body.appendChild(script);
-
-      var endStatus = document.querySelector("end-status");
-      endStatus.addEventListener('click', function (e) {});
-      
+      document.body.appendChild(script);    
     </script>
   </body>
 </html>
