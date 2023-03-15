@@ -19,6 +19,8 @@ from geojson import Point, MultiPolygon, Feature
 
 
 # Create your views here.
+
+@login_required
 def home(request):
     """Serves the homepage for <url>/game/
     
@@ -109,7 +111,7 @@ def home(request):
                    'blur_strength': blur_strength,
                    'fact_progress': fact_progress})
 
-
+@login_required
 def leaderboard(request):
     """Serves the Leadboard webpage for <url>/game/leaderboard
 
@@ -142,7 +144,7 @@ def leaderboard(request):
                    'acc_leaderboard': all_accommodations}
                   )
 
-
+@login_required
 def profile(request):
     """Serves the Profile webpage for <url>/game/profile/
 
@@ -216,7 +218,7 @@ def profile(request):
 
     return render(request, 'game/profile.html', context)
 
-
+@login_required
 def map(request):
     message = ""
 
@@ -287,7 +289,7 @@ def map(request):
     # Serve game/map.html 
     return render(request, 'game/map.html', context=context)
 
-
+@login_required
 def news(request):
     """Serves a news 
 
@@ -319,7 +321,7 @@ def news(request):
 def challengeManager(request):
     return render(request, 'game/challengeManager.html')
 
-
+@login_required
 def QR(request):
     return render(request, 'game/QR.html')
 
@@ -354,6 +356,7 @@ def update_points(request):
     # If the form was not submitted, render a template with the form
     return render(request, 'update_points.html')
 
+@login_required
 def unity(request):
     """Serves the Unity Game at <url>/game/unity>
     Uses the pre-built Unity WebGL html file to load a gameInstance and serve a project to the user
@@ -364,35 +367,46 @@ def unity(request):
     Returns:
         HttpResponse: Webpage at ./templates/game/unity.html
     """
+
+    STORY_POINT_REWARD = 100
     
-    description = []
-    culprit = ""
+    if request.method == "POST":
+        data = json.loads(request.body)
+        give_points = data.get("give_points")
 
-    # story = Story.objects.get(story_number = 1)
-    # suspects = story.suspects.all()
-    # for suspect in suspects:
-    #     description.append(suspect.getDescription())
-    # desc_str = "[SPLIT]".join(description)
-    # clues = story.getAllClues()
-    # culprit = story.getCulprit()
-    # clues_str = "[SPLIT]".join(clues)
-    # sprites = story.getSpritesCodes()
+        # check that story has been completed
+        if give_points == "true":
+            # give points to logged in user
+            user = Account.objects.get(username=request.user.username)
+            user.points += STORY_POINT_REWARD
+            user.daily_points += STORY_POINT_REWARD 
 
-    story = Story.objects.get(story_number = 1)
-    suspects = story.suspects.all()
-    for suspect in suspects:
-        description.append(suspect.brief)
-    desc_str = "[SPLIT]".join(description)
-    clues = [story.clue1, story.clue2, story.clue3, story.clue4, story.clue5, story.clue6, story.clue7, story.clue8, story.clue9, story.clue10]
-    culprit = story.culprit
-    clues_str = "[SPLIT]".join(clues)
-    sprites = [story.sprite_1, story.sprite_2, story.sprite_3, story.sprite_4, story.sprite_5]
+            user.save()
 
-    context = {
-        "spriteCodes": sprites,
-        "culprit": culprit,
-        "descriptions": desc_str,
-        "clues": clues_str
-    }    
+        # redirect to the overview
+        return redirect("game");
         
-    return render(request, template_name="game/unity.html", context=context)
+    else:
+        # construct all information to pass to the unity game
+        description = []
+        culprit = ""
+
+        # get information from a stored Story model
+        story = Story.objects.get(story_number = 1)
+        suspects = story.suspects.all()
+        for suspect in suspects:
+            description.append(suspect.brief)
+        desc_str = "[SPLIT]".join(description) # [SPLIT] recognised by the Unity C# Script as the delimiter
+        clues = [story.clue1, story.clue2, story.clue3, story.clue4, story.clue5, story.clue6, story.clue7, story.clue8, story.clue9, story.clue10]
+        culprit = story.culprit
+        clues_str = "[SPLIT]".join(clues)
+        sprites = [story.sprite_1, story.sprite_2, story.sprite_3, story.sprite_4, story.sprite_5]
+
+        context = {
+            "spriteCodes": sprites,
+            "culprit": culprit,
+            "descriptions": desc_str,
+            "clues": clues_str
+        }    
+    
+        return render(request, template_name="game/unity.html", context=context)
