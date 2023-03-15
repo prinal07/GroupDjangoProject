@@ -6,17 +6,19 @@
 
     <body id="challenge-body">
 
-    <h1 id="challenge-title"> Challenges</h1>
+    <h1 id="challenge-bar-title"> Challenges</h1>
 
     {% for challenge in challenge_list %}
-        <p class="{% if challenge.status %}completed{% else %}todo{% endif %}">
-            Challenge Description: {{ challenge.description }}
-            {% if challenge.status %}
-                Challenge Status: complete!
-            {% else %}
-                Challenge Status: To do
-            {% endif %}
-        </p>
+        <div class="challenge">
+            <div class="challenge-desc">{{ challenge.description }}</div>
+            <div class="challenge-status {% if challenge.status %}completed{% else %}todo{% endif %}">
+                {% if challenge.status %}
+                    Status: complete!
+                {% else %}
+                    Status: To do
+                {% endif %}
+            </div>
+        </div>
     {% endfor %}
 
 

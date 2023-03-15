@@ -16,10 +16,23 @@
 }
 
 
+.challenge {
+    margin-bottom: 20px;
+}
+
+.challenge-desc {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.challenge-status {
+    font-size: 20px;
+}
+
 .completed {
-    background-color: green;
+    color: green;
 }
 
 .todo {
-    background-color: red;
+    color: red;
 }
