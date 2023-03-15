@@ -127,7 +127,7 @@ class Profile(models.Model):
         """
         return f'{self.user.username}Profile'
     
-class ChallengeTracker(models.Model):
+class ChallengeStatus(models.Model):
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
     challenge = models.ForeignKey(Challenge, on_delete=models.CASCADE)
     completed = models.BooleanField(default=False)
