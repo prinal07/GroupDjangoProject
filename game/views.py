@@ -318,10 +318,14 @@ def news(request):
 def challengeManager(request):
     logged_username = request.user.username
     logged_user = Account.objects.get(username=logged_username)
-    print("Hey!")
-    print(logged_user.challenges)
 
-    return render(request, 'game/challengeManager.html')
+    challenge_list = []
+    for challenge_status in logged_user.challengestatus_set.all():
+        challenge_list.append(challenge_status.challenge.challengeDesc)
+
+    print(challenge_list)
+
+    return render(request, 'game/challengeManager.html', {'challenge_list': challenge_list})
 
 
 def QR(request):
