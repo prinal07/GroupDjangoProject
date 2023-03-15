@@ -36,7 +36,9 @@ class Account(models.Model):
     last_day_accessed = models.DateField(default=date.today)
     staffCheck = models.BooleanField(default=False)
     challenges = models.ManyToManyField(Challenge, related_name='accounts')
-
+    greenCounter = models.IntegerField(default=0)
+    binCounter = models.IntegerField(default=0)
+    walkCounter = models.IntegerField(default=0)
 
     def current_level(self):
         """Returns the level of an individual account
@@ -44,7 +46,10 @@ class Account(models.Model):
         Returns:
             int: To reflect 100 points a level, division and round up, Levels possible == [1..]
         """
-        return math.ceil(self.points / 100) 
+        if self.points == 0:
+            return 1
+
+        return math.ceil(self.points / 100)
 
     def level_progress(self):
         """Returns the percentage of progress to the next level of an individual account
@@ -129,7 +134,6 @@ class ChallengeStatus(models.Model):
 
     def __str__(self):
         return f"{self.account.username} - {self.challenge.challengeDesc}"
-    
+
     def isCompleted(self):
         return self.completed
-
