@@ -118,10 +118,10 @@ class Profile(models.Model):
     """
     # Attributes (Columns) of the Model
     # Foreign Key of an existing User Model stored in the table
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     
     # Picture that can be submitted to the database in User Creation
-    image = models.ImageField(default='default.jpg', upload_to='profile_pics')
+    image = models.ImageField(default='default.jpg', null=True, upload_to='profile_pics')
 
     def __str__(self):
         """Chosen string representation format of an individual model
@@ -129,7 +129,7 @@ class Profile(models.Model):
         Returns:
             string: The Username of the user attribute foreign key
         """
-        return f'{self.user.username}Profile'
+        return f'{self.user.username} Profile'
     
 class ChallengeTracker(models.Model):
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
