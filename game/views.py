@@ -46,6 +46,8 @@ def green_checker(request):
                 challenge_tracker.completed = True
                 challenge_tracker.save()
 
+                #Number of clues is increased, as a challenge has been completed
+                logged_user.cluesUnlocked += 1
 
 # Create your views here.
 
@@ -287,6 +289,7 @@ def map(request):
         if boolean_point_in_polygon(point, polygon):
             # Increase counter
             logged_user.greenCounter += 1
+
             # Add points
             logged_user.points += 10
             logged_user.save()
@@ -399,8 +402,8 @@ def update_points(request):
 
         #Bin counter of the user is incremented
         logged_user.binCounter += 1
-        # challenges = logged_user.challengetracker_set.all()
 
+        logged_user.cluesUnlocked += 1
         logged_user.points += 10
         logged_user.daily_points += 10
         logged_user.save()
@@ -444,20 +447,37 @@ def unity(request):
             user.save()
 
         # redirect to the overview
-        return redirect("game");
+        return redirect("game")
         
     else:
         # construct all information to pass to the unity game
         description = []
         culprit = ""
+        clues = []
 
-        # get information from a stored Story model
         story = Story.objects.get(story_number = 1)
         suspects = story.suspects.all()
+        #stores all clues of the story
+        allClues = [story.clue1, story.clue2, story.clue3, story.clue4, story.clue5, story.clue6, story.clue7, story.clue8, story.clue9, story.clue10]
+
+        #fetches current user and the number of clues the user has unlocked
+        logged_username = request.user.username
+        logged_user = Account.objects.get(username = logged_username)
+        cluesUnlocked = logged_user.cluesUnlocked
+        notUnlocked = "Complete a Challenge to unlock next clue"
+
+        #Make the number of unlocked clues viewable in Unity
+        for ctr in range(cluesUnlocked):
+            clues.append(allClues[ctr])
+
+        #Make the number of not unlocked clues viewable as 'Complete a Challenge to unlock next clue'
+        for ctr2 in range(10 - cluesUnlocked):
+            clues.append(notUnlocked)
+
+        # get information from a stored Story model
         for suspect in suspects:
             description.append(suspect.brief)
         desc_str = "[SPLIT]".join(description) # [SPLIT] recognised by the Unity C# Script as the delimiter
-        clues = [story.clue1, story.clue2, story.clue3, story.clue4, story.clue5, story.clue6, story.clue7, story.clue8, story.clue9, story.clue10]
         culprit = story.culprit
         clues_str = "[SPLIT]".join(clues)
         sprites = [story.sprite_1, story.sprite_2, story.sprite_3, story.sprite_4, story.sprite_5]
