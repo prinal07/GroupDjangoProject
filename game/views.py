@@ -366,6 +366,7 @@ def update_points(request):
         logged_username = request.user.username
         logged_user = Account.objects.get(username=logged_username)
 
+        #Bin counter of the user is incremented
         logged_user.binCounter += 1
         # challenges = logged_user.challengetracker_set.all()
 
