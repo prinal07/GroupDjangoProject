@@ -41,7 +41,7 @@ class Account(models.Model):
     startingLng  = models.CharField(default='', max_length=100)
     finalLat = models.CharField(default='', max_length=100)
     finalLng  = models.CharField(default='', max_length=100)
-    finalLocation=models.CharField(default='', max_length=100) 
+    distanceTraveled=models.CharField(default='', max_length=100) 
 
     def current_level(self):
         """Returns the level of an individual account

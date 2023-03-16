@@ -418,7 +418,6 @@
                 // `e.lngLat` is the longitude, latitude geographical position of the event.
                 JSON.stringify(e.lngLat.wrap());
         });
-
             /**
      * Gets the current geolocation of the user and sends it to the locationParser function.
      * If geolocation is not supported by the browser, displays an error message.
@@ -468,7 +467,11 @@
             }
         });
     }
-    function getFinalLocation(){
+    /**
+     * Requests the user's geolocation and calls showFinalPosition with the position data.
+     * If geolocation is not supported by the browser, displays an error message.
+     */
+    function getFinalLocation() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(showFinalPosition);
         } else {
@@ -477,21 +480,31 @@
         }
     }
 
+    /**
+     * Parses the user's position data to retrieve latitude and longitude,
+     * and calls locationParserToget_Directions to retrieve directions based on the user's location.
+     * @param {Object} position - the user's position data, obtained from navigator.geolocation.getCurrentPosition
+     */
     function showFinalPosition(position) {
         let lat = position.coords.latitude;
         let lng = position.coords.longitude;
         locationParserToget_Directions(lat, lng);
         console.log("Latitude: " + position.coords.latitude + ", Longitude: " + position.coords.longitude);
     }
-    function locationParserToget_Directions(latitude, longitude){
 
+    /**
+     * Sends an AJAX request to retrieve directions based on the user's location.
+     * @param {number} latitude - the user's latitude
+     * @param {number} longitude - the user's longitude
+     */
+    function locationParserToget_Directions(latitude, longitude) {
         $.ajax({
             type: "POST",
             url: "/game/get_Directions/",
             data: {
                 'latitude': latitude,
                 'longitude': longitude,
-                'csrfmiddlewaretoken': '{{ csrf_token }}' 
+                'csrfmiddlewaretoken': '{{ csrf_token }}' // included to prevent CSRF attacks
             },
             success: function(data) {
                 console.log("Data sent successfully");
@@ -513,8 +526,7 @@
 
     <div id='green-message'></div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- {%load static%}
-    <script src="{% static '/js/map.js'%}"></script> -->
+    
     <button id="location-button" , onclick="getLocation()">Get Location</button>
     <button id="final-location-button", onclick="getFinalLocation()">Get Final Location</button>
     <style>

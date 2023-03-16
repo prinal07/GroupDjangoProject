@@ -439,7 +439,7 @@ def get_Directions(request):
         distance = R * c
         
         # Save the calculated distance to the user's account
-        logged_account.finalLocation = distance
+        logged_account.distanceTraveled = distance
         logged_account.save()
         
         # Render the map template
