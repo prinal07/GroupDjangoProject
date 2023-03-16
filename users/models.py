@@ -43,6 +43,11 @@ class Account(models.Model):
     binCounter = models.IntegerField(default=0)
     walkCounter = models.IntegerField(default=0)
 
+    #game Completed check to determine if user has completed game
+    gameCompleted = models.IntegerField(default=0)
+    #number of clues unlocked to be able to use for Unity interface
+    cluesUnlocked = models.IntegerField(default=False)
+
     def current_level(self):
         """Returns the level of an individual account
 

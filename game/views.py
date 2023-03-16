@@ -396,6 +396,11 @@ def update_points(request):
         # Get the current user and update their points field in the Database record
         logged_username = request.user.username
         logged_user = Account.objects.get(username=logged_username)
+
+        #Bin counter of the user is incremented
+        logged_user.binCounter += 1
+        # challenges = logged_user.challengetracker_set.all()
+
         logged_user.points += 10
         logged_user.daily_points += 10
         logged_user.save()
@@ -432,6 +437,7 @@ def unity(request):
         if give_points == "true":
             # give points to logged in user
             user = Account.objects.get(username=request.user.username)
+            user.gameCompleted = True
             user.points += STORY_POINT_REWARD
             user.daily_points += STORY_POINT_REWARD 
 
