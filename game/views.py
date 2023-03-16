@@ -18,7 +18,38 @@ from turfpy.measurement import boolean_point_in_polygon
 from geojson import Point, MultiPolygon, Feature
 
 
+def green_checker(request):
+    """ Uses green counter to set status of incomplete Green activities to done
+
+     Args:
+        request (_type_): _description_
+
+         Returns:
+             None
+
+    """
+
+    logged_username = request.user.username
+    logged_user = Account.objects.get(username=logged_username)
+
+    # Get the challenges list for the logged in user
+    challenges_tracker_list = logged_user.challengetracker_set.filter(completed=False)
+
+    # Loop through the challenges and check if any challenge is related to green areas
+    for challenge_tracker in challenges_tracker_list:
+        challenge = challenge_tracker.challenge
+        if challenge.challengeType == 'Green Areas':
+            # Check if the green counter matches the target for this challenge
+            target = int(challenge.challengeDesc.split(' ')[1])  # Get the target number of green areas
+            if logged_user.greenCounter >= target:
+                # Update the challenge tracker status to completed
+                challenge_tracker.completed = True
+                challenge_tracker.save()
+
+
 # Create your views here.
+
+@login_required
 def home(request):
     """Serves the homepage for <url>/game/
     
@@ -109,7 +140,7 @@ def home(request):
                    'blur_strength': blur_strength,
                    'fact_progress': fact_progress})
 
-
+@login_required
 def leaderboard(request):
     """Serves the Leadboard webpage for <url>/game/leaderboard
 
@@ -142,7 +173,7 @@ def leaderboard(request):
                    'acc_leaderboard': all_accommodations}
                   )
 
-
+@login_required
 def profile(request):
     """Serves the Profile webpage for <url>/game/profile/
 
@@ -216,7 +247,7 @@ def profile(request):
 
     return render(request, 'game/profile.html', context)
 
-
+@login_required
 def map(request):
     message = ""
 
@@ -253,10 +284,14 @@ def map(request):
 
         print(boolean_point_in_polygon(point, polygon))
 
-        if (boolean_point_in_polygon(point, polygon)):
+        if boolean_point_in_polygon(point, polygon):
+            # Increase counter
+            logged_user.greenCounter += 1
+            # Add points
             logged_user.points += 10
             logged_user.save()
-            message = {'message': 'You have entered green area!'}
+
+            message = {'message': 'You have entered green area! 10 points awarded'}
             return JsonResponse(message)
 
     bins = Bin.objects.all()
@@ -286,7 +321,7 @@ def map(request):
     # Serve game/map.html 
     return render(request, 'game/map.html', context=context)
 
-
+@login_required
 def news(request):
     """Serves a news 
 
@@ -323,15 +358,13 @@ def challengeManager(request):
     completed_bin_tasks = logged_user.binCounter
     completed_walk_tasks = logged_user.walkCounter
 
-    # challenge_list = []
-    # for challenge_status in logged_user.challengestatus_set.all():
-    #     challenge_list.append(challenge_status.challenge.challengeDesc)
+    green_checker(request)
 
     challenge_list = []
-    for challenge_info in logged_user.challengestatus_set.all():
+    for challenge_info in logged_user.challengetracker_set.all():
         challenge_dict = {}
         challenge_dict['description'] = challenge_info.challenge.challengeDesc
-        challenge_dict['status'] = challenge_info.isCompleted()
+        challenge_dict['status'] = challenge_info.checkStatus()
         challenge_list.append(challenge_dict)
 
     print(challenge_list)
@@ -341,7 +374,7 @@ def challengeManager(request):
                                                            'bin_counter': completed_bin_tasks,
                                                            'walk_counter': completed_walk_tasks})
 
-
+@login_required
 def QR(request):
     return render(request, 'game/QR.html')
 
@@ -376,6 +409,7 @@ def update_points(request):
     # If the form was not submitted, render a template with the form
     return render(request, 'update_points.html')
 
+@login_required
 
 def unity(request):
     """Serves the Unity Game at <url>/game/unity>
@@ -388,35 +422,45 @@ def unity(request):
         HttpResponse: Webpage at ./templates/game/unity.html
     """
 
-    description = []
-    culprit = ""
+    STORY_POINT_REWARD = 100
+    
+    if request.method == "POST":
+        data = json.loads(request.body)
+        give_points = data.get("give_points")
 
-    # story = Story.objects.get(story_number = 1)
-    # suspects = story.suspects.all()
-    # for suspect in suspects:
-    #     description.append(suspect.getDescription())
-    # desc_str = "[SPLIT]".join(description)
-    # clues = story.getAllClues()
-    # culprit = story.getCulprit()
-    # clues_str = "[SPLIT]".join(clues)
-    # sprites = story.getSpritesCodes()
+        # check that story has been completed
+        if give_points == "true":
+            # give points to logged in user
+            user = Account.objects.get(username=request.user.username)
+            user.points += STORY_POINT_REWARD
+            user.daily_points += STORY_POINT_REWARD 
 
-    story = Story.objects.get(story_number=1)
-    suspects = story.suspects.all()
-    for suspect in suspects:
-        description.append(suspect.brief)
-    desc_str = "[SPLIT]".join(description)
-    clues = [story.clue1, story.clue2, story.clue3, story.clue4, story.clue5, story.clue6, story.clue7, story.clue8,
-             story.clue9, story.clue10]
-    culprit = story.culprit
-    clues_str = "[SPLIT]".join(clues)
-    sprites = [story.sprite_1, story.sprite_2, story.sprite_3, story.sprite_4, story.sprite_5]
+            user.save()
 
-    context = {
-        "spriteCodes": sprites,
-        "culprit": culprit,
-        "descriptions": desc_str,
-        "clues": clues_str
-    }
+        # redirect to the overview
+        return redirect("game");
+        
+    else:
+        # construct all information to pass to the unity game
+        description = []
+        culprit = ""
 
-    return render(request, template_name="game/unity.html", context=context)
+        # get information from a stored Story model
+        story = Story.objects.get(story_number = 1)
+        suspects = story.suspects.all()
+        for suspect in suspects:
+            description.append(suspect.brief)
+        desc_str = "[SPLIT]".join(description) # [SPLIT] recognised by the Unity C# Script as the delimiter
+        clues = [story.clue1, story.clue2, story.clue3, story.clue4, story.clue5, story.clue6, story.clue7, story.clue8, story.clue9, story.clue10]
+        culprit = story.culprit
+        clues_str = "[SPLIT]".join(clues)
+        sprites = [story.sprite_1, story.sprite_2, story.sprite_3, story.sprite_4, story.sprite_5]
+
+        context = {
+            "spriteCodes": sprites,
+            "culprit": culprit,
+            "descriptions": desc_str,
+            "clues": clues_str
+        }    
+    
+        return render(request, template_name="game/unity.html", context=context)
