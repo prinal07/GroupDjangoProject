@@ -4,33 +4,23 @@ from game.models import Challenge
 from django.db import models
 from users.models import Account
 from game.models import Challenge
-
+from django.db.models.signals import pre_delete
+from django.dispatch import receiver
+from users.models import Account
+from django.contrib.auth.models import User
 from django.contrib import admin
-from .models import Account, Challenge
+from .models import Account, Challenge, Profile, ChallengeTracker
 
-
-class ChallengeStatus(models.Model):
-    account = models.ForeignKey(Account, on_delete=models.CASCADE)
-    challenge = models.ForeignKey(Challenge, on_delete=models.CASCADE)
-    completed = models.BooleanField(default=False)
-
-    def __str__(self):
-        return f"{self.account.username} - {self.challenge.challengeDesc}"
-    
-    def isCompleted(self):
-        return self.completed
-
-    
 class ChallengeStatusInLine(admin.TabularInline):
-    model = ChallengeStatus
+    model = ChallengeTracker
     extra = 1
 
 class AccountAdmin(admin.ModelAdmin):
+    list_display = ('username', 'is_my_bool_field_true')
     inlines = [ChallengeStatusInLine]
     exclude = ('challenges',)
 
     
 admin.site.register(Account, AccountAdmin)
-
 admin.site.register(Challenge)
-
+admin.site.register(Profile)

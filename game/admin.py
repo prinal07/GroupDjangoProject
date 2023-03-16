@@ -12,6 +12,8 @@ class BinAdmin(admin.ModelAdmin):
     
     # Sets the arrangement of the attributes on the Django Admin page
     list_display = ('bin_number', 'latitude', 'longitude')
+    exclude = ('challenge',)
+
 
 # Register the Bin model using the BinAdmin config class
 admin.site.register(Bin, BinAdmin)
