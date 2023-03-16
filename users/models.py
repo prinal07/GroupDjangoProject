@@ -139,5 +139,5 @@ class ChallengeTracker(models.Model):
     def __str__(self):
         return f"{self.account.username} - {self.challenge.challengeDesc}"
 
-    def isCompleted(self):
+    def checkStatus(self):
         return self.completed
