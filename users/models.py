@@ -43,6 +43,9 @@ class Account(models.Model):
     binCounter = models.IntegerField(default=0)
     walkCounter = models.IntegerField(default=0)
 
+    gameCompleted = models.IntegerField(default=0)
+    cluesUnlocked = models.IntegerField(default=False)
+
     def current_level(self):
         """Returns the level of an individual account
 
