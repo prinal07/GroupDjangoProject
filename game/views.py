@@ -18,6 +18,35 @@ from turfpy.measurement import boolean_point_in_polygon
 from geojson import Point, MultiPolygon, Feature
 
 
+def green_checker(request):
+    """ Uses green counter to set status of incomplete Green activities to done
+
+     Args:
+        request (_type_): _description_
+
+         Returns:
+             None
+
+    """
+
+    logged_username = request.user.username
+    logged_user = Account.objects.get(username=logged_username)
+
+    # Get the challenges list for the logged in user
+    challenges_tracker_list = logged_user.challengetracker_set.filter(completed=False)
+
+    # Loop through the challenges and check if any challenge is related to green areas
+    for challenge_tracker in challenges_tracker_list:
+        challenge = challenge_tracker.challenge
+        if challenge.challengeType == 'Green Areas':
+            # Check if the green counter matches the target for this challenge
+            target = int(challenge.challengeDesc.split(' ')[1])  # Get the target number of green areas
+            if logged_user.greenCounter >= target:
+                # Update the challenge tracker status to completed
+                challenge_tracker.completed = True
+                challenge_tracker.save()
+
+
 # Create your views here.
 
 @login_required
@@ -255,10 +284,14 @@ def map(request):
 
         print(boolean_point_in_polygon(point, polygon))
 
-        if (boolean_point_in_polygon(point, polygon)):
+        if boolean_point_in_polygon(point, polygon):
+            # Increase counter
+            logged_user.greenCounter += 1
+            # Add points
             logged_user.points += 10
             logged_user.save()
-            message = {'message': 'You have entered green area!'}
+
+            message = {'message': 'You have entered green area! 10 points awarded'}
             return JsonResponse(message)
 
     bins = Bin.objects.all()
@@ -325,15 +358,13 @@ def challengeManager(request):
     completed_bin_tasks = logged_user.binCounter
     completed_walk_tasks = logged_user.walkCounter
 
-    # challenge_list = []
-    # for challenge_status in logged_user.challengetracker_set.all():
-    #     challenge_list.append(challenge_status.challenge.challengeDesc)
+    green_checker(request)
 
     challenge_list = []
     for challenge_info in logged_user.challengetracker_set.all():
         challenge_dict = {}
         challenge_dict['description'] = challenge_info.challenge.challengeDesc
-        challenge_dict['status'] = challenge_info.isCompleted()
+        challenge_dict['status'] = challenge_info.checkStatus()
         challenge_list.append(challenge_dict)
 
     print(challenge_list)
