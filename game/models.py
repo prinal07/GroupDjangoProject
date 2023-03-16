@@ -3,7 +3,6 @@ from django.db import models
 from django.core.validators import RegexValidator
 
 class Challenge(models.Model):
-
     challengeId = models.IntegerField(default=1)
     challengeDesc = models.TextField(default="", max_length=400)
     CHALLENGE_TYPES = (
@@ -96,6 +95,10 @@ class Suspect(models.Model):
             self.number = self.story.suspects.count() + 1
         super().save(*args, **kwargs)
 
+    def getDescription(self):
+        return self.brief
+    
+
 class Story(models.Model):
     """Story model to be passed into the Mystery game at <url>/game/unity/
     Defines all information to be used in the game
@@ -129,7 +132,7 @@ class Story(models.Model):
 
     # Codes are concatenated into a string, to customise the appearance of the sprites in-game
     # In the unity project, a C# Function title SetSuspectSprites correlates each index to a sprite object
-    sprite_codes = str(sprite_1) + str(sprite_2) + str(sprite_3) + str(sprite_4) + str(sprite_5)
+    sprite_codes = [sprite_1, sprite_2, sprite_3, sprite_4, sprite_5]
 
     clue1 = models.TextField(max_length=1000, default="")
     clue2 = models.TextField(max_length=1000, default="")
@@ -194,7 +197,7 @@ class Story(models.Model):
         Returns:
             string: Sprite code representation of the appearance in this Story model
         """
-        return self.sprite_codes
+        return "".join(self.sprite_codes)
 
     def getAllClues(self):
         """Function to return all supplied clues for this story, to be presented to the user
@@ -203,3 +206,4 @@ class Story(models.Model):
             [string]: List of clue descriptions, for use in the Unity Game 
         """
         return self.clues
+

@@ -5,6 +5,7 @@ import math
 from django.shortcuts import render, redirect
 from django.db.models import Sum
 from django.contrib import messages
+from game.models import Story, Suspect
 import requests
 
 from game.forms import UserUpdateForm, ProfileUpdateForm, AccountUpdateForm, DeleteAccountForm
@@ -20,7 +21,40 @@ from turfpy.measurement import boolean_point_in_polygon
 from geojson import Point, MultiPolygon, Feature
 
 
+def green_checker(request):
+    """ Uses green counter to set status of incomplete Green activities to done
+
+     Args:
+        request (_type_): _description_
+
+         Returns:
+             None
+
+    """
+
+    logged_username = request.user.username
+    logged_user = Account.objects.get(username=logged_username)
+
+    # Get the challenges list for the logged in user
+    challenges_tracker_list = logged_user.challengetracker_set.filter(completed=False)
+
+    # Loop through the challenges and check if any challenge is related to green areas
+    for challenge_tracker in challenges_tracker_list:
+        challenge = challenge_tracker.challenge
+        if challenge.challengeType == 'Green Areas':
+            # Check if the green counter matches the target for this challenge
+            target = int(challenge.challengeDesc.split(' ')[1])  # Get the target number of green areas
+            if logged_user.greenCounter >= target:
+                # Update the challenge tracker status to completed
+                challenge_tracker.completed = True
+                challenge_tracker.save()
+
+                #Number of clues is increased, as a challenge has been completed
+                logged_user.cluesUnlocked += 1
+
 # Create your views here.
+
+@login_required
 def home(request):
     """Serves the homepage for <url>/game/
     
@@ -37,7 +71,7 @@ def home(request):
         HttpResponse: Serves the webpage stored at ./templates/game/index.html because of Django's file structure
         Passes context to the webpage in JSON format, to record values for use in JavaScript or HTML formatting
     """
-    
+
     # leaderboard of everyone in given accommodation
     # matching the username of Django User class with username our user class
     logged_username = request.user.username
@@ -55,7 +89,7 @@ def home(request):
 
     # Collects all stored accounts that share the current user's accomodation cell value
     all_users_accommodation = Account.objects.all().filter(accommodation=logged_user.accommodation)
-    
+
     # Sorts the accomodations collected on the line above by the points cell value
     all_users_accommodation = all_users_accommodation.order_by('-points')[:5]
 
@@ -66,13 +100,13 @@ def home(request):
 
     # Gets today's date for fetching today's fact
     date_today = date.today()
-    
+
     # Default fact value
     fact_today = "There are no facts in DB"
-    
+
     # Fetch the Fact Record from the Database with shared date
     fact_today_object = Fact.objects.filter(date=date_today).first()
-    
+
     # Replaces default fact with any found fact
     if fact_today_object is not None:
         fact_today = fact_today_object.fact
@@ -111,7 +145,7 @@ def home(request):
                    'blur_strength': blur_strength,
                    'fact_progress': fact_progress})
 
-
+@login_required
 def leaderboard(request):
     """Serves the Leadboard webpage for <url>/game/leaderboard
 
@@ -144,7 +178,7 @@ def leaderboard(request):
                    'acc_leaderboard': all_accommodations}
                   )
 
-
+@login_required
 def profile(request):
     """Serves the Profile webpage for <url>/game/profile/
 
@@ -158,7 +192,7 @@ def profile(request):
             - A Profile overview page stored at ./templates/game/profile.html due to Django's file structure
                 Pass the context of all possible forms, to be issued on button request
     """
-    
+
     # Fetches current username and account record
     logged_username = request.user.username
     logged_account = Account.objects.get(username=logged_username)
@@ -167,10 +201,10 @@ def profile(request):
     if request.method == 'POST':
         user_update_form = UserUpdateForm(request.POST, instance=request.user)
         picture_update_form = ProfileUpdateForm(request.POST,
-                                   request.FILES,
-                                   instance=request.user.profile)
+                                                request.FILES,
+                                                instance=request.user.profile)
         # Find account in database to update it
-        account_update_form = AccountUpdateForm(request.POST, 
+        account_update_form = AccountUpdateForm(request.POST,
                                                 instance=Account.objects.get(username=request.user.username))
 
         if user_update_form.is_valid() and picture_update_form.is_valid() and account_update_form.is_valid():
@@ -218,7 +252,7 @@ def profile(request):
 
     return render(request, 'game/profile.html', context)
 
-
+@login_required
 def map(request):
     message = ""
 
@@ -255,12 +289,16 @@ def map(request):
 
         print(boolean_point_in_polygon(point, polygon))
 
-        if (boolean_point_in_polygon(point, polygon)):
+        if boolean_point_in_polygon(point, polygon):
+            # Increase counter
+            logged_user.greenCounter += 1
+
+            # Add points
             logged_user.points += 10
             logged_user.save()
-            message = {'message': 'You have entered green area!'}
-            return JsonResponse(message)
 
+            message = {'message': 'You have entered green area! 10 points awarded'}
+            return JsonResponse(message)
 
     bins = Bin.objects.all()
     """Supplies coordinates of bins to the mapbxo representation in <url>/game/map/
@@ -289,7 +327,7 @@ def map(request):
     # Serve game/map.html 
     return render(request, 'game/map.html', context=context)
 
-
+@login_required
 def news(request):
     """Serves a news 
 
@@ -319,9 +357,30 @@ def news(request):
 
 
 def challengeManager(request):
-    return render(request, 'game/challengeManager.html')
+    logged_username = request.user.username
+    logged_user = Account.objects.get(username=logged_username)
 
+    completed_green_tasks = logged_user.greenCounter
+    completed_bin_tasks = logged_user.binCounter
+    completed_walk_tasks = logged_user.walkCounter
 
+    green_checker(request)
+
+    challenge_list = []
+    for challenge_info in logged_user.challengetracker_set.all():
+        challenge_dict = {}
+        challenge_dict['description'] = challenge_info.challenge.challengeDesc
+        challenge_dict['status'] = challenge_info.checkStatus()
+        challenge_list.append(challenge_dict)
+
+    print(challenge_list)
+
+    return render(request, 'game/challengeManager2.html', {'challenge_list': challenge_list,
+                                                           'green_counter': completed_green_tasks,
+                                                           'bin_counter': completed_bin_tasks,
+                                                           'walk_counter': completed_walk_tasks})
+
+@login_required
 def QR(request):
     return render(request, 'game/QR.html')
 
@@ -338,11 +397,16 @@ def update_points(request):
             - A redirect to page <url>/
             - A webpage to page <url>/game/ 
     """
-    
+
     if request.method == 'POST' and 'update_points' in request.POST:
         # Get the current user and update their points field in the Database record
         logged_username = request.user.username
         logged_user = Account.objects.get(username=logged_username)
+
+        #Bin counter of the user is incremented
+        logged_user.binCounter += 1
+
+        logged_user.cluesUnlocked += 1
         logged_user.points += 10
         logged_user.daily_points += 10
         logged_user.save()
@@ -356,6 +420,8 @@ def update_points(request):
     # If the form was not submitted, render a template with the form
     return render(request, 'update_points.html')
 
+@login_required
+
 def unity(request):
     """Serves the Unity Game at <url>/game/unity>
     Uses the pre-built Unity WebGL html file to load a gameInstance and serve a project to the user
@@ -366,8 +432,69 @@ def unity(request):
     Returns:
         HttpResponse: Webpage at ./templates/game/unity.html
     """
+
+    STORY_POINT_REWARD = 100
+    
+    if request.method == "POST":
+        data = json.loads(request.body)
+        give_points = data.get("give_points")
+
+        # check that story has been completed
+        if give_points == "true":
+            # give points to logged in user
+            user = Account.objects.get(username=request.user.username)
+            user.gameCompleted = True
+            user.points += STORY_POINT_REWARD
+            user.daily_points += STORY_POINT_REWARD 
+
+            user.save()
+
+        # redirect to the overview
+        return redirect("game")
         
-    return render(request, template_name="game/unity.html")
+    else:
+        # construct all information to pass to the unity game
+        description = []
+        culprit = ""
+        clues = []
+
+        story = Story.objects.get(story_number = 1)
+        suspects = story.suspects.all()
+        #stores all clues of the story
+        allClues = [story.clue1, story.clue2, story.clue3, story.clue4, story.clue5, story.clue6, story.clue7, story.clue8, story.clue9, story.clue10]
+
+        #fetches current user and the number of clues the user has unlocked
+        logged_username = request.user.username
+        logged_user = Account.objects.get(username = logged_username)
+        cluesUnlocked = logged_user.cluesUnlocked
+        notUnlocked = "Complete a Challenge to unlock next clue"
+
+        #Make the number of unlocked clues viewable in Unity
+        for ctr in range(cluesUnlocked):
+            clues.append(allClues[ctr])
+
+        #Make the number of not unlocked clues viewable as 'Complete a Challenge to unlock next clue'
+        for ctr2 in range(10 - cluesUnlocked):
+            clues.append(notUnlocked)
+
+        # get information from a stored Story model
+        for suspect in suspects:
+            description.append(suspect.brief)
+        desc_str = "[SPLIT]".join(description) # [SPLIT] recognised by the Unity C# Script as the delimiter
+        culprit = story.culprit
+        clues_str = "[SPLIT]".join(clues)
+        sprites = [story.sprite_1, story.sprite_2, story.sprite_3, story.sprite_4, story.sprite_5]
+
+        context = {
+            "spriteCodes": sprites,
+            "culprit": culprit,
+            "descriptions": desc_str,
+            "clues": clues_str
+        }    
+    
+        return render(request, template_name="game/unity.html", context=context)
+    
+        
 @csrf_exempt
 def Receiver(request):
     """
@@ -448,5 +575,3 @@ def get_Directions(request):
     else:
         # Render the map template
         return render(request, "game/map.html")
-
-   
