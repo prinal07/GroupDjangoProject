@@ -87,4 +87,32 @@ class BinTestCase(TestCase):
     def string_representation_test(self):
         bin = Bin.objects.get(bin_number=1)
         self.assertEqual(str(bin), f"{bin.latitude}, {bin.longitude}")
-          
+
+class SuspectTestCase(TestCase):
+    def setUp(self):
+        suspect = Story.objects.create(
+            story = None,
+            number = 1,
+            name = "Alex Houghton",
+            brief = "A second year comp sci student"
+        )
+        
+    def test_number(self):
+        suspect = Suspect.objects.get(number=1)
+        self.assertTrue(isinstance(suspect.number, int))
+        self.assertTrue(suspect.number >= 0)
+        
+    def test_name(self):
+        suspect = Suspect.objects.get(number=1)
+        self.assertTrue(isinstance(suspect.name, str))
+        self.assertTrue(suspect.name != "")
+        
+    def test_brief(self):
+        suspect = Suspect.objects.get(number=1)
+        self.assertTrue(isinstance(suspect.brief, str))
+        self.assertEqual(suspect.brief, "A second year comp sci student")
+        self.assertTrue(suspect.name != "")
+        
+    def string_representation_test(self):
+        suspect = Suspect.objects.get(number=1)
+        self.assertEqual(str(suspect), "Alex Houghton")

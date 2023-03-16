@@ -86,6 +86,9 @@ class Suspect(models.Model):
         # Tells Django admin to order by the number attribute value in descending order
         ordering = ['number']
 
+    def __str__(self):
+        return f"{self.name}"
+
     def save(self, *args, **kwargs):
         """Saves the Suspect model to the Database as a new record
         Overloads the existing models.Model.save() function
