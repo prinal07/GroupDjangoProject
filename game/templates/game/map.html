@@ -15,7 +15,6 @@
         <script>
             console.log('{{bin_info}}')
             var bin_info = JSON.parse('{{bin_info}}'); </script>
-        
         <style>
             body {
                 margin: 0;
@@ -28,7 +27,6 @@
                 top: 0;
                 bottom: 0;
                 width: 80%;
-                height: 50%;
             }
 
             .marker {
@@ -418,102 +416,8 @@
                 // `e.lngLat` is the longitude, latitude geographical position of the event.
                 JSON.stringify(e.lngLat.wrap());
         });
-            /**
-     * Gets the current geolocation of the user and sends it to the locationParser function.
-     * If geolocation is not supported by the browser, displays an error message.
-     */
-    function getLocation() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(showPosition);
-        } else {
-            document.getElementById("location-button").innerHTML = "Geolocation is not supported by this browser.";
-            console.log("Geolocation is not supported by this browser.");
-        }
-    }
 
-    /**
-     * Callback function for getCurrentPosition. Extracts the latitude and longitude from the position object,
-     * and passes them to the locationParser function. Also logs the current location to the console.
-     * 
-     * @param {Object} position - The position object returned by getCurrentPosition.
-     */
-    function showPosition(position) {
-        let lat = position.coords.latitude;
-        let lng = position.coords.longitude;
-        locationParserToReceiver(lat, lng);
-        console.log("Latitude: " + position.coords.latitude + ", Longitude: " + position.coords.longitude);
-    }
 
-    /**
-     * Sends a POST request to the specified URL with the provided latitude and longitude data.
-     * 
-     * @param {number} latitude - The latitude of the user's current location.
-     * @param {number} longitude - The longitude of the user's current location.
-     */
-    function locationParserToReceiver(latitude, longitude){
-        $.ajax({
-            type: "POST",
-            url: "/game/Receiver/",
-            data: {
-                'latitude': latitude,
-                'longitude': longitude,
-                'csrfmiddlewaretoken': '{{ csrf_token }}' 
-            },
-            success: function(data) {
-                console.log("Data sent successfully");
-            },
-            error: function(xhr, status, error) {
-                console.log("Error sending data: " + error);
-            }
-        });
-    }
-    /**
-     * Requests the user's geolocation and calls showFinalPosition with the position data.
-     * If geolocation is not supported by the browser, displays an error message.
-     */
-    function getFinalLocation() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(showFinalPosition);
-        } else {
-            document.getElementById("final-location-button").innerHTML = "Geolocation is not supported by this browser.";
-            console.log("Geolocation is not supported by this browser.");
-        }
-    }
-
-    /**
-     * Parses the user's position data to retrieve latitude and longitude,
-     * and calls locationParserToget_Directions to retrieve directions based on the user's location.
-     * @param {Object} position - the user's position data, obtained from navigator.geolocation.getCurrentPosition
-     */
-    function showFinalPosition(position) {
-        let lat = position.coords.latitude;
-        let lng = position.coords.longitude;
-        locationParserToget_Directions(lat, lng);
-        console.log("Latitude: " + position.coords.latitude + ", Longitude: " + position.coords.longitude);
-    }
-
-    /**
-     * Sends an AJAX request to retrieve directions based on the user's location.
-     * @param {number} latitude - the user's latitude
-     * @param {number} longitude - the user's longitude
-     */
-    function locationParserToget_Directions(latitude, longitude) {
-        $.ajax({
-            type: "POST",
-            url: "/game/get_Directions/",
-            data: {
-                'latitude': latitude,
-                'longitude': longitude,
-                'csrfmiddlewaretoken': '{{ csrf_token }}' // included to prevent CSRF attacks
-            },
-            success: function(data) {
-                console.log("Data sent successfully");
-            },
-            error: function(xhr, status, error) {
-                console.log("Error sending data: " + error);
-            }
-        });
-    }
     </script>
 
     <style>
@@ -525,41 +429,7 @@
     </style>
 
     <div id='green-message'></div>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
-    <button id="location-button" , onclick="getLocation()">Get Location</button>
-    <button id="final-location-button", onclick="getFinalLocation()">Get Final Location</button>
-    <style>
-        #location-button {
-        position: absolute;
-        bottom: 10px;
-        left: 20%;
-        transform: translateX(-5%);
-        padding: 10px;
-        border: none;
-        background-color: #1c1c1c;
-        color: white;
-        font-size: 16px;
-        font-weight: bold;
-        cursor: pointer;
-    }
-    
-    #final-location-button {
-        position: absolute;
-        bottom: 10px;
-        right: 5%;
-        transform: translateX(5%);
-        padding: 10px;
-        border: none;
-        background-color: #1c1c1c;
-        color: white;
-        font-size: 16px;
-        font-weight: bold;
-        cursor: pointer;
-    }
-    </style>
 
-    
     </body>
     </html>
 
