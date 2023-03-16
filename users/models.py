@@ -1,6 +1,7 @@
 from datetime import date
 
 import math
+from pyexpat import model
 from django.db import models
 from django.contrib.auth.models import User
 from game.models import Challenge
@@ -36,7 +37,11 @@ class Account(models.Model):
     last_day_accessed = models.DateField(default=date.today)
     staffCheck = models.BooleanField(default=False)
     challenges = models.ManyToManyField(Challenge, related_name='accounts')
-
+    startingLat = models.CharField(default='', max_length=100)
+    startingLng  = models.CharField(default='', max_length=100)
+    finalLat = models.CharField(default='', max_length=100)
+    finalLng  = models.CharField(default='', max_length=100)
+    finalLocation=models.CharField(default='', max_length=100) 
 
     def current_level(self):
         """Returns the level of an individual account
@@ -94,6 +99,9 @@ class Account(models.Model):
             int: The number of points achieved
         """
         return self.points
+
+    def getStartLocation(self):
+        return self.startingLocation
 
 
 class Profile(models.Model):

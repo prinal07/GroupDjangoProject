@@ -1,4 +1,6 @@
+from cmath import log
 from datetime import date
+import math
 
 from django.shortcuts import render, redirect
 from django.db.models import Sum
@@ -9,10 +11,11 @@ from game.forms import UserUpdateForm, ProfileUpdateForm, AccountUpdateForm, Del
 from users.models import Account
 from game.models import Bin
 from .models import Fact
+from math import radians
 from django.contrib.auth.decorators import login_required
-
+from django.views.decorators.csrf import csrf_exempt
 import json
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from turfpy.measurement import boolean_point_in_polygon
 from geojson import Point, MultiPolygon, Feature
 
@@ -365,3 +368,85 @@ def unity(request):
     """
         
     return render(request, template_name="game/unity.html")
+@csrf_exempt
+def Receiver(request):
+    """
+    A sample view that receives a POST request with 'latitude' and 'longitude' parameters.
+    This view is CSRF exempt.
+
+    Args:
+        request (HttpRequest): The request object sent by the client.
+
+    Returns:
+        HttpResponse: A simple response confirming that data was received.
+    """
+    if request.method == 'POST':
+
+        logged_username = request.user.username
+        logged_account = Account.objects.get(username=logged_username)
+
+
+        # Get the 'latitude' and 'longitude' parameters from the POST request
+        latitude = request.POST.get('latitude')
+        longitude = request.POST.get('longitude')
+        
+       
+        logged_account.startingLat = latitude
+        logged_account.startingLng = longitude  # set the startingLocation field to latitude
+        logged_account.save()  # save the Account object to the database
+       
+
+        # Return a simple response confirming that data was received
+        return HttpResponse('success')
+
+    else:
+        # Return an error message if the request method is not POST
+        return HttpResponse('Invalid request method')
+
+def get_Directions(request):
+    """
+    This function takes in a POST request object and calculates the distance 
+    between two latitude-longitude coordinates using the Haversine formula. 
+    It then saves the distance to the database and returns a rendered template.
+    """
+    if request.method == 'POST':
+        # Get the username and account object for the logged-in user
+        logged_username = request.user.username
+        logged_account = Account.objects.get(username=logged_username)
+        
+        # Retrieve the final latitude and longitude from the POST request and save them to the user's account
+        logged_account.finalLat = request.POST.get('latitude')
+        logged_account.finalLng = longitude = request.POST.get('longitude')
+        logged_account.save() 
+        
+        # Convert the starting and final latitude-longitude coordinates to radians
+        startingLat = float(logged_account.startingLat)
+        startingLng = float(logged_account.startingLng)
+        finalLat = float(logged_account.finalLat)
+        finalLng = float(logged_account.finalLng)
+        lat1 = radians(startingLat)
+        lon1 = radians(startingLng)
+        lat2 = radians(finalLat)
+        lon2 = radians(finalLng)
+        
+       
+        # Calculate the distance between the two coordinates using the Haversine formula
+        d_lat = lat2 - lat1
+        d_lon = lon2 - lon1
+        a = math.sin(d_lat/2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(d_lon/2)**2
+        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
+        R = 6371 # Earth's radius in km
+        distance = R * c
+        
+        # Save the calculated distance to the user's account
+        logged_account.finalLocation = distance
+        logged_account.save()
+        
+        # Render the map template
+        return render(request, "game/map.html")
+    
+    else:
+        # Render the map template
+        return render(request, "game/map.html")
+
+   
