@@ -42,7 +42,11 @@ class Account(models.Model):
     greenCounter = models.IntegerField(default=0)
     binCounter = models.IntegerField(default=0)
     walkCounter = models.IntegerField(default=0)
-
+    startingLat = models.CharField(default='', max_length=100)
+    startingLng  = models.CharField(default='', max_length=100)
+    finalLat = models.CharField(default='', max_length=100)
+    finalLng  = models.CharField(default='', max_length=100)
+    distanceTraveled=models.CharField(default='', max_length=100)
     #game Completed check to determine if user has completed game
     gameCompleted = models.IntegerField(default=0)
     #number of clues unlocked to be able to use for Unity interface
