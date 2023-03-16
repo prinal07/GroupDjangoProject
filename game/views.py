@@ -19,6 +19,16 @@ from geojson import Point, MultiPolygon, Feature
 
 
 def green_checker(request):
+    """ Uses green counter to set status of incomplete Green activities to done
+
+     Args:
+        request (_type_): _description_
+
+         Returns:
+             None
+
+    """
+
     logged_username = request.user.username
     logged_user = Account.objects.get(username=logged_username)
 
