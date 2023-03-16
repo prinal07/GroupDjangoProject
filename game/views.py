@@ -44,13 +44,47 @@ def green_checker(request):
         if challenge.challengeType == 'Green Areas':
             # Check if the green counter matches the target for this challenge
             target = int(challenge.challengeDesc.split(' ')[1])  # Get the target number of green areas
+            print(target)
             if logged_user.greenCounter >= target:
                 # Update the challenge tracker status to completed
                 challenge_tracker.completed = True
                 challenge_tracker.save()
 
-                #Number of clues is increased, as a challenge has been completed
+                # Number of clues is increased, as a challenge has been completed
                 logged_user.cluesUnlocked += 1
+
+
+def bin_checker(request):
+    """ Uses bin counter to set status of incomplete Green activities to done and increment clue counter
+
+     Args:
+        request (_type_): _description_
+
+         Returns:
+             None
+
+    """
+
+    logged_username = request.user.username
+    logged_user = Account.objects.get(username=logged_username)
+
+    # Get the challenges list for the logged in user
+    challenges_tracker_list = logged_user.challengetracker_set.filter(completed=False)
+
+    # Loop through the challenges and check if any challenge is related to green areas
+    for challenge_tracker in challenges_tracker_list:
+        challenge = challenge_tracker.challenge
+        if challenge.challengeType == 'Bin':
+            # Check if the green counter matches the target for this challenge
+            target = int(challenge.challengeDesc.split(' ')[1])  # Get the target number of bins
+            if logged_user.binCounter >= target:
+                # Update the challenge tracker status to completed
+                challenge_tracker.completed = True
+                challenge_tracker.save()
+
+                # Number of clues is increased, as a challenge has been completed
+                logged_user.cluesUnlocked += 1
+
 
 # Create your views here.
 
@@ -365,6 +399,7 @@ def challengeManager(request):
     completed_walk_tasks = logged_user.walkCounter
 
     green_checker(request)
+    bin_checker(request)
 
     challenge_list = []
     for challenge_info in logged_user.challengetracker_set.all():
@@ -458,14 +493,19 @@ def unity(request):
         culprit = ""
         clues = []
 
-        story = Story.objects.get(story_number = 1)
-        suspects = story.suspects.all()
-        #stores all clues of the story
-        allClues = [story.clue1, story.clue2, story.clue3, story.clue4, story.clue5, story.clue6, story.clue7, story.clue8, story.clue9, story.clue10]
+        # Ensure that user can always go right to game after completing challenge with updated clue count
+        green_checker(request)
+        bin_checker(request)
 
-        #fetches current user and the number of clues the user has unlocked
+        story = Story.objects.get(story_number=1)
+        suspects = story.suspects.all()
+        # stores all clues of the story
+        allClues = [story.clue1, story.clue2, story.clue3, story.clue4, story.clue5, story.clue6, story.clue7,
+                    story.clue8, story.clue9, story.clue10]
+
+        # fetches current user and the number of clues the user has unlocked
         logged_username = request.user.username
-        logged_user = Account.objects.get(username = logged_username)
+        logged_user = Account.objects.get(username=logged_username)
         cluesUnlocked = logged_user.cluesUnlocked
         notUnlocked = "Complete a Challenge to unlock next clue"
 
