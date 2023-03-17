@@ -118,4 +118,114 @@ class SuspectTestCase(TestCase):
         self.assertEqual(str(suspect), "Alex Houghton")
         
 class StoryTestCase(TestCase):
-    pass
+    def setUp(self):
+        story = Story.objects.create( 
+            story_number=1,
+            sprite_1="3",
+            sprite_2="2",
+            sprite_3="1",
+            sprite_4="4",
+            sprite_5="5",
+            clue1="Clue 1",
+            clue2="Clue 2",
+            clue3="Clue 3",
+            clue4="Clue 4",
+            clue5="Clue 5",
+            clue6="Clue 6",
+            clue7="Clue 7",
+            clue8="Clue 8",
+            clue9="Clue 9",
+            clue10="Clue 10",
+            culprit="1"
+        )
+
+    def test_number(self):
+        story = Story.objects.get(story_number=1)
+        self.assertTrue(isinstance(story.story_number, int))
+        self.assertEqual(story.story_number, 1)
+
+    def test_sprites(self):
+        story = Story.objects.get(story_number=1)
+
+        self.assertTrue(isinstance(story.sprite_1, str))
+        self.assertTrue(len(story.sprite_1) == 1)
+        self.assertTrue(int(story.sprite_1) >= 0)
+        self.assertTrue(int(story.sprite_1) < 10)
+        
+        self.assertTrue(isinstance(story.sprite_2, str))
+        self.assertTrue(len(story.sprite_2) == 1)
+        self.assertTrue(int(story.sprite_2) >= 0)
+        self.assertTrue(int(story.sprite_2) < 10)
+
+        self.assertTrue(isinstance(story.sprite_3, str))
+        self.assertTrue(len(story.sprite_3) == 1)
+        self.assertTrue(int(story.sprite_3) >= 0)
+        self.assertTrue(int(story.sprite_3) < 10)
+
+        self.assertTrue(isinstance(story.sprite_4, str))
+        self.assertTrue(len(story.sprite_4) == 1)
+        self.assertTrue(int(story.sprite_4) >= 0)
+        self.assertTrue(int(story.sprite_4) < 10)
+
+        self.assertTrue(isinstance(story.sprite_5, str))
+        self.assertTrue(len(story.sprite_5) == 1)
+        self.assertTrue(int(story.sprite_5) >= 0)
+        self.assertTrue(int(story.sprite_5) < 10)
+
+        sprite_codes = [story.sprite_1, story.sprite_2, story.sprite_3, story.sprite_4, story.sprite_5]
+
+        self.assertEqual(story.getSpritesCodes(self), "".join(sprite_codes))
+
+    def test_clues(self):
+        story = Story.objects.get(story_number=1)
+
+        self.assertTrue(isinstance(story.clue1, str))
+        self.assertTrue(len(story.clue1) <= 1000)
+
+        self.assertTrue(isinstance(story.clue2, str))
+        self.assertTrue(len(story.clue2) <= 1000)
+        
+        self.assertTrue(isinstance(story.clue3, str))
+        self.assertTrue(len(story.clue3) <= 1000)
+        
+        self.assertTrue(isinstance(story.clue4, str))
+        self.assertTrue(len(story.clue4) <= 1000)
+        
+        self.assertTrue(isinstance(story.clue5, str))
+        self.assertTrue(len(story.clue5) <= 1000)
+        
+        self.assertTrue(isinstance(story.clue6, str))
+        self.assertTrue(len(story.clue6) <= 1000)
+        
+        self.assertTrue(isinstance(story.clue7, str))
+        self.assertTrue(len(story.clue7) <= 1000)
+        
+        self.assertTrue(isinstance(story.clue8, str))
+        self.assertTrue(len(story.clue8) <= 1000)
+        
+        self.assertTrue(isinstance(story.clue9, str))
+        self.assertTrue(len(story.clue9) <= 1000)
+                
+        self.assertTrue(isinstance(story.clue10, str))
+        self.assertTrue(len(story.clue10) <= 1000)
+
+        clues = [story.clue1, story.clue2, story.clue3, story.clue4, story.clue5, 
+            story.clue6, story.clue7, story.clue8, story.clue9, story.clue10]
+
+        self.assertEqual(story.getAllClues(self), clues)
+
+
+    def test_culprit(self):
+        story = Story.objects.get(story_number=1)
+
+        self.assertTrue(isinstance(story.culprit, str))
+        self.assertTrue(len(story.culprit) == 1)
+        self.assertTrue(int(story.culprit) >= 1)
+        self.assertTrue(int(story.culprit) <= 5)
+        self.assertEqual(story.getCulprit(self), story.culprit)
+
+    def test_suspects(self):
+        story = Story.objects.get(story_number=1)
+
+        self.assertTrue(len(story.get_suspects(self)) <= story.MAX_SUSPECTS)
+        self.assertTrue()

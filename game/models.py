@@ -152,7 +152,7 @@ class Story(models.Model):
     clues = [clue1, clue2, clue3, clue4, clue5, clue6, clue7, clue8, clue9, clue10]
     
     # Assigns the culprit to an index of the five available characters
-    culprit = models.CharField(max_length=1, validators=[RegexValidator(r'^[0-4]$')])
+    culprit = models.CharField(max_length=1, validators=[RegexValidator(r'^[1-5]$')])
     
     def can_add_suspect(self):
         """Check to determine if the maximum number of suspects has been reached
