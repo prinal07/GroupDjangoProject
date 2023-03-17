@@ -116,3 +116,6 @@ class SuspectTestCase(TestCase):
     def string_representation_test(self):
         suspect = Suspect.objects.get(number=1)
         self.assertEqual(str(suspect), "Alex Houghton")
+        
+class StoryTestCase(TestCase):
+    pass
