@@ -99,33 +99,38 @@
 
 
 
-    <form id="riddle-form">
-        {% csrf_token %}
+    <div id="riddle-section">
 
-        <div class="question">
-            {{ question }}
-        </div>
+        {% if not done %}
+            <form id="riddle-form">
+                {% csrf_token %}
 
-        <input type="radio" name="answer" id="answer1" value="{{ answer1 }}">
-        <label for="answer1">{{ answer1 }}</label><br>
+                <div class="question">
+                    {{ question }}
+                </div>
 
-        <input type="radio" name="answer" id="answer2" value="{{ answer2 }}">
+                <input type="radio" name="answer" id="answer1" value="{{ answer1 }}">
+                <label for="answer1">{{ answer1 }}</label><br>
+
+                <input type="radio" name="answer" id="answer2" value="{{ answer2 }}">
         <label for="answer2">{{ answer2 }}</label><br>
 
-        <input type="radio" name="answer" id="answer3" value="{{ answer3 }}">
-        <label for="answer3">{{ answer3 }}</label><br>
+                <input type="radio" name="answer" id="answer3" value="{{ answer3 }}">
+                <label for="answer3">{{ answer3 }}</label><br>
 
-        <input type="radio" name="answer" id="answer4" value="{{ answer4 }}">
-        <label for="answer4">{{ answer4 }}</label><br>
+                <input type="radio" name="answer" id="answer4" value="{{ answer4 }}">
+                <label for="answer4">{{ answer4 }}</label><br>
 
-        <div style="text-align: center;">
-            <input type="submit" value="Submit">
-        </div>
-    </form>
+                <div style="text-align: center;">
+                    <input type="submit" value="Submit">
+                </div>
+            </form>
+        {% else %}
+            <p>Challenge Done</p>
 
+        {% endif %}
 
-
-    <p>{{ riddle_message }}</p>
+    </div>
 
 
 
@@ -143,7 +148,7 @@
                 XHR.addEventListener("load", (event) => {
 
                     const response = JSON.parse(event.target.responseText)
-                    alert(response.message);
+                    document.getElementById('riddle-section').innerHTML = response.message
                 });
 
                 // Define what happens in case of error

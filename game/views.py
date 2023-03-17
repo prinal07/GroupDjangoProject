@@ -213,6 +213,7 @@ def home(request):
     answer3 = riddle_today_object.answer3
     answer4 = riddle_today_object.answer4
     done = logged_user.challengeDone
+    print(done)
 
     # Need form to show for next day
     if logged_user.last_day_accessed != date.today():
