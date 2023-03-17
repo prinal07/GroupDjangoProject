@@ -14,5 +14,7 @@ urlpatterns = [path('', player_views.home, name='overview'),
                path('update_points/', player_views.update_points, name='update_points'),
                path('unity/', player_views.unity, name='unity'),
                path('Receiver/', player_views.Receiver, name='Receiver'),
-               path('get_Directions/', player_views.get_Directions, name='get_Directions')
+               path('get_Directions/', player_views.get_Directions, name='get_Directions'),
+               path('riddle_handler/', player_views.riddle_handler, name='riddle_handler')
+
                ]

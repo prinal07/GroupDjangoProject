@@ -53,7 +53,6 @@ def green_checker(request):
                 # Number of clues is increased, as a challenge has been completed
                 logged_user.cluesUnlocked += 1
 
-
 def bin_checker(request):
     """ Uses bin counter to set status of incomplete Green activities to done and increment clue counter
 
@@ -86,7 +85,35 @@ def bin_checker(request):
                 logged_user.cluesUnlocked += 1
 
 
+def riddle_handler(request):
+    riddle_message = ""
+    if request.method == "POST":
+        print(json.loads(request.body))
+        challengeData = json.loads(request.body)
+        challengeAnswer = challengeData['answer']
+
+        logged_username = request.user.username
+        logged_user = Account.objects.get(username=logged_username)
+
+        riddle_today_object = Riddle.objects.filter(date=date.today()).first()
+
+        selected_answer = challengeAnswer
+
+        logged_user.challengeDone = True
+        if selected_answer == riddle_today_object.correct_answer:
+            riddle_message = "Correct Answer! Clue unlocked! Come back tomorrow for another riddle!"
+            logged_user.cluesUnlocked += 1
+        else:
+            riddle_message = "Incorrect Answer. Come back tomorrow for another riddle!"
+
+        logged_user.save()
+
+    message = {'message': riddle_message}
+    return JsonResponse(message)
+
+
 # Create your views here.
+
 
 @login_required
 def home(request):
@@ -191,33 +218,7 @@ def home(request):
     if logged_user.last_day_accessed != date.today():
         logged_user.challengeDone = False
 
-    if request.method == 'POST':
-        done = True
-        logged_user.challengeDone = True
-        selected_answer = request.POST.get('answer')
-        if selected_answer == riddle_today_object.correct_answer:
-            riddle_message = "Correct Answer! Clue unlocked! Come back tomorrow for another riddle!"
-            logged_user.cluesUnlocked += 1
 
-
-        else:
-            riddle_message = "Wrong Answer! Come back tomorrow for another riddle"
-
-            return render(request, 'game/overview.html',
-                          {'title': 'Overview',
-                           'user_points': user_points,
-                           'daily_points': daily_points,
-                           'user_acc_leaderboard': all_users_accommodation,
-                           'acc_leaderboard': all_accommodations,
-                           'current_level': logged_user.current_level(),
-                           'level_progress': logged_user.level_progress(),
-                           'fact_today': fact_today,
-                           'blur_strength': blur_strength,
-                           'fact_progress': fact_progress,
-                           'challenge_list': challenge_list,
-                           'done': done,
-                           'riddle_message': riddle_message
-                           })
 
     return render(request, 'game/overview.html',
                   {'title': 'Overview',
@@ -651,3 +652,4 @@ def get_Directions(request):
     else:
         # Render the map template
         return render(request, "game/map.html")
+

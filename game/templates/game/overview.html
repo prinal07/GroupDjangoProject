@@ -98,8 +98,8 @@
     </div>
 
 
-    {% if not done %}
-    <form id="riddle-form" method="post" action="{% url 'overview' %}">
+
+    <form id="riddle-form">
         {% csrf_token %}
 
         <div class="question">
@@ -123,12 +123,57 @@
         </div>
     </form>
 
-    {% else %}
-
-        <p>{{ riddle_message }}</p>
 
 
-    {% endif %}
+    <p>{{ riddle_message }}</p>
+
+
+
+
+    <script>
+        window.addEventListener("load", () => {
+
+            function sendData() {
+                const XHR = new XMLHttpRequest();
+
+                // Bind the FormData object and the form element
+                const FD = new FormData(form);
+
+                // Define what happens on successful data submission
+                XHR.addEventListener("load", (event) => {
+
+                    const response = JSON.parse(event.target.responseText)
+                    alert(response.message);
+                });
+
+                // Define what happens in case of error
+                XHR.addEventListener("error", (event) => {
+                    alert('Oops! Something went wrong.');
+                });
+
+                // Set up our request
+                XHR.open("POST", "{% url 'riddle_handler' %}");
+
+                XHR.setRequestHeader("Accept", "application/json");
+                XHR.setRequestHeader("Content-Type", "application/json");
+                XHR.setRequestHeader("X-CSRFToken", '{{ csrf_token }}')
+                // The data sent is what the user provided in the form
+                XHR.send(JSON.stringify(Object.fromEntries(FD)));
+            }
+
+
+            const form = document.getElementById("riddle-form")
+            form.addEventListener("submit", (event) => {
+                event.preventDefault()
+                sendData()
+
+            })
+
+
+        })
+
+
+    </script>
 
 
 {% endblock %}
