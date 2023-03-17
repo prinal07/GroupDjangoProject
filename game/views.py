@@ -185,7 +185,13 @@ def home(request):
                    'level_progress': logged_user.level_progress(),
                    'fact_today': fact_today,
                    'blur_strength': blur_strength,
-                   'fact_progress': fact_progress})
+                   'fact_progress': fact_progress,
+                   'question': question,
+                   'answer1': answer1,
+                   'answer2': answer2,
+                   'answer3': answer3,
+                   'answer4': answer4
+                   })
 
 
 @login_required

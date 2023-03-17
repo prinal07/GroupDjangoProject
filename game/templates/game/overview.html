@@ -6,7 +6,7 @@
 
 
     <div class="overview">
-        <h1>Overview</h1>
+        <h1>Welcome Detective</h1>
     </div><br>
 
 
@@ -27,10 +27,6 @@
     <div style="text-align: center;">
         <h4> Daily points: {{ daily_points }}  </h4>
     </div>
-
-
-
-
 
 
 
@@ -78,5 +74,32 @@
         </table>
 
     </div>
+
+
+
+    <form method="post" action="{% url 'overview' %}">
+        {% csrf_token %}
+
+        <div class="question">
+            {{ question }}
+        </div>
+
+        <input type="radio" name="answer" id="answer1" value="{{ answer1 }}">
+        <label for="answer1">{{ answer1 }}</label><br>
+
+        <input type="radio" name="answer" id="answer2" value="{{ answer2 }}">
+        <label for="answer2">{{ answer2 }}</label><br>
+
+        <input type="radio" name="answer" id="answer3" value="{{ answer3 }}">
+        <label for="answer3">{{ answer3 }}</label><br>
+
+        <input type="radio" name="answer" id="answer4" value="{{ answer4 }}">
+        <label for="answer4">{{ answer4 }}</label><br>
+
+        <div style="text-align: center;">
+            <input type="submit" value="Submit">
+        </div>
+    </form>
+
 
 {% endblock %}
