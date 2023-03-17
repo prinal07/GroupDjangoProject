@@ -121,6 +121,26 @@ def home(request):
     logged_user.last_day_accessed = date.today()
     logged_user.save()
 
+    # get user points
+    user_points = logged_user.points
+
+    # get daily user points
+
+    daily_points = logged_user.daily_points
+
+    # Calculate blur based on daily points
+
+    blur_strength = 0
+    if daily_points < 100:
+        blur_strength = 10
+        # blur_strength = math.floor(10 - daily_points / 10)
+
+    # Compute progress bar for daily fact of day
+    fact_progress = daily_points
+    # Fact progress remains at 100 once 100 daily points acquired
+    if fact_progress > 100:
+        fact_progress = 100
+
     # Collects all stored accounts that share the current user's accomodation cell value
     all_users_accommodation = Account.objects.all().filter(accommodation=logged_user.accommodation)
 
@@ -149,31 +169,40 @@ def home(request):
 
     # Find riddle by date and obtain question and answer fields
     riddle_today_object = Riddle.objects.filter(date=date_today).first()
+
     question = riddle_today_object.question
     answer1 = riddle_today_object.answer1
     answer2 = riddle_today_object.answer2
     answer3 = riddle_today_object.answer3
     answer4 = riddle_today_object.answer4
+    done = riddle_today_object.status()
+    print(done)
 
-    # get user points
-    user_points = logged_user.points
+    riddle_content = {"question": question,
+                      "answer1": answer1,
+                      "answer2": answer2,
+                      "answer3": answer3,
+                      "answer4": answer4}
 
-    # get daily user points
+    if done == True:
+        riddle_message = "Come back tomorrow for another riddle!"
+        return render(request, 'game/overview.html',
+                      {'title': 'Overview',
+                       'user_points': user_points,
+                       'daily_points': daily_points,
+                       'user_acc_leaderboard': all_users_accommodation,
+                       'acc_leaderboard': all_accommodations,
+                       'current_level': logged_user.current_level(),
+                       'level_progress': logged_user.level_progress(),
+                       'fact_today': fact_today,
+                       'blur_strength': blur_strength,
+                       'fact_progress': fact_progress,
+                       'done': done,
+                       'riddle_message': riddle_message
+                       })
 
-    daily_points = logged_user.daily_points
-
-    # Calculate blur based on daily points
-
-    blur_strength = 0
-    if daily_points < 100:
-        blur_strength = 10
-        # blur_strength = math.floor(10 - daily_points / 10)
-
-    # Compute progress bar for daily fact of day
-    fact_progress = daily_points
-    # Fact progress remains at 100 once 100 daily points acquired
-    if fact_progress > 100:
-        fact_progress = 100
+    # if request.method == 'POST':
+    #     selected_answer = request.POST.get('answer')
 
     return render(request, 'game/overview.html',
                   {'title': 'Overview',
@@ -186,11 +215,12 @@ def home(request):
                    'fact_today': fact_today,
                    'blur_strength': blur_strength,
                    'fact_progress': fact_progress,
-                   'question': question,
-                   'answer1': answer1,
-                   'answer2': answer2,
-                   'answer3': answer3,
-                   'answer4': answer4
+                   'done': done,
+                   "question": question,
+                   "answer1": answer1,
+                   "answer2": answer2,
+                   "answer3": answer3,
+                   "answer4": answer4
                    })
 
 
