@@ -43,15 +43,16 @@ class Account(models.Model):
     binCounter = models.IntegerField(default=0)
     walkCounter = models.IntegerField(default=0)
     startingLat = models.CharField(default='', max_length=100)
-    startingLng  = models.CharField(default='', max_length=100)
+    startingLng = models.CharField(default='', max_length=100)
     finalLat = models.CharField(default='', max_length=100)
-    finalLng  = models.CharField(default='', max_length=100)
-    distanceTraveled=models.CharField(default='', max_length=100)
-    #game Completed check to determine if user has completed game
+    finalLng = models.CharField(default='', max_length=100)
+    distanceTraveled = models.CharField(default='', max_length=100)
+    # game Completed check to determine if user has completed game
     gameCompleted = models.IntegerField(default=0)
-    #number of clues unlocked to be able to use for Unity interface
+    # number of clues unlocked to be able to use for Unity interface
     cluesUnlocked = models.IntegerField(default=False)
-    challengeDone = models.BooleanField(default=False)
+    riddleDone = models.BooleanField(default=False)
+    riddleStatus = models.CharField(default="", max_length=100)
 
     def current_level(self):
         """Returns the level of an individual account

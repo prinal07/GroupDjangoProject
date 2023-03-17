@@ -99,13 +99,13 @@ def riddle_handler(request):
 
         selected_answer = challengeAnswer
 
-        logged_user.challengeDone = True
+        logged_user.riddleDone = True
         if selected_answer == riddle_today_object.correct_answer:
             riddle_message = "Correct Answer! Clue unlocked! Come back tomorrow for another riddle!"
             logged_user.cluesUnlocked += 1
         else:
             riddle_message = "Incorrect Answer. Come back tomorrow for another riddle!"
-
+        logged_user.riddleStatus = riddle_message
         logged_user.save()
 
     message = {'message': riddle_message}
@@ -212,12 +212,12 @@ def home(request):
     answer2 = riddle_today_object.answer2
     answer3 = riddle_today_object.answer3
     answer4 = riddle_today_object.answer4
-    done = logged_user.challengeDone
+    done = logged_user.riddleDone
     print(done)
 
     # Need form to show for next day
     if logged_user.last_day_accessed != date.today():
-        logged_user.challengeDone = False
+        logged_user.riddleDone = False
 
 
 
@@ -238,7 +238,8 @@ def home(request):
                    "answer1": answer1,
                    "answer2": answer2,
                    "answer3": answer3,
-                   "answer4": answer4
+                   "answer4": answer4,
+                   "riddle_status": logged_user.riddleStatus
                    })
 
 
