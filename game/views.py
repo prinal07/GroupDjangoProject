@@ -169,7 +169,7 @@ def home(request):
 
     # Find riddle by date and obtain question and answer fields
     riddle_today_object = Riddle.objects.filter(date=date_today).first()
-
+    riddle_message = ""
     question = riddle_today_object.question
     answer1 = riddle_today_object.answer1
     answer2 = riddle_today_object.answer2
@@ -177,15 +177,19 @@ def home(request):
     answer4 = riddle_today_object.answer4
     done = riddle_today_object.status()
     print(done)
+    # Don't need to update status based on time visited as new fact with default false statue is taken every day
 
-    riddle_content = {"question": question,
-                      "answer1": answer1,
-                      "answer2": answer2,
-                      "answer3": answer3,
-                      "answer4": answer4}
+    if request.method == 'POST':
+        done = True
+        selected_answer = request.POST.get('answer')
+        if selected_answer == riddle_today_object.correct_answer:
+            riddle_message = "Correct Answer! Clue unlocked! Come back tomorrow for another riddle!"
+            logged_user.cluesUnlocked += 1
 
-    if done == True:
-        riddle_message = "Come back tomorrow for another riddle!"
+
+        else:
+            riddle_message = "Wrong Answer! Come back tomorrow for another riddle"
+
         return render(request, 'game/overview.html',
                       {'title': 'Overview',
                        'user_points': user_points,
@@ -200,9 +204,6 @@ def home(request):
                        'done': done,
                        'riddle_message': riddle_message
                        })
-
-    # if request.method == 'POST':
-    #     selected_answer = request.POST.get('answer')
 
     return render(request, 'game/overview.html',
                   {'title': 'Overview',
