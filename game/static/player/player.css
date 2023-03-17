@@ -114,7 +114,7 @@ body {
 
 /*styling of riddle form*/
 
-form {
+#riddle-form {
   max-width: 600px;
   margin: 0 auto;
   background-color: #f7f7f7;
@@ -133,8 +133,9 @@ form {
 }
 
 label {
-  display: inline-block;
-  margin-bottom: 10px;
+  display: block;
+  margin: 0 auto;
+  text-align: center;
   font-size: 18px;
 }
 
