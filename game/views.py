@@ -5,7 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect
 from django.db.models import Sum
 from django.contrib import messages
-from game.models import Story, Suspect
+from game.models import Story, Suspect, Riddle
 import requests
 from django.http import HttpResponse, JsonResponse
 
@@ -147,6 +147,14 @@ def home(request):
 
     print(fact_today)
 
+    # Find riddle by date and obtain question and answer fields
+    riddle_today_object = Riddle.objects.filter(date=date_today).first()
+    question = riddle_today_object.question
+    answer1 = riddle_today_object.answer1
+    answer2 = riddle_today_object.answer2
+    answer3 = riddle_today_object.answer3
+    answer4 = riddle_today_object.answer4
+
     # get user points
     user_points = logged_user.points
 
@@ -178,6 +186,7 @@ def home(request):
                    'fact_today': fact_today,
                    'blur_strength': blur_strength,
                    'fact_progress': fact_progress})
+
 
 @login_required
 def leaderboard(request):
@@ -211,6 +220,7 @@ def leaderboard(request):
                   {'title': 'Leaderboard', 'user_acc_leaderboard': all_users_accommodation,
                    'acc_leaderboard': all_accommodations}
                   )
+
 
 @login_required
 def profile(request):
@@ -285,6 +295,7 @@ def profile(request):
     }
 
     return render(request, 'game/profile.html', context)
+
 
 @login_required
 def map(request):
@@ -361,6 +372,7 @@ def map(request):
     # Serve game/map.html 
     return render(request, 'game/map.html', context=context)
 
+
 @login_required
 def news(request):
     """Serves a news 
@@ -415,6 +427,7 @@ def challengeManager(request):
                                                            'bin_counter': completed_bin_tasks,
                                                            'walk_counter': completed_walk_tasks})
 
+
 @login_required
 def QR(request):
     return render(request, 'game/QR.html')
@@ -438,7 +451,7 @@ def update_points(request):
         logged_username = request.user.username
         logged_user = Account.objects.get(username=logged_username)
 
-        #Bin counter of the user is incremented
+        # Bin counter of the user is incremented
         logged_user.binCounter += 1
 
         logged_user.cluesUnlocked += 1
@@ -455,8 +468,8 @@ def update_points(request):
     # If the form was not submitted, render a template with the form
     return render(request, 'update_points.html')
 
-@login_required
 
+@login_required
 def unity(request):
     """Serves the Unity Game at <url>/game/unity>
     Uses the pre-built Unity WebGL html file to load a gameInstance and serve a project to the user
@@ -469,7 +482,7 @@ def unity(request):
     """
 
     STORY_POINT_REWARD = 100
-    
+
     if request.method == "POST":
         data = json.loads(request.body)
         give_points = data.get("give_points")
@@ -480,13 +493,13 @@ def unity(request):
             user = Account.objects.get(username=request.user.username)
             user.gameCompleted = True
             user.points += STORY_POINT_REWARD
-            user.daily_points += STORY_POINT_REWARD 
+            user.daily_points += STORY_POINT_REWARD
 
             user.save()
 
         # redirect to the overview
         return redirect("game")
-        
+
     else:
         # construct all information to pass to the unity game
         description = []
@@ -509,18 +522,18 @@ def unity(request):
         cluesUnlocked = logged_user.cluesUnlocked
         notUnlocked = "Complete a Challenge to unlock next clue"
 
-        #Make the number of unlocked clues viewable in Unity
+        # Make the number of unlocked clues viewable in Unity
         for ctr in range(cluesUnlocked):
             clues.append(allClues[ctr])
 
-        #Make the number of not unlocked clues viewable as 'Complete a Challenge to unlock next clue'
+        # Make the number of not unlocked clues viewable as 'Complete a Challenge to unlock next clue'
         for ctr2 in range(10 - cluesUnlocked):
             clues.append(notUnlocked)
 
         # get information from a stored Story model
         for suspect in suspects:
             description.append(suspect.brief)
-        desc_str = "[SPLIT]".join(description) # [SPLIT] recognised by the Unity C# Script as the delimiter
+        desc_str = "[SPLIT]".join(description)  # [SPLIT] recognised by the Unity C# Script as the delimiter
         culprit = story.culprit
         clues_str = "[SPLIT]".join(clues)
         sprites = [story.sprite_1, story.sprite_2, story.sprite_3, story.sprite_4, story.sprite_5]
@@ -530,9 +543,11 @@ def unity(request):
             "culprit": culprit,
             "descriptions": desc_str,
             "clues": clues_str
-        }    
-    
+        }
+
         return render(request, template_name="game/unity.html", context=context)
+
+
 @csrf_exempt
 def Receiver(request):
     """
@@ -550,16 +565,13 @@ def Receiver(request):
         logged_username = request.user.username
         logged_account = Account.objects.get(username=logged_username)
 
-
         # Get the 'latitude' and 'longitude' parameters from the POST request
         latitude = request.POST.get('latitude')
         longitude = request.POST.get('longitude')
 
-
         logged_account.startingLat = latitude
         logged_account.startingLng = longitude  # set the startingLocation field to latitude
         logged_account.save()  # save the Account object to the database
-
 
         # Return a simple response confirming that data was received
         return HttpResponse('success')
@@ -567,6 +579,8 @@ def Receiver(request):
     else:
         # Return an error message if the request method is not POST
         return HttpResponse('Invalid request method')
+
+
 def get_Directions(request):
     """
     This function takes in a POST request object and calculates the distance 
@@ -581,7 +595,7 @@ def get_Directions(request):
         # Retrieve the final latitude and longitude from the POST request and save them to the user's account
         logged_account.finalLat = request.POST.get('latitude')
         logged_account.finalLng = longitude = request.POST.get('longitude')
-        logged_account.save() 
+        logged_account.save()
 
         # Convert the starting and final latitude-longitude coordinates to radians
         startingLat = float(logged_account.startingLat)
@@ -593,13 +607,12 @@ def get_Directions(request):
         lat2 = radians(finalLat)
         lon2 = radians(finalLng)
 
-
         # Calculate the distance between the two coordinates using the Haversine formula
         d_lat = lat2 - lat1
         d_lon = lon2 - lon1
-        a = math.sin(d_lat/2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(d_lon/2)**2
-        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
-        R = 6371 # Earth's radius in km
+        a = math.sin(d_lat / 2) ** 2 + math.cos(lat1) * math.cos(lat2) * math.sin(d_lon / 2) ** 2
+        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+        R = 6371  # Earth's radius in km
         distance = R * c
 
         # Save the calculated distance to the user's account
