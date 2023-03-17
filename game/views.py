@@ -167,6 +167,16 @@ def home(request):
 
     print(fact_today)
 
+    green_checker(request)
+    bin_checker(request)
+
+    challenge_list = []
+    for challenge_info in logged_user.challengetracker_set.all():
+        challenge_dict = {}
+        challenge_dict['description'] = challenge_info.challenge.challengeDesc
+        challenge_dict['status'] = challenge_info.checkStatus()
+        challenge_list.append(challenge_dict)
+
     # Find riddle by date and obtain question and answer fields
     riddle_today_object = Riddle.objects.filter(date=date_today).first()
     riddle_message = ""
@@ -175,12 +185,15 @@ def home(request):
     answer2 = riddle_today_object.answer2
     answer3 = riddle_today_object.answer3
     answer4 = riddle_today_object.answer4
-    done = riddle_today_object.status()
-    print(done)
-    # Don't need to update status based on time visited as new fact with default false statue is taken every day
+    done = logged_user.challengeDone
+
+    # Need form to show for next day
+    if logged_user.last_day_accessed != date.today():
+        logged_user.challengeDone = False
 
     if request.method == 'POST':
         done = True
+        logged_user.challengeDone = True
         selected_answer = request.POST.get('answer')
         if selected_answer == riddle_today_object.correct_answer:
             riddle_message = "Correct Answer! Clue unlocked! Come back tomorrow for another riddle!"
@@ -190,20 +203,21 @@ def home(request):
         else:
             riddle_message = "Wrong Answer! Come back tomorrow for another riddle"
 
-        return render(request, 'game/overview.html',
-                      {'title': 'Overview',
-                       'user_points': user_points,
-                       'daily_points': daily_points,
-                       'user_acc_leaderboard': all_users_accommodation,
-                       'acc_leaderboard': all_accommodations,
-                       'current_level': logged_user.current_level(),
-                       'level_progress': logged_user.level_progress(),
-                       'fact_today': fact_today,
-                       'blur_strength': blur_strength,
-                       'fact_progress': fact_progress,
-                       'done': done,
-                       'riddle_message': riddle_message
-                       })
+            return render(request, 'game/overview.html',
+                          {'title': 'Overview',
+                           'user_points': user_points,
+                           'daily_points': daily_points,
+                           'user_acc_leaderboard': all_users_accommodation,
+                           'acc_leaderboard': all_accommodations,
+                           'current_level': logged_user.current_level(),
+                           'level_progress': logged_user.level_progress(),
+                           'fact_today': fact_today,
+                           'blur_strength': blur_strength,
+                           'fact_progress': fact_progress,
+                           'challenge_list': challenge_list,
+                           'done': done,
+                           'riddle_message': riddle_message
+                           })
 
     return render(request, 'game/overview.html',
                   {'title': 'Overview',
@@ -216,6 +230,7 @@ def home(request):
                    'fact_today': fact_today,
                    'blur_strength': blur_strength,
                    'fact_progress': fact_progress,
+                   'challenge_list': challenge_list,
                    'done': done,
                    "question": question,
                    "answer1": answer1,
@@ -437,32 +452,6 @@ def news(request):
     context = {'newsList': newsList}
 
     return render(request, 'game/news.html', context)
-
-
-def challengeManager(request):
-    logged_username = request.user.username
-    logged_user = Account.objects.get(username=logged_username)
-
-    completed_green_tasks = logged_user.greenCounter
-    completed_bin_tasks = logged_user.binCounter
-    completed_walk_tasks = logged_user.walkCounter
-
-    green_checker(request)
-    bin_checker(request)
-
-    challenge_list = []
-    for challenge_info in logged_user.challengetracker_set.all():
-        challenge_dict = {}
-        challenge_dict['description'] = challenge_info.challenge.challengeDesc
-        challenge_dict['status'] = challenge_info.checkStatus()
-        challenge_list.append(challenge_dict)
-
-    print(challenge_list)
-
-    return render(request, 'game/challengeManager2.html', {'challenge_list': challenge_list,
-                                                           'green_counter': completed_green_tasks,
-                                                           'bin_counter': completed_bin_tasks,
-                                                           'walk_counter': completed_walk_tasks})
 
 
 @login_required

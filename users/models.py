@@ -51,6 +51,7 @@ class Account(models.Model):
     gameCompleted = models.IntegerField(default=0)
     #number of clues unlocked to be able to use for Unity interface
     cluesUnlocked = models.IntegerField(default=False)
+    challengeDone = models.BooleanField(default=False)
 
     def current_level(self):
         """Returns the level of an individual account
