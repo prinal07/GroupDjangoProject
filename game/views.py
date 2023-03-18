@@ -108,7 +108,7 @@ def riddle_handler(request):
         else:
             riddle_message = "Incorrect Answer. Come back tomorrow for another riddle!"
             # message which stays even after challenge has been complted
-        logged_user.riddleStatus = riddle_message
+        logged_user.riddle_message_status = riddle_message
         logged_user.save()
 
     message = {'message': riddle_message}
@@ -145,6 +145,7 @@ def home(request):
     # Resets a User's Daily points if accessing on a different day
     if logged_user.last_day_accessed != date.today():
         logged_user.daily_points = 0
+        logged_user.riddleDone = False
         logged_user.save()
 
     # Resets the value of last_day_accessed to prevent Daily points resets until tomorrow
@@ -215,6 +216,7 @@ def home(request):
     answer4 = "No Answer 4"
     done = False
 
+
     # Find riddle by date and obtain question and answer fields
     riddle_today_object = Riddle.objects.filter(date=date_today).first()
     if riddle_today_object is not None:
@@ -224,11 +226,6 @@ def home(request):
         answer3 = riddle_today_object.answer3
         answer4 = riddle_today_object.answer4
         done = False
-
-    # Need form to show for next day
-    if logged_user.last_day_accessed != date.today():
-        print("logged in first time today!")
-        logged_user.riddleDone = False
 
     return render(request, 'game/overview.html',
                   {'title': 'Overview',
@@ -248,7 +245,7 @@ def home(request):
                    "answer2": answer2,
                    "answer3": answer3,
                    "answer4": answer4,
-                   "riddle_status": logged_user.riddleStatus
+                   "riddle_status": logged_user.riddle_message_status
                    })
 
 

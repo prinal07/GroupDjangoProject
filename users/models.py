@@ -52,7 +52,7 @@ class Account(models.Model):
     # number of clues unlocked to be able to use for Unity interface
     cluesUnlocked = models.IntegerField(default=False)
     riddleDone = models.BooleanField(default=False)
-    riddleStatus = models.CharField(default="", max_length=100)
+    riddle_message_status = models.CharField(default="", max_length=100)
 
     def current_level(self):
         """Returns the level of an individual account
