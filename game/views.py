@@ -152,6 +152,9 @@ def home(request):
     logged_user.last_day_accessed = date.today()
     logged_user.save()
 
+    logged_user.cluesUnlocked += 1
+    logged_user.save()
+
     # get user points
     user_points = logged_user.points
 
