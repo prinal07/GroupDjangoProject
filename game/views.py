@@ -228,7 +228,7 @@ def home(request):
         answer2 = riddle_today_object.answer2
         answer3 = riddle_today_object.answer3
         answer4 = riddle_today_object.answer4
-        done = False
+        done = logged_user.riddleDone
 
     return render(request, 'game/overview.html',
                   {'title': 'Overview',
