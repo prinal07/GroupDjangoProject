@@ -2,7 +2,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import User as django_user
 
-from .models import Profile, Account, Challenge, ChallengeStatus
+from .models import Profile, Account, Challenge, ChallengeTracker
 
 
 @receiver(post_save, sender=django_user)
@@ -19,9 +19,9 @@ def save_profile(sender, instance, **kwargs):
 def create_challengestatus(sender, instance, created, **kwargs):
     if not created:
         # Challenge object has been updated
-        for status in ChallengeStatus.objects.filter(challenge=instance):
+        for status in ChallengeTracker.objects.filter(challenge=instance):
             # Create a copy of the ChallengeStatus object
-            ChallengeStatus.objects.create(
+            ChallengeTracker.objects.create(
                 account=status.account,
                 challenge=instance,
                 completed=status.completed
@@ -33,9 +33,8 @@ def create_account_challenges(sender, instance, created, **kwargs):
     if created:
         challenges = Challenge.objects.all()
         for challenge in challenges:
-            ChallengeStatus.objects.create(
+            ChallengeTracker.objects.create(
                 account=instance,
                 challenge=challenge,
                 completed=False
             )
-
