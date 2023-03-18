@@ -53,6 +53,7 @@ def green_checker(request):
                 # Number of clues is increased, as a challenge has been completed
                 logged_user.cluesUnlocked += 1
 
+
 def bin_checker(request):
     """ Uses bin counter to set status of incomplete Green activities to done and increment clue counter
 
@@ -100,11 +101,13 @@ def riddle_handler(request):
         selected_answer = challengeAnswer
 
         logged_user.riddleDone = True
+        # dynamic messages
         if selected_answer == riddle_today_object.correct_answer:
             riddle_message = "Correct Answer! Clue unlocked! Come back tomorrow for another riddle!"
             logged_user.cluesUnlocked += 1
         else:
             riddle_message = "Incorrect Answer. Come back tomorrow for another riddle!"
+            # message which stays even after challenge has been complted
         logged_user.riddleStatus = riddle_message
         logged_user.save()
 
@@ -204,22 +207,28 @@ def home(request):
         challenge_dict['status'] = challenge_info.checkStatus()
         challenge_list.append(challenge_dict)
 
+    # Default
+    question = "No Question in DB"
+    answer1 = "No Answer 1"
+    answer2 = "No Answer 2"
+    answer3 = "No Answer 3"
+    answer4 = "No Answer 4"
+    done = False
+
     # Find riddle by date and obtain question and answer fields
     riddle_today_object = Riddle.objects.filter(date=date_today).first()
-    riddle_message = ""
-    question = riddle_today_object.question
-    answer1 = riddle_today_object.answer1
-    answer2 = riddle_today_object.answer2
-    answer3 = riddle_today_object.answer3
-    answer4 = riddle_today_object.answer4
-    done = logged_user.riddleDone
-    print(done)
+    if riddle_today_object is not None:
+        question = riddle_today_object.question
+        answer1 = riddle_today_object.answer1
+        answer2 = riddle_today_object.answer2
+        answer3 = riddle_today_object.answer3
+        answer4 = riddle_today_object.answer4
+        done = False
 
     # Need form to show for next day
     if logged_user.last_day_accessed != date.today():
+        print("logged in first time today!")
         logged_user.riddleDone = False
-
-
 
     return render(request, 'game/overview.html',
                   {'title': 'Overview',
@@ -654,4 +663,3 @@ def get_Directions(request):
     else:
         # Render the map template
         return render(request, "game/map.html")
-
