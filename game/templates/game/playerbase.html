@@ -24,6 +24,20 @@
 </head>
 
 <body>
+
+<div class="message-container">
+    <main role="main" class="message-container">
+        <div>
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">{{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+        </div>
+    </main>
+</div>
 <!-- Side-Nav -->
 <div class="side-navbar active-nav d-flex justify-content-between flex-wrap flex-column" id="sidebar">
     <ul class="nav flex-column text-white w-100">
@@ -36,8 +50,6 @@
         </a>
 
         <a href="{% url 'unity' %}" class="mx-2"><i class="bx bxs-flag-alt"></i> Accuse </a>
-
-        <a href="{% url 'challengeManager' %}" class="mx-2"><i class="bx bxs-flag-alt"></i> Challenges</a>
 
         <a href="{% url 'leaderboard' %}" class="mx-2"><i class="bx bxs-trophy"></i> Leaderboard</a>
 
