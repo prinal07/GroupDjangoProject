@@ -67,6 +67,7 @@ function validateForm() {
 	emailValid = true;
 	password1Valid = true;
 	password2Valid = true;
+	tcValid = true;
 	
 	// for select fields
 	for (j = 0; j < z.length; j++) {
@@ -94,21 +95,14 @@ function validateForm() {
 	if (currentTab == x.length-1) {
 		password1Valid = passwordCheck()
 		password2Valid = duplicatePasswords()
+		tcValid = checkCheckbox()
 	}
 
-	if (selectValid && inputValid && emailValid && password1Valid && password2Valid) {
+	if (selectValid && inputValid && emailValid && password1Valid && password2Valid && tcValid) {
 		document.getElementsByClassName("step")[currentTab].className += " finish";
 		return true;
 	}
 	return false;
-	
-	// If the valid status is true -> add finished class to step
-	// if (valid) {
-	// 	document.getElementsByClassName("step")[currentTab].className += " finish";
-	// }
-	// return valid; // return the valid status
-	
-	// TODO: CHECK EMAIL
 }
 
 /**
@@ -240,4 +234,21 @@ function duplicatePasswords() {
 		return false
 	}
 
+}
+
+/**
+ * Checks whether the terms and conditions checkbox has been checked
+ * @returns true if it has, false if it hasnt
+ */
+function checkCheckbox() {
+	var tcCheck = document.getElementById("tcCheck");
+
+  var checkBox = document.getElementById("terms-checkbox");
+	if (checkBox.checked == true) {
+		tcCheck.style.display = "none"
+    return true
+	} else {
+	tcCheck.style.display = "list-item"
+    return false
+  }
 }
