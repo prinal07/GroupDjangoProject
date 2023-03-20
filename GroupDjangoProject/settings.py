@@ -109,6 +109,8 @@ WSGI_APPLICATION = 'GroupDjangoProject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+MAX_CONN_AGE = 600
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
