@@ -143,12 +143,21 @@ class Profile(models.Model):
         return f'{self.user.username}Profile'
     
 class ChallengeTracker(models.Model):
+    """
+    Account Challenge model to store the status of the challenge with a foriegn key to the challenge itself
+    """
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
     challenge = models.ForeignKey(Challenge, on_delete=models.CASCADE)
     completed = models.BooleanField(default=False)
 
     def __str__(self):
+        """
+        Returns the username of the account and the description of challenge
+        """
         return f"{self.account.username} - {self.challenge.challengeDesc}"
 
     def checkStatus(self):
+        """
+        Checks if challenge is complete
+        """
         return self.completed
