@@ -76,13 +76,14 @@ body {
   background-color: black;
   color: #fff;
   margin-left: -62px;
+  margin-top: 30px;
+  position: fixed;
 }
 
 .overview {
   width: 100%;
   margin: 0 auto;
   text-align: center;
-  margin-top: -3rem;
   padding: 3px 0;
   background-color: #dedede;
 }
