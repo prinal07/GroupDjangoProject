@@ -37,6 +37,8 @@ class Account(models.Model):
     points = models.IntegerField(default=0)
     daily_points = models.IntegerField(default=0)
     last_day_accessed = models.DateField(default=date.today)
+    last_bin_scanned = models.DateTimeField()
+    last_green_accessed = models.DateTimeField()
     staffCheck = models.BooleanField(default=False)
     challenges = models.ManyToManyField(Challenge, related_name='accounts')
     greenCounter = models.IntegerField(default=0)
