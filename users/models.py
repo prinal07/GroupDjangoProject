@@ -52,7 +52,7 @@ class Account(models.Model):
     # game Completed check to determine if user has completed game
     gameCompleted = models.IntegerField(default=0)
     # number of clues unlocked to be able to use for Unity interface
-    cluesUnlocked = models.IntegerField(default=False)
+    cluesUnlocked = models.IntegerField(default=0)
     riddleDone = models.BooleanField(default=False)
     riddle_message_status = models.CharField(default="", max_length=100)
 

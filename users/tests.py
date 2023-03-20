@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.test import TestCase
 
 
@@ -5,6 +6,7 @@ import datetime
 import os
 import PIL
 from .models import *
+from .views import *
 from django.contrib.auth.models import User
 
 class AccountTestCase(TestCase):
@@ -50,6 +52,8 @@ class AccountTestCase(TestCase):
                           points=124,
                           daily_points=50,
                           last_day_accessed=date.today(),
+                          last_bin_scanned=datetime.datetime.now(),
+                          last_green_area_accessed=datetime.datetime.now(),
                           staffCheck=False,
                           greenCounter=1,
                           binCounter=4,
@@ -101,6 +105,16 @@ class AccountTestCase(TestCase):
     def test_last_day_type(self):
         account = Account.objects.get(username="username1")
         self.assertTrue(isinstance(account.last_day_accessed, datetime.date))
+
+    def test_last_bin_scan_time(self):
+        account = Account.objects.get(username="username1")
+        self.assertTrue(isinstance(account.last_bin_scanned, datetime.datetime))
+        self.assertTrue(account.last_bin_scanned <= datetime.datetime.now())
+        
+    def test_last_green_area_time(self):
+        account = Account.objects.get(username="username1")
+        self.assertTrue(isinstance(account.last_green_area_accessed, datetime.datetime))
+        self.assertTrue(account.last_bin_scanned <= datetime.datetime.now())
 
     def test_staff_type(self):
         account = Account.objects.get(username="username1")
@@ -155,6 +169,43 @@ class AccountTestCase(TestCase):
         account = Account.objects.get(username="username1")
         self.assertTrue(isinstance(account.walkCounter, int))
         self.assertTrue(account.walkCounter >= 0)
+        
+    def test_start_latitude(self):
+        account = Account.objects.get(username="username1")
+        self.assertTrue(isinstance(account.startingLat, float))
+        self.assertTrue(account.startingLat >= -90.0)
+        self.assertTrue(account.startingLat <= 90.0)
+        
+    def test_start_longitude(self):
+        account = Account.objects.get(username="username1")
+        self.assertTrue(isinstance(account.startingLng, float))
+        self.assertTrue(account.startingLng >= -180.0)
+        self.assertTrue(account.startingLng <= 180.0)
+        
+    def test_distance_travelled(self):
+        account = Account.objects.get(username="username1")
+        self.assertTrue(float(account.distanceTraveled) > 0.0)
+        self.assertTrue(False not in [i in ["0","1","2","3","4","5","6","7","8","9","."] for i in account.distanceTraveled])
+    
+    def test_game_complete(self):
+        account = Account.objects.get(username="username1")
+        self.assertTrue(isinstance(account.gameCompleted, int))
+        self.assertTrue(account.gameCompleted >= 0)
+        
+    def test_clues(self):
+        account = Account.objects.get(username="username1")
+        self.assertTrue(isinstance(account.cluesUnlocked, int))
+        self.assertTrue(account.cluesUnlocked >= 0)
+        
+    def test_riddle_done(self):
+        account = Account.objects.get(username="username1")
+        self.assertTrue(isinstance(account.riddleDone, bool))
+        self.assertTrue(account.riddleDone != None)
+    
+    def test_riddle_status(self):
+        account = Account.objects.get(username="username1")
+        self.assertTrue(isinstance(account.riddle_message_status, str))
+        self.assertTrue(len(account.riddle_message_status) <= 100)
     
     def string_representation_test(self):
         account = Account.objects.get(username="usernamae1")
@@ -207,3 +258,27 @@ class ChallengeTrackerTestCase(TestCase):
     
     def completedTest(self):
         pass
+    
+class WebResponseTestCase(TestCase):
+    def setUp(self):
+        account = Account.objects.create(profileClass=1,
+                    accommodation="Accom",
+                    email="ah123@exeter.ac.uk",
+                    username="username1",
+                    password="password123",
+                    group=1,
+                    level=1,
+                    points=124,
+                    daily_points=50,
+                    last_day_accessed=date.today(),
+                    last_bin_scanned=datetime.datetime.now(),
+                    last_green_area_accessed=datetime.datetime.now(),
+                    staffCheck=False,
+                    greenCounter=1,
+                    binCounter=4,
+                    walkCounter=2)
+        
+    def test_register_page(self):
+        page = self.client.get('register/')
+        self.assertTrue(isinstance(page, HttpResponse))
+        
