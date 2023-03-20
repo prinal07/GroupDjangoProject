@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, time, datetime
 import math
 from math import radians
 from django.views.decorators.csrf import csrf_exempt
@@ -399,15 +399,22 @@ def map(request):
         print(boolean_point_in_polygon(point, polygon))
 
         if boolean_point_in_polygon(point, polygon):
-            # Increase counter
-            logged_user.greenCounter += 1
+            if logged_user.last_green_area_accessed == None:
+                logged_user.last_green_area_accessed = datetime.now()
+               
+            difference = datetime.now() - logged_user.last_green_area_accessed 
+            if difference > datetime.time(0, 5, 0):
+                # Increase counter
+                logged_user.greenCounter += 1
 
-            # Add points
-            logged_user.points += 10
-            logged_user.save()
+                # Add points
+                logged_user.points += 10
+                logged_user.save()
 
-            message = {'message': 'You have entered green area! 10 points awarded'}
-            return JsonResponse(message)
+                message = {'message': 'You have entered green area! 10 points awarded'}
+                return JsonResponse(message)
+            else:
+                message = {'message': f"You won't get rewarded right now. Try again in {str(difference)}"}
 
     bins = Bin.objects.all()
     """Supplies coordinates of bins to the mapbxo representation in <url>/game/map/
@@ -484,24 +491,35 @@ def update_points(request):
             - A webpage to page <url>/game/ 
     """
 
+    # Get the current user and update their points field in the Database record
+    logged_username = request.user.username
+    logged_user = Account.objects.get(username=logged_username)
+
+
     if request.method == 'POST' and 'update_points' in request.POST:
-        # Get the current user and update their points field in the Database record
-        logged_username = request.user.username
-        logged_user = Account.objects.get(username=logged_username)
+        if logged_user.last_bin_scanned == None:
+            logged_user.last_bin_scanned = datetime.now()
+        
+        difference = datetime.now() - logged_user.last_bin_scanned
+        
+        if difference > datetime.time(0, 5, 0):    
+            # Bin counter of the user is incremented
+            logged_user.binCounter += 1
+            logged_user.last_bin_scanned = datetime.now()
 
-        # Bin counter of the user is incremented
-        logged_user.binCounter += 1
+            logged_user.cluesUnlocked += 1
+            logged_user.points += 10
+            logged_user.daily_points += 10
+            logged_user.save()
 
-        logged_user.cluesUnlocked += 1
-        logged_user.points += 10
-        logged_user.daily_points += 10
-        logged_user.save()
+            # Show a success message to the user
+            messages.success(request, 'Points updated successfully!')
 
-        # Show a success message to the user
-        messages.success(request, 'Points updated successfully!')
-
-        # Redirect back to the current page
-        return redirect(request.META.get('HTTP_REFERER', '/'))
+            # Redirect back to the current page
+            return redirect(request.META.get('HTTP_REFERER', '/'))
+        else:
+            messages.warning(request, f"Can't scan a bin at this time. Try again in {str(difference)}")
+            return redirect(request.META.get('HTTP_REFERER', '/'))
 
     # If the form was not submitted, render a template with the form
     return render(request, 'update_points.html')
