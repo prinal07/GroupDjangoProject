@@ -10,8 +10,11 @@ urlpatterns = [path('', player_views.home, name='overview'),
                path('profile/', player_views.profile, name='profile'),
                path('map/', player_views.map, name='map'),
                path('news/', player_views.news, name='news'),
-               path('challenges/', player_views.challengeManager, name='challengeManager'),
                path('QR/', player_views.QR, name='QR'),
                path('update_points/', player_views.update_points, name='update_points'),
-               path('unity/', player_views.unity, name='unity')
+               path('unity/', player_views.unity, name='unity'),
+               path('Receiver/', player_views.Receiver, name='Receiver'),
+               path('get_Directions/', player_views.get_Directions, name='get_Directions'),
+               path('riddle_handler/', player_views.riddle_handler, name='riddle_handler')
+
                ]

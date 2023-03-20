@@ -42,6 +42,17 @@ class Account(models.Model):
     greenCounter = models.IntegerField(default=0)
     binCounter = models.IntegerField(default=0)
     walkCounter = models.IntegerField(default=0)
+    startingLat = models.CharField(default='', max_length=100)
+    startingLng = models.CharField(default='', max_length=100)
+    finalLat = models.CharField(default='', max_length=100)
+    finalLng = models.CharField(default='', max_length=100)
+    distanceTraveled = models.CharField(default='', max_length=100)
+    # game Completed check to determine if user has completed game
+    gameCompleted = models.IntegerField(default=0)
+    # number of clues unlocked to be able to use for Unity interface
+    cluesUnlocked = models.IntegerField(default=False)
+    riddleDone = models.BooleanField(default=False)
+    riddle_message_status = models.CharField(default="", max_length=100)
 
     def current_level(self):
         """Returns the level of an individual account
@@ -139,5 +150,5 @@ class ChallengeTracker(models.Model):
     def __str__(self):
         return f"{self.account.username} - {self.challenge.challengeDesc}"
 
-    def isCompleted(self):
+    def checkStatus(self):
         return self.completed
