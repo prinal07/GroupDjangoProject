@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-krjr9offmx(s#uwxz)5^7as(n!6sy#wv_e-j*p%hn)x8nycxa%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -143,7 +143,7 @@ django_heroku.settings(locals())
 # Stores uploaded profile images
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# how we will access image in browser
+# how we will access image in browsers
 MEDIA_URL = '/media/'
 
 # Default primary key field type
