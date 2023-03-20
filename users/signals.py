@@ -25,7 +25,7 @@ def save_profile(sender, instance, **kwargs):
 @receiver(post_save, sender=Challenge)
 def create_challengestatus(sender, instance, created, **kwargs):
     """
-    Creates a challenge under account model
+    Populates in line challenges of users by pulling from the Challenge model
 
     """
     if not created:
@@ -42,6 +42,8 @@ def create_challengestatus(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Account)
 def create_account_challenges(sender, instance, created, **kwargs):
     """
+
+      Creates a challenge under account model
 
     """
     if created:
