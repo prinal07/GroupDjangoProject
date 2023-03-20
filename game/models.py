@@ -92,6 +92,9 @@ class Suspect(models.Model):
         # Tells Django admin to order by the number attribute value in descending order
         ordering = ['number']
 
+    def __str__(self):
+        return f"{self.name}"
+
     def save(self, *args, **kwargs):
         """Saves the Suspect model to the Database as a new record
         Overloads the existing models.Model.save() function
@@ -155,7 +158,8 @@ class Story(models.Model):
     clues = [clue1, clue2, clue3, clue4, clue5, clue6, clue7, clue8, clue9, clue10]
 
     # Assigns the culprit to an index of the five available characters
-    culprit = models.CharField(max_length=1, validators=[RegexValidator(r'^[0-4]$')])
+    culprit = models.CharField(max_length=1, validators=[RegexValidator(r'^[1-5]$')])
+    
 
     def can_add_suspect(self):
         """Check to determine if the maximum number of suspects has been reached
