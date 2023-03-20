@@ -3,10 +3,7 @@ from django.contrib.auth.models import User
 
 from users.models import Profile, Account
 
-from .models import Riddle
-
-
-# Update Django's user
+#Update Django's user
 class UserUpdateForm(forms.ModelForm):
     email = forms.EmailField()
 

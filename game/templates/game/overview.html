@@ -6,7 +6,7 @@
 
 
     <div class="overview">
-        <h1>Welcome Detective</h1>
+        <h1>Overview</h1>
     </div><br>
 
 
@@ -28,27 +28,327 @@
         <h4> Daily points: {{ daily_points }}  </h4>
     </div>
 
-    <body id="challenge-body">
+    <style>
+        .grid-box {
+            width: 150px;
+            padding: 10px;
+            height: 150px;
+        }
 
-    <h1 id="challenge-bar-title"> Challenges</h1>
+        #game-grid {
+            border-collapse: collapse;
+            width: 100%;
+            max-width: 800px;
+            margin: auto;
+            margin-bottom: 40px;
+            text-align: center
+        }
 
-    {% for challenge in challenge_list %}
-        <div class="challenge-container">
-            <div class="challenge">
-                <div class="challenge-desc">{{ challenge.description }}</div>
-                <div class="challenge-status {% if challenge.status %}completed{% else %}todo{% endif %}">
-                    {% if challenge.status %}
-                        Status: complete!
-                    {% else %}
-                        Status: To do
-                    {% endif %}
+        #game-grid-container {
+            display: inline-block;
+        }
+
+        .flip-card {
+            background-color: transparent;
+            width: 100%;
+            height: 100%;
+            perspective: 1000px;
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+        }
+
+        .flip-card-front {
+            background-color: #bbb;
+            color: black;
+        }
+
+        .flip-card-back {
+            background-color: #2980b9;
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+
+    </style>
+    <div id="gamegridcontainer">
+
+    </div>
+    <div id="game-grid">
+        <div id="game-grid-container">
+            <div class="row">
+                <div class="col-md-3 grid-box">
+
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                {#      <img src="img_avatar.png" alt="Avatar" style="width:300px;height:300px;">#}
+                                Bin 1
+                            </div>
+                            <div class="flip-card-back">
+                                <h1>Bins 1</h1>
+                                <p>Recycle in one bin!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-3 grid-box">
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                {#      <img src="img_avatar.png" alt="Avatar" style="width:300px;height:300px;">#}
+                                Walk 5 km in one day
+                            </div>
+                            <div class="flip-card-back">
+                                <h1>Walk</h1>
+                                <p>Hope you enjoyed your walk!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-3 grid-box">
+
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                {#      <img src="img_avatar.png" alt="Avatar" style="width:300px;height:300px;">#}
+                                Green Gratitude
+                            </div>
+                            <div class="flip-card-back">
+                                <h1>GG</h1>
+                                <p>That's beautiful!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 grid-box">
+
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                {#      <img src="img_avatar.png" alt="Avatar" style="width:300px;height:300px;">#}
+                                Bin 1
+                            </div>
+                            <div class="flip-card-back">
+                                <h1>Bins 1</h1>
+                                <p>Recycle in one bin!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 grid-box">
+
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                {#      <img src="img_avatar.png" alt="Avatar" style="width:300px;height:300px;">#}
+                                Cycle for atleast 30 minutes
+                            </div>
+                            <div class="flip-card-back">
+                                <h1>Cycle</h1>
+                                <p>Keep it up!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 grid-box">
+
+
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                {#      <img src="img_avatar.png" alt="Avatar" style="width:300px;height:300px;">#}
+                                Bin 1
+                            </div>
+                            <div class="flip-card-back">
+                                <h1>Bins 1</h1>
+                                <p>Recycle in one bin!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 grid-box">
+
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                {#      <img src="img_avatar.png" alt="Avatar" style="width:300px;height:300px;">#}
+                                Bin 1
+                            </div>
+                            <div class="flip-card-back">
+                                <h1>Bins 1</h1>
+                                <p>Recycle in one bin!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 grid-box">
+
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                {#      <img src="img_avatar.png" alt="Avatar" style="width:300px;height:300px;">#}
+                                Bin 1
+                            </div>
+                            <div class="flip-card-back">
+                                <h1>Visit this charity link</h1>
+                                <p>Hopefully you donated!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 grid-box">
+
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                {#      <img src="img_avatar.png" alt="Avatar" style="width:300px;height:300px;">#}
+                                Bin 1
+                            </div>
+                            <div class="flip-card-back">
+                                <h1>Bins 1</h1>
+                                <p>Recycle in one bin!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 grid-box">
+
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                {#      <img src="img_avatar.png" alt="Avatar" style="width:300px;height:300px;">#}
+                                Bin 1
+                            </div>
+                            <div class="flip-card-back">
+                                <h1>Bins 1</h1>
+                                <p>Recycle in one bin!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 grid-box">
+
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                {#      <img src="img_avatar.png" alt="Avatar" style="width:300px;height:300px;">#}
+                                Bin 1
+                            </div>
+                            <div class="flip-card-back">
+                                <h1>Bins 1</h1>
+                                <p>Recycle in one bin!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 grid-box">
+
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                {#      <img src="img_avatar.png" alt="Avatar" style="width:300px;height:300px;">#}
+                                Explore a green area
+                            </div>
+                            <div class="flip-card-back">
+                                <h1>Green Area</h1>
+                                <p>Good work explorer!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 grid-box">
+
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                {#      <img src="img_avatar.png" alt="Avatar" style="width:300px;height:300px;">#}
+                                Bin 1
+                            </div>
+                            <div class="flip-card-back">
+                                <h1>Bins 1</h1>
+                                <p>Recycle in one bin!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 grid-box">
+
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                {#      <img src="img_avatar.png" alt="Avatar" style="width:300px;height:300px;">#}
+                                Bin 1
+                            </div>
+                            <div class="flip-card-back">
+                                <h1>Bins 1</h1>
+                                <p>Recycle in one bin!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 grid-box">
+
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                {#      <img src="img_avatar.png" alt="Avatar" style="width:300px;height:300px;">#}
+                                Bin 1
+                            </div>
+                            <div class="flip-card-back">
+                                <h1>Bins 1</h1>
+                                <p>Recycle in one bin!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 grid-box">
+
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                {#      <img src="img_avatar.png" alt="Avatar" style="width:300px;height:300px;">#}
+                                Bin 1
+                            </div>
+                            <div class="flip-card-back">
+                                <h1>Bins 1</h1>
+                                <p>Recycle in one bin!</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    {% endfor %}
 
+    </div>
 
-    </body>
 
 
 
@@ -96,89 +396,5 @@
         </table>
 
     </div>
-
-
-
-    <div id="riddle-section">
-
-        {% if not done %}
-            <form id="riddle-form">
-                {% csrf_token %}
-
-                <div class="question">
-                    {{ question }}
-                </div>
-
-                <input type="radio" name="answer" id="answer1" value="{{ answer1 }}">
-                <label for="answer1">{{ answer1 }}</label><br>
-
-                <input type="radio" name="answer" id="answer2" value="{{ answer2 }}">
-        <label for="answer2">{{ answer2 }}</label><br>
-
-                <input type="radio" name="answer" id="answer3" value="{{ answer3 }}">
-                <label for="answer3">{{ answer3 }}</label><br>
-
-                <input type="radio" name="answer" id="answer4" value="{{ answer4 }}">
-                <label for="answer4">{{ answer4 }}</label><br>
-
-                <div style="text-align: center;">
-                    <input type="submit" value="Submit">
-                </div>
-            </form>
-        {% else %}
-            <p>{{ riddle_status }} </p>
-
-        {% endif %}
-
-    </div>
-
-
-
-
-    <script>
-        window.addEventListener("load", () => {
-
-            function sendData() {
-                const XHR = new XMLHttpRequest();
-
-                // Bind the FormData object and the form element
-                const FD = new FormData(form);
-
-                // Define what happens on successful data submission
-                XHR.addEventListener("load", (event) => {
-
-                    const response = JSON.parse(event.target.responseText)
-                    document.getElementById('riddle-section').innerHTML = response.message
-                });
-
-                // Define what happens in case of error
-                XHR.addEventListener("error", (event) => {
-                    alert('Oops! Something went wrong.');
-                });
-
-                // Set up our request
-                XHR.open("POST", "{% url 'riddle_handler' %}");
-
-                XHR.setRequestHeader("Accept", "application/json");
-                XHR.setRequestHeader("Content-Type", "application/json");
-                XHR.setRequestHeader("X-CSRFToken", '{{ csrf_token }}')
-                // The data sent is what the user provided in the form
-                XHR.send(JSON.stringify(Object.fromEntries(FD)));
-            }
-
-
-            const form = document.getElementById("riddle-form")
-            form.addEventListener("submit", (event) => {
-                event.preventDefault()
-                sendData()
-
-            })
-
-
-        })
-
-
-    </script>
-
 
 {% endblock %}
