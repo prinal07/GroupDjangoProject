@@ -519,7 +519,7 @@ def update_points(request):
             # Redirect back to the current page
             return redirect(request.META.get('HTTP_REFERER', '/'))
         else:
-            messages.warning(request, f"Can't scan a bin at this time. Try again in {str(difference)}")
+            messages.warning(request, f"Can't scan a bin at this time. Try again in {str(time_difference)}")
             return redirect(request.META.get('HTTP_REFERER', '/'))
 
     # If the form was not submitted, render a template with the form
@@ -544,7 +544,7 @@ def unity(request):
         data = json.loads(request.body)
         give_points = data.get("give_points")
 
-        user = Accounts.objects.get(user=request.user.username)
+        user = Account.objects.get(user=request.user.username)
         
         # check that story has been completed
         if not user.gameCompleted or user.last_day_accessed != date.today():
