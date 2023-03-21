@@ -1,5 +1,6 @@
 from datetime import date, time, datetime
 import math
+import re
 from math import radians
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect
@@ -7,7 +8,8 @@ from django.db.models import Sum
 from django.contrib import messages
 from .models import Story, Suspect, Riddle, Bin, Fact
 import requests
-from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
+from django.http import HttpResponse, JsonResponse
+from django.contrib.auth import logout
 
 from .forms import UserUpdateForm, ProfileUpdateForm, AccountUpdateForm, DeleteAccountForm
 from users.models import Account
@@ -148,9 +150,6 @@ def home(request):
 
     # Resets the value of last_day_accessed to prevent Daily points resets until tomorrow
     logged_user.last_day_accessed = date.today()
-    logged_user.save()
-
-    logged_user.cluesUnlocked += 1
     logged_user.save()
 
     # get user points
@@ -397,22 +396,26 @@ def map(request):
         print(boolean_point_in_polygon(point, polygon))
 
         if boolean_point_in_polygon(point, polygon):
-            if logged_user.last_green_area_accessed == None:
+            if logged_user.last_green_area_accessed == "":
                 logged_user.last_green_area_accessed = datetime.now()
                
-            difference = datetime.now() - logged_user.last_green_area_accessed 
-            if difference > datetime.time(0, 5, 0):
+            time_difference = datetime.now() - logged_user.last_green_area_accessed 
+            if time_difference.total_seconds() > 300:
                 # Increase counter
                 logged_user.greenCounter += 1
+
+                # Updates the time if it has been 5 minutes
+                logged_user.last_green_area_accessed = datetime.now()
 
                 # Add points
                 logged_user.points += 10
                 logged_user.save()
 
+                create_popup("YOU HAVE ENTERED A GREEN AREA")
                 message = {'message': 'You have entered green area! 10 points awarded'}
                 return JsonResponse(message)
             else:
-                message = {'message': f"You won't get rewarded right now. Try again in {str(difference)}"}
+                message = {'message': f"You won't get rewarded right now. Try again in {str(time_difference)}"}
 
     bins = Bin.objects.all()
     """Supplies coordinates of bins to the mapbxo representation in <url>/game/map/
@@ -498,9 +501,9 @@ def update_points(request):
         if logged_user.last_bin_scanned == None:
             logged_user.last_bin_scanned = datetime.now()
         
-        difference = datetime.now() - logged_user.last_bin_scanned
+        time_difference = datetime.now() - logged_user.last_bin_scanned
         
-        if difference > datetime.time(0, 5, 0):    
+        if time_difference.total_seconds() > 300:    
             # Bin counter of the user is incremented
             logged_user.binCounter += 1
             logged_user.last_bin_scanned = datetime.now()
@@ -516,7 +519,7 @@ def update_points(request):
             # Redirect back to the current page
             return redirect(request.META.get('HTTP_REFERER', '/'))
         else:
-            messages.warning(request, f"Can't scan a bin at this time. Try again in {str(difference)}")
+            messages.warning(request, f"Can't scan a bin at this time. Try again in {str(time_difference)}")
             return redirect(request.META.get('HTTP_REFERER', '/'))
 
     # If the form was not submitted, render a template with the form
@@ -647,6 +650,8 @@ def get_Directions(request):
     It then saves the distance to the database and returns a rendered template.
     """
     if request.method == 'POST':
+
+
         # Get the username and account object for the logged-in user
         logged_username = request.user.username
         logged_account = Account.objects.get(username=logged_username)
@@ -678,9 +683,44 @@ def get_Directions(request):
         logged_account.distanceTraveled = distance
         logged_account.save()
 
+
+        # Get the challenges list for the logged in user
+        challenges_tracker_list = logged_account.challengetracker_set.filter(completed=False)
+
+        pattern = r'\d+'  # match one or more digits
+
+        # Loop through the challenges and check if any challenge is related to walking
+        for challenge_tracker in challenges_tracker_list:
+            challenge = challenge_tracker.challenge
+            if challenge.challengeType == 'Walking':
+                match = re.search(pattern, challenge.challengeDesc)
+                target = int(match.group())
+
+                if logged_account.distanceTraveled >= target:
+                    # Update the challenge tracker status to completed
+                    challenge_tracker.completed = True
+                    challenge_tracker.save()
+
+                    # Number of clues is increased, as a challenge has been completed
+                    logged_account.cluesUnlocked += 1
+                    logged_account.account_points += 10
+                    
+                    logged_account.save()
+
         # Render the map template
         return render(request, "game/map.html")
 
     else:
         # Render the map template
         return render(request, "game/map.html")
+    
+
+from django.contrib.auth import logout
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
+
+
+
+def logout_view(request):
+    logout(request)
+    return redirect(reverse_lazy('login'))

@@ -5,7 +5,6 @@
 function sidebarToggle() {
     var sidebar = document.querySelector("#sidebar");
     var container = document.querySelector(".sidenav-container");
-    console.log("hi")
     if (sidebar.classList.contains('active-nav')) {
         sidebar.classList.remove('active-nav');
         container.classList.remove('active-cont');
