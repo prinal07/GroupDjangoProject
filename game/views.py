@@ -18,7 +18,7 @@ from django.http import JsonResponse
 from turfpy.measurement import boolean_point_in_polygon
 from geojson import Point, MultiPolygon, Feature
 
-
+@login_required
 def green_checker(request):
     """ Uses green counter to set status of incomplete Green activities to done
 
@@ -51,7 +51,7 @@ def green_checker(request):
                 # Number of clues is increased, as a challenge has been completed
                 logged_user.cluesUnlocked += 1
 
-
+@login_required
 def bin_checker(request):
     """ Uses bin counter to set status of incomplete Green activities to done and increment clue counter
 
@@ -83,7 +83,7 @@ def bin_checker(request):
                 # Number of clues is increased, as a challenge has been completed
                 logged_user.cluesUnlocked += 1
 
-
+@login_required
 def riddle_handler(request):
     riddle_message = ""
     if request.method == "POST":
@@ -542,16 +542,24 @@ def unity(request):
         data = json.loads(request.body)
         give_points = data.get("give_points")
 
+        user = Accounts.objects.get(user=request.user.username)
+        
         # check that story has been completed
-        if give_points == "true":
-            # give points to logged in user
-            user = Account.objects.get(username=request.user.username)
-            user.gameCompleted = True
-            user.points += STORY_POINT_REWARD
-            user.daily_points += STORY_POINT_REWARD
+        if not user.gameCompleted or user.last_day_accessed != date.today():
+            if give_points == "true":
+                # give points to logged in user
+                user.gameCompleted = True
+                user.points += STORY_POINT_REWARD
+                user.daily_points += STORY_POINT_REWARD
 
-            user.save()
+                user.storiesCompleted += 1
+            
+                user.save()
+            
+        # redirect to the overview
+        return redirect("game")
 
+    else:
         # construct all information to pass to the unity game
     description = []
     culprit = ""
