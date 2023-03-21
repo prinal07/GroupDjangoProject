@@ -361,20 +361,6 @@ def profile(request):
     return render(request, 'game/profile.html', context)
 
 
-import tkinter as tk
-
-
-def create_popup(text):
-    popup = tk.Tk()
-    popup.geometry("300x100")  # Set the size of the popup window
-    popup.title("Popup")
-    label = tk.Label(popup, text=text)
-    label.pack(pady=20)
-    ok_button = tk.Button(popup, text="OK", command=popup.destroy)
-    ok_button.pack()
-    popup.mainloop()
-
-
 @login_required
 def map(request):
     message = ""
