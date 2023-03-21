@@ -500,9 +500,9 @@ def update_points(request):
         if logged_user.last_bin_scanned == None:
             logged_user.last_bin_scanned = datetime.now()
         
-        difference = datetime.now() - logged_user.last_bin_scanned
-        
-        if difference > datetime.time(0, 5, 0):    
+        time_difference = datetime.now() - logged_user.last_bin_scanned
+
+        if time_difference.total_seconds() > 300:
             # Bin counter of the user is incremented
             logged_user.binCounter += 1
             logged_user.last_bin_scanned = datetime.now()
@@ -676,11 +676,28 @@ def get_Directions(request):
         distance = R * c
 
         # Save the calculated distance to the user's account
-        logged_account.distanceTraveled = distance
+        logged_account.distanceTraveled += distance
+        # add tinker window pop
+        if distance == 1:
+            logged_account.points += 10
+            logged_account.save()
+            message = "Congratulations! You've reached a distance milestone of 1 mile."
+
+        if distance == 5:
+            logged_account.points += 10
+            logged_account.save()
+            message = "Congratulations! You've reached a distance milestone of 1 mile."
+
+        if distance == 10:
+            logged_account.distanceTraveled = 0
+            logged_account.points += 50
+            logged_account.save()
+            message = "Wow! You've reached a distance milestone of 10 and earned 50 bonus points!"
+
         logged_account.save()
 
         # Render the map template
-        return render(request, "game/map.html")
+        return render(request, "game/map.html", message)
 
     else:
         # Render the map template

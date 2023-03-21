@@ -47,6 +47,7 @@
                 font-family: 'Open Sans', sans-serif;
             }
         </style>
+        ]
 
     </head>
 
@@ -179,28 +180,33 @@
 
                         'coordinates': [
                             [
-                                [-3.54012113,50.7393587],
-                                [-3.5382954,50.7381304],
-                                [-3.5372081,50.7394105 ],
-                               
+                                [-3.54012113, 50.7393587],
+                                [-3.5382954, 50.7381304],
+                                [-3.5372081, 50.7394105],
+
                             ]
                         ]
                     }
                 }
             });
+
+            points = [
+                [-3.5341631, 50.7418840],
+                [-3.5335790, 50.7403587],
+                [-3.5312515, 50.7410841],
+                [-3.5324632, 50.7422746]
+            ]
+
             map.addSource('exeter', {
                 'type': 'geojson',
                 'data': {
-                    'type':'Feature',
+                    'type': 'Feature',
                     'geometry': {
                         'type': 'Polygon',
                         'coordinates': [
-                            [
-                                [-3.5341631,50.7418840],
-                                [-3.5335790,50.7403587],
-                                [-3.5312515,50.7410841],
-                                [-3.5324632, 50.7422746]
-                            ]
+
+                            points
+
                         ]
                     }
                 }
@@ -208,7 +214,7 @@
             map.addSource('park3', {
                 'type': 'geojson',
                 'data': {
-                    'type':'Feature',
+                    'type': 'Feature',
                     'geometry': {
                         'type': 'Polygon',
                         'coordinates': [
@@ -550,7 +556,15 @@
             cursor: pointer;
         }
         </style>
-    
+
+    {% if message %}
+        <script>
+            window.onload = function () {
+                alert("{{ message }}");
+            };
+        </script>
+    {% endif %}
+
     </body>
     </html>
 
