@@ -1,22 +1,24 @@
-/* Center the content */
-#about-content {
+/* Center the content  */
+.about-content {
+  font-family: Raleway;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100%;
+  color: rgb(234, 234, 234);
 }
 
 /* Style the header */
-#about-page-title {
+.page-title {
   font-size: 2.5rem;
   margin-bottom: 2rem;
 }
 
-/* Style the mission statement */
+/* Style the mission statement  */
 .mission-statement {
   font-size: 1.5rem;
   line-height: 1.5;
-  text-align: center;
+  text-align: left;
   margin-bottom: 3rem;
 }

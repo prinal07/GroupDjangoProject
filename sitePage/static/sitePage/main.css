@@ -1,17 +1,10 @@
 body {
-  background: #e6e6e6;
+  background-image: url(woodbackground.jpg);
+  background-size: 100vw 200vh;
+  background-repeat: no-repeat;
+  background-color: #2d2c2c;
   color: #333333;
-  margin-top: 5rem;
-
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  color: #444444;
+  height: 100%;
 }
 
 ul {
@@ -19,11 +12,11 @@ ul {
 }
 
 .bg-steel {
-  background-color: #00ca96;
+  background-color: #F5DEB3;
 }
 
 .site-header .navbar-nav .nav-link {
-  color: white;
+  color: black;
 }
 
 .site-header .navbar-nav .nav-link:hover {
@@ -42,41 +35,6 @@ ul {
   margin-bottom: 20px;
 }
 
-.article-title {
-  color: #444444;
-}
-
-a.article-title:hover {
-  color: #00ca96;
-  text-decoration: none;
-}
-
-.article-content {
-  white-space: pre-line;
-}
-
-.article-img {
-  height: 65px;
-  width: 65px;
-  margin-right: 16px;
-}
-
-.article-metadata {
-  padding-bottom: 1px;
-  margin-bottom: 4px;
-  border-bottom: 1px solid #e3e3e3
-}
-
-.article-metadata a:hover {
-  color: #333;
-  text-decoration: none;
-}
-
-.article-svg {
-  width: 25px;
-  height: 25px;
-  vertical-align: middle;
-}
 
 .account-img {
   height: 125px;
@@ -94,4 +52,30 @@ a.article-title:hover {
   text-align: center;
   width: 50%;
   padding: 10px;
+}
+
+.index {
+  text-align: center;
+  vertical-align: middle;
+  font-family: Raleway;
+  color: rgb(234, 234, 234);
+}
+
+.startRedirect {
+  display: inline-block;
+  padding: 25px 40px;
+  background-color: #F5DEB3;
+  color: black;
+  text-align: center;
+  text-decoration: none;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.startRedirect:hover {
+  background-color: #e3c896;
+  text-decoration: none;
+  color: rgb(0, 19, 227);
 }
