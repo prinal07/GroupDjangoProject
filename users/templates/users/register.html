@@ -5,7 +5,7 @@
 
 {% block content %}
     {% csrf_token %}
-
+    {%load static%}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -60,6 +60,7 @@
                     <li id="passReq2">Password must contain at least one number</li>
                     <li id="passReq3">Password must contain at least one non-numeric character</li>
                     <li id="passDuplicate" style="display: none;">Passwords do not match</li>
+                    <li id="tcCheck" style="display: none;">You must agree to the terms and conditions</li>
                 </p>
             <p>
                 {% render_field form.password1 placeholder="Password" id="password" onblur="passwordCheck()" %}
@@ -67,7 +68,13 @@
             <p>
                 {% render_field form.password2 placeholder="Confirm Password" id="password2" onblur="duplicatePasswords()" %} 
             </p>              
-
+            <p>
+                <label for="terms-checkbox" class="checkbox-label">
+                    <input type="checkbox" id="terms-checkbox" class="styled-checkbox">
+                    <span class="checkmark"></span>
+                    <a href="{% static '/EcoExeterPrivacyPolicy.pdf' %}" target="_blank">I agree to the terms and conditions</a>
+                </label>
+            </p>
             </div>
 
 
@@ -96,9 +103,7 @@
     </form>
 
 </body>
-{%load static%}
     <script src="{% static '/js/form.js' %}"></script>
-
 </html>
 
 {% endblock content %}
