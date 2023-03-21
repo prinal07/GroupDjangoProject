@@ -31,20 +31,16 @@
         <hr>
         <table style="width:100%">
             <td style="width:50%">
-                <form method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <fieldset class="form-group">
-                        <h3> Update Username: </h3>
-                        {% render_field user_update_form.username placeholder="username" id+="u_form" %} <br><br>
-                        <h3> Update Email: </h3>
-                        {% render_field user_update_form.email placeholder="email" id+="u_form" %} <br><br>
-                        <h3>
-                            Update Image:
-                        </h3>
-                        <div>
+                <div>
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                            <h3> Update Username: </h3>
+                            {% render_field user_update_form.username placeholder="username" id+="u_form" %} <br><br>
+                            <h3> Update Email: </h3>
+                            {% render_field user_update_form.email placeholder="email" id+="u_form" %} <br><br>
+                            <h3> Update Image: </h3>
                             {% render_field picture_update_form.image id+="u_form" %}
-                        </div>
-                    </fieldset>
+                </div>
                     <br><br>
                     <div class="form-group">
                         <button id="uFormSubmitBtn" type="submit"
@@ -66,23 +62,20 @@
                 <h5><i class="bx bxs-trophy"></i> Achievments 3</h5>
                 <br><br>
                 <h5><i class="bx bxs-trophy"></i> Achievments 4</h5>
-
                 <br><br>
-                <form method="POST">
-                    {% csrf_token %}
-                    <div>
-                        <h4><input type="submit" name="delete" value="Delete" id="uFormSubmitBtn"
-                                   style="background-color: red; border: 1.5px solid maroon;"> Confirm
+                <div class="form-group">
+                    <form method="POST">
+                        {% csrf_token %}
+                            <h4><input type="submit" name="delete" value="Delete" id="uFormSubmitBtn"
+                                style="background-color: red; border: 1.5px solid maroon;"> Confirm
                             Deletion {% render_field user_delete_form.confirm_delete id+="deleteTick" %} </h4>
-                    </div>
-
-
-                </form>
+                            <small>*In compliance with the GDPR, all your data will be deleted.</small>
+                    </form>
+                </div>
 
             </td>
         </table>
 
-        <!-- FORM HERE -->
     </div>
 {% endblock content %}
 
