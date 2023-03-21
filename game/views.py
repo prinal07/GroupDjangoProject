@@ -52,6 +52,7 @@ def green_checker(request):
 
                 # Number of clues is increased, as a challenge has been completed
                 logged_user.cluesUnlocked += 1
+                logged_user.save()
 
 @login_required
 def bin_checker(request):
