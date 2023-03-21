@@ -341,12 +341,17 @@ map.on('mousemove', (e) => {
         JSON.stringify(e.lngLat.wrap());
 });
 
+function createPopup(text) {
+    window.alert(text);
+}  
+  
 
 /* Gets the current geolocation of the user and sends it to the locationParser function.
 * If geolocation is not supported by the browser, displays an error message.
 */
 function getLocation() {
     if (navigator.geolocation) {
+        createPopup("Exploration started, enjoy your journey!")
         navigator.geolocation.getCurrentPosition(showPosition);
     } else {
         document.getElementById("location-button").innerHTML = "Geolocation is not supported by this browser.";
@@ -392,6 +397,7 @@ function locationParserToReceiver(latitude, longitude) {
  */
 function getFinalLocation() {
     if (navigator.geolocation) {
+        createPopup("You've ended your journey!")
         navigator.geolocation.getCurrentPosition(showFinalPosition);
     } else {
         document.getElementById("final-location-button").innerHTML = "Geolocation is not supported by this browser.";

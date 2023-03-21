@@ -9,6 +9,8 @@ from django.contrib import messages
 from game.models import Story, Suspect, Riddle
 import requests
 from django.http import HttpResponse, JsonResponse
+from django.contrib.auth import logout
+
 
 from game.forms import UserUpdateForm, ProfileUpdateForm, AccountUpdateForm, DeleteAccountForm
 from users.models import Account
@@ -151,9 +153,6 @@ def home(request):
 
     # Resets the value of last_day_accessed to prevent Daily points resets until tomorrow
     logged_user.last_day_accessed = date.today()
-    logged_user.save()
-
-    logged_user.cluesUnlocked += 1
     logged_user.save()
 
     # get user points
@@ -711,3 +710,14 @@ def get_Directions(request):
     else:
         # Render the map template
         return render(request, "game/map.html")
+    
+
+from django.contrib.auth import logout
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
+
+
+
+def logout_view(request):
+    logout(request)
+    return redirect(reverse_lazy('login'))
