@@ -36,7 +36,7 @@ class Account(models.Model):
     level = models.IntegerField(default=1)
     points = models.IntegerField(default=0)
     daily_points = models.IntegerField(default=0)
-    last_day_accessed = models.DateField(default=date.today)
+    last_day_accessed = models.DateField(default=date.today())
     last_green_area_accessed = models.DateTimeField(auto_now_add=True)
     last_bin_scanned = models.DateTimeField(auto_now_add=True)
     staffCheck = models.BooleanField(default=False)
@@ -50,7 +50,8 @@ class Account(models.Model):
     finalLng = models.CharField(default='', max_length=100)
     distanceTraveled = models.CharField(default='', max_length=100)
     # game Completed check to determine if user has completed game
-    gameCompleted = models.IntegerField(default=0)
+    gameCompleted = models.BooleanField(default=False)
+    storiesCompleted = models.IntegerField(default=0)
     # number of clues unlocked to be able to use for Unity interface
     cluesUnlocked = models.IntegerField(default=False)
     riddleDone = models.BooleanField(default=False)
