@@ -20,7 +20,7 @@ from django.http import JsonResponse
 from turfpy.measurement import boolean_point_in_polygon
 from geojson import Point, MultiPolygon, Feature
 
-
+@login_required
 def green_checker(request):
     """ Uses green counter to set status of incomplete Green activities to done
 
@@ -53,7 +53,7 @@ def green_checker(request):
                 # Number of clues is increased, as a challenge has been completed
                 logged_user.cluesUnlocked += 1
 
-
+@login_required
 def bin_checker(request):
     """ Uses bin counter to set status of incomplete Green activities to done and increment clue counter
 
@@ -85,7 +85,7 @@ def bin_checker(request):
                 # Number of clues is increased, as a challenge has been completed
                 logged_user.cluesUnlocked += 1
 
-
+@login_required
 def riddle_handler(request):
     riddle_message = ""
     if request.method == "POST":
