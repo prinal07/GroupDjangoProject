@@ -1,5 +1,6 @@
 from django.test import TestCase
 from .models import *
+from .views import *
 
 import datetime
 
@@ -229,3 +230,30 @@ class StoryTestCase(TestCase):
 
         self.assertTrue(len(story.get_suspects(self)) <= story.MAX_SUSPECTS)
         self.assertTrue()
+        
+class GameWebPageTestCase(TestCase):
+    def setUp(self):
+        account = Account.objects.create(profileClass=1,
+                    accommodation="Accom",
+                    email="ah123@exeter.ac.uk",
+                    username="username1",
+                    password="password123",
+                    group=1,
+                    level=1,
+                    points=124,
+                    daily_points=50,
+                    last_day_accessed=date.today(),
+                    last_bin_scanned=datetime.datetime.now(),
+                    last_green_area_accessed=datetime.datetime.now(),
+                    staffCheck=False,
+                    greenCounter=1,
+                    binCounter=4,
+                    walkCounter=2)
+
+    def test_riddle_handler(self):
+        account = Account.objects.get(username="username1")
+        page = self.client.get('/game/riddle_handler/', requests.request(user=account))
+        
+        self.assertTrue(isinstance(page, JsonResponse))
+        
+        

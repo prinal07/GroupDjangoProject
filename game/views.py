@@ -6,16 +6,13 @@ from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect
 from django.db.models import Sum
 from django.contrib import messages
-from game.models import Story, Suspect, Riddle
+from .models import Story, Suspect, Riddle, Bin, Fact
 import requests
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import logout
 
-
-from game.forms import UserUpdateForm, ProfileUpdateForm, AccountUpdateForm, DeleteAccountForm
+from .forms import UserUpdateForm, ProfileUpdateForm, AccountUpdateForm, DeleteAccountForm
 from users.models import Account
-from game.models import Bin
-from .models import Fact
 from django.contrib.auth.decorators import login_required
 
 import json
@@ -23,7 +20,7 @@ from django.http import JsonResponse
 from turfpy.measurement import boolean_point_in_polygon
 from geojson import Point, MultiPolygon, Feature
 
-
+@login_required
 def green_checker(request):
     """ Uses green counter to set status of incomplete Green activities to done
 
@@ -56,7 +53,7 @@ def green_checker(request):
                 # Number of clues is increased, as a challenge has been completed
                 logged_user.cluesUnlocked += 1
 
-
+@login_required
 def bin_checker(request):
     """ Uses bin counter to set status of incomplete Green activities to done and increment clue counter
 
@@ -88,7 +85,7 @@ def bin_checker(request):
                 # Number of clues is increased, as a challenge has been completed
                 logged_user.cluesUnlocked += 1
 
-
+@login_required
 def riddle_handler(request):
     riddle_message = ""
     if request.method == "POST":
@@ -530,6 +527,7 @@ def update_points(request):
 
 
 @login_required
+@csrf_exempt
 def unity(request):
     """Serves the Unity Game at <url>/game/unity>
     Uses the pre-built Unity WebGL html file to load a gameInstance and serve a project to the user
@@ -547,65 +545,69 @@ def unity(request):
         data = json.loads(request.body)
         give_points = data.get("give_points")
 
+        user = Accounts.objects.get(user=request.user.username)
+        
         # check that story has been completed
-        if give_points == "true":
-            # give points to logged in user
-            user = Account.objects.get(username=request.user.username)
-            user.gameCompleted = True
-            user.points += STORY_POINT_REWARD
-            user.daily_points += STORY_POINT_REWARD
+        if not user.gameCompleted or user.last_day_accessed != date.today():
+            if give_points == "true":
+                # give points to logged in user
+                user.gameCompleted = True
+                user.points += STORY_POINT_REWARD
+                user.daily_points += STORY_POINT_REWARD
 
-            user.save()
-
+                user.storiesCompleted += 1
+            
+                user.save()
+            
         # redirect to the overview
         return redirect("game")
 
     else:
         # construct all information to pass to the unity game
-        description = []
-        culprit = ""
-        clues = []
+    description = []
+    culprit = ""
+    clues = []
 
-        # Ensure that user can always go right to game after completing challenge with updated clue count
-        green_checker(request)
-        bin_checker(request)
+    # Ensure that user can always go right to game after completing challenge with updated clue count
+    green_checker(request)
+    bin_checker(request)
 
-        story = Story.objects.get(story_number=1)
-        suspects = story.suspects.all()
-        # stores all clues of the story
-        allClues = [story.clue1, story.clue2, story.clue3, story.clue4, story.clue5, story.clue6, story.clue7,
-                    story.clue8, story.clue9, story.clue10]
+    story = Story.objects.get(story_number=1)
+    suspects = story.suspects.all()
+    # stores all clues of the story
+    allClues = [story.clue1, story.clue2, story.clue3, story.clue4, story.clue5, story.clue6, story.clue7,
+                story.clue8, story.clue9, story.clue10]
 
-        # fetches current user and the number of clues the user has unlocked
-        logged_username = request.user.username
-        logged_user = Account.objects.get(username=logged_username)
-        cluesUnlocked = logged_user.cluesUnlocked
-        notUnlocked = "Complete a Challenge to unlock next clue"
+    # fetches current user and the number of clues the user has unlocked
+    logged_username = request.user.username
+    logged_user = Account.objects.get(username=logged_username)
+    cluesUnlocked = logged_user.cluesUnlocked
+    notUnlocked = "Complete a Challenge to unlock next clue"
 
-        # Make the number of unlocked clues viewable in Unity
-        for ctr in range(cluesUnlocked):
-            clues.append(allClues[ctr])
+    # Make the number of unlocked clues viewable in Unity
+    for ctr in range(cluesUnlocked):
+        clues.append(allClues[ctr])
 
-        # Make the number of not unlocked clues viewable as 'Complete a Challenge to unlock next clue'
-        for ctr2 in range(10 - cluesUnlocked):
-            clues.append(notUnlocked)
+    # Make the number of not unlocked clues viewable as 'Complete a Challenge to unlock next clue'
+    for ctr2 in range(10 - cluesUnlocked):
+        clues.append(notUnlocked)
 
-        # get information from a stored Story model
-        for suspect in suspects:
-            description.append(suspect.brief)
+    # get information from a stored Story model
+    for suspect in suspects:
+        description.append(suspect.brief)
         desc_str = "[SPLIT]".join(description)  # [SPLIT] recognised by the Unity C# Script as the delimiter
         culprit = story.culprit
         clues_str = "[SPLIT]".join(clues)
         sprites = [story.sprite_1, story.sprite_2, story.sprite_3, story.sprite_4, story.sprite_5]
 
-        context = {
-            "spriteCodes": sprites,
-            "culprit": culprit,
-            "descriptions": desc_str,
-            "clues": clues_str
-        }
+    context = {
+        "spriteCodes": sprites,
+        "culprit": culprit,
+        "descriptions": desc_str,
+        "clues": clues_str
+    }
 
-        return render(request, template_name="game/unity.html", context=context)
+    return render(request, template_name="game/unity.html", context=context)
 
 
 @csrf_exempt
