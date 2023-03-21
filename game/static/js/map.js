@@ -77,20 +77,20 @@ for (const feature of geojson.features) {
 }
 
 
-console.log(bin_info);
+// console.log(bin_info);
 
 
-for (var i = 0; i < bin_info.length; i++) {
-    let lat = parseFloat(bin_info[i][0]);
-    let lon = parseFloat(bin_info[i][1]);
+// for (var i = 0; i < bin_info.length; i++) {
+//     let lat = parseFloat(bin_info[i][0]);
+//     let lon = parseFloat(bin_info[i][1]);
 
-    popup = new mapboxgl.Popup({ offset: 25 }).setText(bin_info[i][2]);
+//     popup = new mapboxgl.Popup({ offset: 25 }).setText(bin_info[i][2]);
 
-    marker = new mapboxgl.Marker()
-        .setLngLat([lon, lat])
-        .setPopup(popup)
-        .addTo(map);
-}
+//     marker = new mapboxgl.Marker()
+//         .setLngLat([lon, lat])
+//         .setPopup(popup)
+//         .addTo(map);
+// }
 
 map.on('load', () => {
     // Add a data source containing GeoJSON data.
