@@ -232,3 +232,4 @@ class Riddle(models.Model):
         """Finds status of riddle object
         Returns: status of riddle"""
         return self.done
+
