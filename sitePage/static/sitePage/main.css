@@ -12,11 +12,11 @@ ul {
 }
 
 .bg-steel {
-  background-color: #00ca96;
+  background-color: #F5DEB3;
 }
 
 .site-header .navbar-nav .nav-link {
-  color: white;
+  color: black;
 }
 
 .site-header .navbar-nav .nav-link:hover {
@@ -35,41 +35,6 @@ ul {
   margin-bottom: 20px;
 }
 
-.article-title {
-  color: #444444;
-}
-
-a.article-title:hover {
-  color: #00ca96;
-  text-decoration: none;
-}
-
-.article-content {
-  white-space: pre-line;
-}
-
-.article-img {
-  height: 65px;
-  width: 65px;
-  margin-right: 16px;
-}
-
-.article-metadata {
-  padding-bottom: 1px;
-  margin-bottom: 4px;
-  border-bottom: 1px solid #e3e3e3
-}
-
-.article-metadata a:hover {
-  color: #333;
-  text-decoration: none;
-}
-
-.article-svg {
-  width: 25px;
-  height: 25px;
-  vertical-align: middle;
-}
 
 .account-img {
   height: 125px;
@@ -99,8 +64,8 @@ a.article-title:hover {
 .startRedirect {
   display: inline-block;
   padding: 25px 40px;
-  background-color: #00ca96;
-  color: white;
+  background-color: #F5DEB3;
+  color: black;
   text-align: center;
   text-decoration: none;
   border: none;
@@ -110,7 +75,7 @@ a.article-title:hover {
 }
 
 .startRedirect:hover {
-  background-color: #01b689;
+  background-color: #e3c896;
   text-decoration: none;
-  color: rgb(59, 59, 59);
+  color: rgb(35, 51, 227);
 }

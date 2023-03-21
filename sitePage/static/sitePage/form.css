@@ -1,4 +1,4 @@
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 1000px) {
     * {
         display: block;
     }
@@ -102,8 +102,8 @@ input.invalid {
 
 button {
     margin-right: 15px;
-    background-color: #04aa6d;
-    color: #ffffff;
+    background-color: #F5DEB3;
+    color: black;
     border: none;
     padding: 10px 20px;
     font-size: 17px;
@@ -119,6 +119,7 @@ button:hover {
 
 #prevBtn {
     background-color: #bbbbbb;
+    color: black;
 }
 
 /* Make circles that indicate the steps of the form: */
