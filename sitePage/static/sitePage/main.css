@@ -1,7 +1,10 @@
 body {
   background-image: url(woodbackground.jpg);
+  background-size: 100vw 200vh;
+  background-repeat: no-repeat;
+  background-color: #2d2c2c;
   color: #333333;
-  margin-top: 5rem;
+  height: 100%;
 }
 
 ul {
@@ -86,17 +89,11 @@ a.article-title:hover {
   padding: 10px;
 }
 
-
-@import url('https://fonts.googleapis.com/css?family=Abril+Fatface');
-
-
 .index {
   text-align: center;
   vertical-align: middle;
-  /* margin: 0 auto; */
-  font-family: 'Abril Fatface';
-  color: rgb(217, 222, 148);
-
+  font-family: Raleway;
+  color: rgb(234, 234, 234);
 }
 
 .startRedirect {
