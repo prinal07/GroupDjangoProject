@@ -7,6 +7,7 @@ from django.shortcuts import render, redirect
 from django.db.models import Sum
 from django.contrib import messages
 from .models import Story, Suspect, Riddle, Bin, Fact
+from users.models import Account
 import requests
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import logout
@@ -545,7 +546,7 @@ def unity(request):
         data = json.loads(request.body)
         give_points = data.get("give_points")
 
-        user = Accounts.objects.get(user=request.user.username)
+        user = Account.objects.get(user=request.user.username)
         
         # check that story has been completed
         if not user.gameCompleted or user.last_day_accessed != date.today():
@@ -564,48 +565,49 @@ def unity(request):
 
     else:
         # construct all information to pass to the unity game
-    description = []
-    culprit = ""
-    clues = []
+        description = []
+        culprit = ""
+        clues = []
 
-    # Ensure that user can always go right to game after completing challenge with updated clue count
-    green_checker(request)
-    bin_checker(request)
 
-    story = Story.objects.get(story_number=1)
-    suspects = story.suspects.all()
-    # stores all clues of the story
-    allClues = [story.clue1, story.clue2, story.clue3, story.clue4, story.clue5, story.clue6, story.clue7,
-                story.clue8, story.clue9, story.clue10]
+        # Ensure that user can always go right to game after completing challenge with updated clue count
+        green_checker(request)
+        bin_checker(request)
 
-    # fetches current user and the number of clues the user has unlocked
-    logged_username = request.user.username
-    logged_user = Account.objects.get(username=logged_username)
-    cluesUnlocked = logged_user.cluesUnlocked
-    notUnlocked = "Complete a Challenge to unlock next clue"
+        story = Story.objects.get(story_number=1)
+        suspects = story.suspects.all()
+        # stores all clues of the story
+        allClues = [story.clue1, story.clue2, story.clue3, story.clue4, story.clue5, story.clue6, story.clue7,
+                    story.clue8, story.clue9, story.clue10]
 
-    # Make the number of unlocked clues viewable in Unity
-    for ctr in range(cluesUnlocked):
-        clues.append(allClues[ctr])
+        # fetches current user and the number of clues the user has unlocked
+        logged_username = request.user.username
+        logged_user = Account.objects.get(username=logged_username)
+        cluesUnlocked = logged_user.cluesUnlocked
+        notUnlocked = "Complete a Challenge to unlock next clue"
 
-    # Make the number of not unlocked clues viewable as 'Complete a Challenge to unlock next clue'
-    for ctr2 in range(10 - cluesUnlocked):
-        clues.append(notUnlocked)
+        # Make the number of unlocked clues viewable in Unity
+        for ctr in range(cluesUnlocked):
+            clues.append(allClues[ctr])
 
-    # get information from a stored Story model
-    for suspect in suspects:
-        description.append(suspect.brief)
-        desc_str = "[SPLIT]".join(description)  # [SPLIT] recognised by the Unity C# Script as the delimiter
-        culprit = story.culprit
-        clues_str = "[SPLIT]".join(clues)
-        sprites = [story.sprite_1, story.sprite_2, story.sprite_3, story.sprite_4, story.sprite_5]
+        # Make the number of not unlocked clues viewable as 'Complete a Challenge to unlock next clue'
+        for ctr2 in range(10 - cluesUnlocked):
+            clues.append(notUnlocked)
 
-    context = {
-        "spriteCodes": sprites,
-        "culprit": culprit,
-        "descriptions": desc_str,
-        "clues": clues_str
-    }
+        # get information from a stored Story model
+        for suspect in suspects:
+            description.append(suspect.brief)
+            desc_str = "[SPLIT]".join(description)  # [SPLIT] recognised by the Unity C# Script as the delimiter
+            culprit = story.culprit
+            clues_str = "[SPLIT]".join(clues)
+            sprites = [story.sprite_1, story.sprite_2, story.sprite_3, story.sprite_4, story.sprite_5]
+
+        context = {
+            "spriteCodes": sprites,
+            "culprit": culprit,
+            "descriptions": desc_str,
+            "clues": clues_str
+        }
 
     return render(request, template_name="game/unity.html", context=context)
 
