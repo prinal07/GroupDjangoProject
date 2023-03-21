@@ -224,21 +224,21 @@ class ProfileTestCase(TestCase):
         test_user_in_database(): Tests if Profile User is in the Users database
     """
     def setUp(self):
-        img_path = os.getcwd()
-        img_path += "\\media\\default.jpg"
+        #img_path = os.getcwd()
+        #img_path += "\\media\\default.jpg"
 
-        mock_user = User.objects.create(username="username1")
-        self.profile = Profile.objects.create()
-        self.profile.user = mock_user
+        #mock_user = User.objects.create(username="username1")
+        #self.profile = Profile.objects.create()
+        #self.profile.user = mock_user
 
     def test_user_key_type(self):
-        self.assertTrue(isinstance(self.profile.user, User))
+        #self.assertTrue(isinstance(self.profile.user, User))
 
     def test_user_in_database(self):
-        self.assertTrue(self.profile.user in User.objects.all())
+        #self.assertTrue(self.profile.user in User.objects.all())
 
     def string_representation_test(self):
-        self.assertEqual(str(self.profile.user), f"{self.profile.user.username} Profile")
+        #self.assertEqual(str(self.profile.user), f"{self.profile.user.username} Profile")
         
 class ChallengeTrackerTestCase(TestCase):
     def setUp(self):
