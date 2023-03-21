@@ -11,7 +11,9 @@ from users.models import Account
 import requests
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import logout
-
+from django.contrib.auth import logout
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 from .forms import UserUpdateForm, ProfileUpdateForm, AccountUpdateForm, DeleteAccountForm
 from users.models import Account
 from django.contrib.auth.decorators import login_required
@@ -716,12 +718,6 @@ def get_Directions(request):
         # Render the map template
         return render(request, "game/map.html")
     
-
-from django.contrib.auth import logout
-from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
-
-
 
 def logout_view(request):
     logout(request)
