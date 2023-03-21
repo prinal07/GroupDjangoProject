@@ -2,6 +2,8 @@
 {% extends "game/playerbase.html" %}
 {%load widget_tweaks%}
 {% block content %}
+{% load static %}
+    
     <div class="main">
         <table style="width:100%">
             <td style="width:50%">
@@ -14,9 +16,7 @@
                 </div>
             </td>
             <td style="width:50%; vertical-align:middle;">
-                <h4 class="user-points-title"> User points: {{ user_points }}  </h4>
-
-
+                
                 <div id='level-progress'>
                     <h4 id="current-level">Level: {{ current_level }}</h4>
                     <h4 id="level-progress-title">Progress to next level:</h4>
@@ -49,33 +49,38 @@
                     </div>
 
                 </form>
-                <br>
+                <br><br>
                 
-            </td>
-            <td style="width:50%">
-                <h3> Achievments: </h3>
-                <br><br>
-                <h5><i class="bx bxs-trophy"></i> Achievments 1</h5>
-                <br><br>
-                <h5><i class="bx bxs-trophy"></i> Achievments 2</h5>
-                <br><br>
-                <h5><i class="bx bxs-trophy"></i> Achievments 3</h5>
-                <br><br>
-                <h5><i class="bx bxs-trophy"></i> Achievments 4</h5>
-                <br><br>
                 <div class="form-group">
                     <form method="POST">
                         {% csrf_token %}
+                        <h3><b>Delete Account:</b></h3><br>
                             <h4><input type="submit" name="delete" value="Delete" id="uFormSubmitBtn"
-                                style="background-color: red; border: 1.5px solid maroon;"> Confirm
-                            Deletion {% render_field user_delete_form.confirm_delete id+="deleteTick" %} </h4>
+                                style="background-color: red; border: 1.5px solid black;"> 
+                                <br><br>Confirm Deletion {% render_field user_delete_form.confirm_delete id+="deleteTick" %} </h4>
                             <small>*In compliance with the GDPR, all your data will be deleted.</small>
                     </form>
                 </div>
 
             </td>
+            <td style="width:50%">
+                
+                    <h3> Eco Achievments: </h3>
+                    <h3 id="eco1"><img class="profileBadge" src="{% static 'player/badges/lowlevel.png' %}"> Earth Newbie </h3>
+                    <h3 id="eco2" style="display:none"><img class="profileBadge" src="{% static 'player/badges/midlevel.png' %}"> Environmentalist </h3>
+                    <h3 id="eco3" style="display:none"><img class="profileBadge" src="{% static 'player/badges/highlevel.png' %}"> Greta's Protégé</h3>
+                    
+                    <h3> Story Achievments: </h3>
+                    <h3 id="story1"><img class="profileBadge" src="{% static 'player/badges/lowstory.png' %}"> Rookie Detective</h3>
+                    <h3 id="story2" style="display:none"><img class="profileBadge" src="{% static 'player/badges/midstory.png' %}"> Journeyman Detective</h3>
+                    <h3 id="story3" style="display:none"><img class="profileBadge" src="{% static 'player/badges/highstory.png' %}"> Expert Detective</h3>
+
+            </td>
         </table>
 
     </div>
+    
+    <script src="{% static 'js/profile.js' %}"></script>
+
 {% endblock content %}
 
