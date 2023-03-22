@@ -13,8 +13,9 @@
         <link href="https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.css" rel="stylesheet">
         <script src="https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.js"></script>
         <script>
-            console.log('{{bin_info}}')
             var bin_info = JSON.parse('{{bin_info}}');
+            var message = JSON.parse('{{ message }}');
+
         </script>
         <style>
             body {
@@ -153,10 +154,6 @@
                 )
                 .addTo(map);
         }
-
-
-        console.log(bin_info);
-
 
         for (var i = 0; i < bin_info.length; i++) {
             let lat = parseFloat(bin_info[i][0]);
@@ -367,27 +364,50 @@
             var lat = e.coords.latitude
             var currentPosition = [lon, lat];
             console.log(currentPosition);
-            let xhr = new XMLHttpRequest();
 
-            xhr.open("POST", "{% url 'map' %}");
+            $.ajax({
+                type: "POST",
+                url: "/game/map/",
+                data: {
+                    'lat': lat,
+                    'lon': lon,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function (data) {
+                    if (data["within_area"]) {
+                        console.log("user in area");
+                        document.getElementById('green-message').innerHTML = data["within_area"];
+                    } else if (data["too_soon"]) {
+                        console.log("user in area too soon");
+                        document.getElementById('green-message').innerHTML = data["within_area"];
+                    } else if (data["not_in_area"]) {
+                        console.log("user NOT in area");
+                        document.getElementById('green-message').innerHTML = data["within_area"];
+                    } else {
+                        document.getElementById('green-message').innerHTML = "";
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log("Error sending data: " + error);
+                }
+            });
+            /*
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", "
+            {% url 'map' %}");
             xhr.setRequestHeader("Accept", "application/json");
             xhr.setRequestHeader("Content-Type", "application/json");
-            xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}')
-            let data = `{"lon": ` + lon + `, "lat":` + lat + `}`;
-            xhr.send(data);
-
-
+            xhr.setRequestHeader("X-CSRFToken", '
+            {{ csrf_token }}')
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4) {
                     console.log(xhr.status);
-                    console.log(xhr.responseText);
-                    var data = JSON.parse(xhr.responseText)
-                    document.getElementById('green-message').innerHTML = data['message']
+                    console.log(xhr.response);
                 }
             };
-
-
-
+            let data = `{"lon": ` + lon + `, "lat":` + lat + `}`;
+            xhr.send(data);
+            console.log("READY STATE" + xhr.readyState);*/
         });
         // add markers to map
 
@@ -428,6 +448,7 @@
      /* Gets the current geolocation of the user and sends it to the locationParser function.
      * If geolocation is not supported by the browser, displays an error message.
      */
+
     function getLocation() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(showPosition);
@@ -560,9 +581,8 @@
 
     {% if message %}
         <script>
-            window.onload = function () {
-                alert("{{ message }}");
-            };
+            document.getElementById('green-message').innerHTML = message;
+            console.log(message);
         </script>
     {% endif %}
 

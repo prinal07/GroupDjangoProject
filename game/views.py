@@ -364,37 +364,86 @@ def profile(request):
 
 @login_required
 def map(request):
+    """Supplies coordinates of bins to the mapbxo representation in <url>/game/map/
+
+    Args:
+        request (_type_): _description_
+
+    Returns:
+        HttpResponse: Serves ./templates/map.html due to Django's file structure
+        Passes a JSON structure as context, holding a 2D Array of Bin Lat/Lon Coordinates and ID Number
+    """
     message = ""
+
+    print(request.method)
 
     logged_username = request.user.username
     logged_user = Account.objects.get(username=logged_username)
 
     if request.method == 'POST':
-        data = json.loads(request.body)
-        lat = data.get("lat")
-        lon = data.get("lon")
-        print(data)
+        lat = float(request.POST.get("lat"))
+        lon = float(request.POST.get("lon"))
 
         print(lat, lon)
 
         point = Feature(geometry=Point([lat, lon]))
         polygon = Feature(geometry=MultiPolygon(
-            [([(50.7393587, -3.54012113), (50.7381304, -3.5382954), (50.7394105, -3.537208)],),
-             (
-                 [(50.7418840, -3.5341631), (50.7403587, -3.5335790), (50.7410841, -3.5312515),
-                  (50.7422746, -3.5324632)],),
-             (
-                 [(50.7364445, -3.5293083), (50.7358839, -3.5291410), (50.7360017, -3.5298109),
-                  (50.7363348, -3.5299208)],),
-             (
-                 [(50.7287101, -3.5374679), (50.7280259, -3.5364497), (50.7280361, -3.5353282),
-                  (50.7289626, -3.5356284)],),
-             ([(50.7341617, -3.5319415), (50.7340736, -3.5314349), (50.7332753, -3.5324445),
-               (50.7330960, -3.5319436)],),
-             ([(50.7359873845501, -3.532288932448523), (50.73694531506939, -3.5334667225815792),
-               (50.736653497251154, -3.5340531117119554)],)
+            [(
+                [
+                    (50.7393587, -3.54012113),
+                    (50.7381304, -3.5382954),
+                    (50.7394105, -3.537208),
+                ],
+            ),
+                (
+                    [
+                        (50.7418840, -3.5341631),
+                        (50.7403587, -3.5335790),
+                        (50.7410841, -3.5312515),
+                        (50.7422746, -3.5324632),
+                    ],
+                ),
+                (
+                    [
+                        (50.7364445, -3.5293083),
+                        (50.7358839, -3.5291410),
+                        (50.7360017, -3.5298109),
+                        (50.7363348, -3.5299208),
+                    ],
+                ),
+                (
+                    [
+                        (50.7287101, -3.5374679),
+                        (50.7280259, -3.5364497),
+                        (50.7280361, -3.5353282),
+                        (50.7289626, -3.5356284),
+                    ],
+                ),
+                (
+                    [
+                        (50.7341617, -3.5319415),
+                        (50.7340736, -3.5314349),
+                        (50.7332753, -3.5324445),
+                        (50.7330960, -3.5319436),
+                    ],
+                ),
+                (
+                    [
+                        (50.7359873845501, -3.532288932448523),
+                        (50.73694531506939, -3.5334667225815792),
+                        (50.736653497251154, -3.5340531117119554),
+                    ],
+                ),
+                (
+                    [
+                        (lat + 1.0, lon + 1.0),
+                        (lat - 1.0, lon - 1.0),
+                        (lat - 1.0, lon + 1.0),
+                        (lat + 1.0, lon - 1.0),
+                    ],
+                )
 
-             ]))
+            ]))
         # ([(lat + 1, lon + 1), (lat - 1, lon - 1), (lat - 1, lon + 1), (lat + 1, lon - 1)],),
 
         print(boolean_point_in_polygon(point, polygon))
@@ -403,30 +452,24 @@ def map(request):
             if logged_user.last_green_area_accessed == None:
                 logged_user.last_green_area_accessed = datetime.now()
 
-            time_difference = datetime.now() - logged_user.last_green_area_accessed
-            if time_difference.seconds > 300:
+            print("")
+            # time_difference = datetime.now() - logged_user.last_green_area_accessed
+            if True:
                 # Increase counter
                 logged_user.greenCounter += 1
 
                 # Add points
                 logged_user.points += 10
+                logged_user.daily_points += 10
                 logged_user.save()
 
-                message = {'message': 'You have entered green area! 10 points awarded'}
-                return JsonResponse(message)
+                return JsonResponse({'within_area': "You have been rewarded!"})
             else:
-                message = {'message': f"You won't get rewarded right now. Try again in {str(time_difference)}"}
+                return JsonResponse({'too_soon': f"You can't be rewarded at this time. Come back later."})
+        else:
+            return JsonResponse({'not_in_area': "NOT IN AN AREA"})
 
-    bins = Bin.objects.all()
-    """Supplies coordinates of bins to the mapbxo representation in <url>/game/map/
-    
-    Args:
-        request (_type_): _description_
-
-    Returns:
-        HttpResponse: Serves ./templates/map.html due to Django's file structure
-        Passes a JSON structure as context, holding a 2D Array of Bin Lat/Lon Coordinates and ID Number
-    """
+    print(message)
 
     # Collect all Bin records from the Database Table
     bins = Bin.objects.all()
