@@ -402,9 +402,9 @@ def map(request):
         if boolean_point_in_polygon(point, polygon):
             if logged_user.last_green_area_accessed == None:
                 logged_user.last_green_area_accessed = datetime.now()
-               
-            difference = datetime.now() - logged_user.last_green_area_accessed 
-            if difference > datetime.time(0, 5, 0):
+
+            time_difference = datetime.now() - logged_user.last_green_area_accessed
+            if time_difference.seconds > 300:
                 # Increase counter
                 logged_user.greenCounter += 1
 
@@ -415,7 +415,7 @@ def map(request):
                 message = {'message': 'You have entered green area! 10 points awarded'}
                 return JsonResponse(message)
             else:
-                message = {'message': f"You won't get rewarded right now. Try again in {str(difference)}"}
+                message = {'message': f"You won't get rewarded right now. Try again in {str(time_difference)}"}
 
     bins = Bin.objects.all()
     """Supplies coordinates of bins to the mapbxo representation in <url>/game/map/
@@ -503,7 +503,7 @@ def update_points(request):
         
         time_difference = datetime.now() - logged_user.last_bin_scanned
 
-        if time_difference.total_seconds() > 300:
+        if time_difference.seconds > 300:
             # Bin counter of the user is incremented
             logged_user.binCounter += 1
             logged_user.last_bin_scanned = datetime.now()
