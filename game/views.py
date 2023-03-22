@@ -541,9 +541,16 @@ def update_points(request):
     logged_username = request.user.username
     logged_user = Account.objects.get(username=logged_username)
 
-
     if request.method == 'POST' and 'update_points' in request.POST:
         if logged_user.last_bin_scanned == None:
+            logged_user.binCounter += 1
+            logged_user.last_bin_scanned = timezone.now()
+
+            logged_user.cluesUnlocked += 1
+            logged_user.points += 10
+            logged_user.daily_points += 10
+            logged_user.save()
+
             logged_user.last_bin_scanned = timezone.now()
 
         time_difference = timezone.now() - logged_user.last_bin_scanned
