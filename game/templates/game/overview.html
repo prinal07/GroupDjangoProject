@@ -33,16 +33,16 @@
     <h1 id="challenge-bar-title"> Challenges</h1>
 
     {% for challenge in challenge_list %}
-        <div class="challenge-container">
-            <div class="challenge">
+    <b> <div class="challenge-container">
+            <div class="challenge {% if challenge.status %}completeBorder{% else %}incompleteBorder{% endif %}">
                 <div class="challenge-desc">{{ challenge.description }}</div>
-                <div class="challenge-status {% if challenge.status %}completed{% else %}todo{% endif %}">
+              <b> <div class="challenge-status {% if challenge.status %}completed{% else %}todo{% endif %}">
                     {% if challenge.status %}
-                        Status: complete!
+                        Status: Complete!
                     {% else %}
-                        Status: To do
+                        Status: Incomplete!
                     {% endif %}
-                </div>
+                </div></b>
             </div>
         </div>
     {% endfor %}
