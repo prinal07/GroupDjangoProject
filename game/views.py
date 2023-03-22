@@ -90,6 +90,7 @@ def bin_checker(request):
 
                 # Number of clues is increased, as a challenge has been completed
                 logged_user.cluesUnlocked += 1
+                logged_user.save()
 
 @login_required
 def riddle_handler(request):
@@ -734,17 +735,21 @@ def get_Directions(request):
         
         if distance == 1:
             logged_account.points += 10
+            logged_account.daily_points += 10
             logged_account.save()
             return JsonResponse({'onekm':  "Congratulations! You've reached a distance milestone of 1 km."})
 
         if distance == 5:
-            logged_account.points += 10
+            logged_account.points += 20
+            logged_account.daily_points += 20
+
             logged_account.save()
             return JsonResponse({'fivekm':  "Congratulations! You've reached a distance milestone of 5 kms."})
 
         if distance == 10:
             logged_account.distanceTraveled = 0
             logged_account.points += 50
+            logged_account.daily_points += 50
             logged_account.save()
             return JsonResponse({'tenkm':  "Congratulations! You've reached a distance milestone of 10 kms."})
 
@@ -771,8 +776,7 @@ def get_Directions(request):
                     # Number of clues is increased, as a challenge has been completed
                     logged_account.cluesUnlocked += 1
                     logged_account.account_points += 10
-
-
+                    logged_account.daily_points += 10
                     
                     logged_account.save()
 
