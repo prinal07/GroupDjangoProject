@@ -76,17 +76,17 @@ for (const feature of geojson.features) {
         .addTo(map);
 }
 
-for (var i = 0; i < bin_info.length; i++) {
-    let lat = parseFloat(bin_info[i][0]);
-    let lon = parseFloat(bin_info[i][1]);
+// for (var i = 0; i < bin_info.length; i++) {
+//     let lat = parseFloat(bin_info[i][0]);
+//     let lon = parseFloat(bin_info[i][1]);
 
-    popup = new mapboxgl.Popup({offset: 25}).setText(bin_info[i][2]);
+//     popup = new mapboxgl.Popup({offset: 25}).setText(bin_info[i][2]);
 
-    marker = new mapboxgl.Marker()
-        .setLngLat([lon, lat])
-        .setPopup(popup)
-        .addTo(map);
-}
+//     marker = new mapboxgl.Marker()
+//         .setLngLat([lon, lat])
+//         .setPopup(popup)
+//         .addTo(map);
+// }
 
 map.on('load', () => {
 // Add a data source containing GeoJSON data.
@@ -288,7 +288,7 @@ geolocate.on('geolocate', function (e) {
 
     $.ajax({
         type: "POST",
-        url: "/game/map/",
+        url: ".",
         data: {
             'lat': lat,
             'lon': lon,
@@ -395,7 +395,7 @@ console.log("Latitude: " + position.coords.latitude + ", Longitude: " + position
 function locationParserToReceiver(latitude, longitude){
 $.ajax({
     type: "POST",
-    url: "/game/Receiver/",
+    url: "./Receiver",
     data: {
         'latitude': latitude,
         'longitude': longitude,
@@ -438,7 +438,7 @@ console.log("Latitude: " + position.coords.latitude + ", Longitude: " + position
 function locationParserToget_Directions(latitude, longitude) {
 $.ajax({
     type: "POST",
-    url: "/game/get_Directions/",
+    url: "./get_Directions",
     data: {
         'latitude': latitude,
         'longitude': longitude,

@@ -363,7 +363,7 @@ def profile(request):
 
     return render(request, 'game/profile.html', context)
 
-
+@csrf_exempt
 @login_required
 def map(request):
     """Supplies coordinates of bins to the mapbxo representation in <url>/game/map/
@@ -459,9 +459,6 @@ def map(request):
                 # Increase counter
                 logged_user.greenCounter += 1
                 logged_user.last_green_area_accessed = timezone.now()
-
-                # Updates the time if it has been 5 minutes
-                logged_user.last_green_area_accessed = datetime.now()
 
                 # Add points
                 logged_user.points += 10
