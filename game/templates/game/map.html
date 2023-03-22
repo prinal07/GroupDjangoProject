@@ -4,38 +4,143 @@
 {% block content %}
 {% load static %}
 
-    <html>
-    <head>
-        <link href="https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.css" rel="stylesheet">
-        <script src="https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.js"></script>
-        <link rel="stylesheet" href="{% static '/player/map.css' %}">
-        
-        
-        <script>
-            var bin_info = JSON.parse('{{bin_info}}');
+<html>
 
-        </script>
+<head>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.js"></script>
+    <link rel="stylesheet" href="{% static '/player/map.css' %}">
 
-        ]
 
-    </head>
+    <script>
+        var bin_info = JSON.parse('{{bin_info}}');
 
-    <body>
+    </script>
+
+    ]
+
+</head>
+
+<body>
 
     <div id="map"></div>
     <pre id="info"></pre>
 
- 
+
     <div id='green-message'></div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        /* Gets the current geolocation of the user and sends it to the locationParser function.
+     * If geolocation is not supported by the browser, displays an error message.
+     */
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition);
+            } else {
+                document.getElementById("location-button").innerHTML = "Geolocation is not supported by this browser.";
+                console.log("Geolocation is not supported by this browser.");
+            }
+        }
 
+        /* Callback function for getCurrentPosition. Extracts the latitude and longitude from the position object,
+         * and passes them to the locationParser function. Also logs the current location to the console.
+         * 
+         * @param {Object} position - The position object returned by getCurrentPosition.
+         */
+        function showPosition(position) {
+            let lat = position.coords.latitude;
+            let lng = position.coords.longitude;
+            locationParserToReceiver(lat, lng);
+            console.log("Latitude: " + position.coords.latitude + ", Longitude: " + position.coords.longitude);
+        }
+        /* Sends a POST request to the specified URL with the provided latitude and longitude data.
+             * 
+             * @param {number} latitude - The latitude of the user's current location.
+             * @param {number} longitude - The longitude of the user's current location.
+             */
+        function locationParserToReceiver(latitude, longitude) {
+            $.ajax({
+                type: "POST",
+                url: "/game/Receiver/",
+                data: {
+                    'latitude': latitude,
+                    'longitude': longitude,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function (data) {
+                    console.log("Data sent successfully");
+                    window.alert("Journey Started!");
+
+                },
+                error: function (xhr, status, error) {
+                    console.log("Error sending data: " + error);
+                }
+            });
+        }
+        /* Requests the user's geolocation and calls showFinalPosition with the position data.
+         * If geolocation is not supported by the browser, displays an error message.
+         */
+        function getFinalLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showFinalPosition);
+            } else {
+                document.getElementById("final-location-button").innerHTML = "Geolocation is not supported by this browser.";
+                console.log("Geolocation is not supported by this browser.");
+            }
+        }
+        /* Parses the user's position data to retrieve latitude and longitude,
+             * and calls locationParserToget_Directions to retrieve directions based on the user's location.
+             * @param {Object} position - the user's position data, obtained from navigator.geolocation.getCurrentPosition
+             */
+        function showFinalPosition(position) {
+            let lat = position.coords.latitude;
+            let lng = position.coords.longitude;
+            locationParserToget_Directions(lat, lng);
+            console.log("Latitude: " + position.coords.latitude + ", Longitude: " + position.coords.longitude);
+        }
+
+        /* Sends an AJAX request to retrieve directions based on the user's location.
+         * @param {number} latitude - the user's latitude
+         * @param {number} longitude - the user's longitude
+         */
+        function locationParserToget_Directions(latitude, longitude) {
+            $.ajax({
+                type: "POST",
+                url: "/game/get_Directions/",
+                data: {
+                    'latitude': latitude,
+                    'longitude': longitude,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}' // included to prevent CSRF attacks
+                },
+                success: function (data) {
+                    console.log("Data sent successfully");
+                    if (data["onekm"]) {
+                        console.log("1 km completed");
+                        window.alert(data["onekm"]);
+                    } else if (data["fivekm"]) {
+                        console.log("5 km completed");
+                        window.alert(data["onekm"]);
+                    } else if (data["tenkm"]) {
+                        console.log("10 km completed");
+                        window.alert(data["tenkm"]);
+                    } else {
+                        window.alert("You haven't walked")
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log("Error sending data: " + error);
+                }
+            });
+        }
+    </script>
     <button id="location-button" , onclick="getLocation()">Start Exploration</button>
-    <button id="final-location-button", onclick="getFinalLocation()">End Exploration</button>
+    <button id="final-location-button" , onclick="getFinalLocation()">End Exploration</button>
 
     <script src="{% static '/js/map.js' %}"></script>
-    </body>
-    </html>
+</body>
+
+</html>
 
 
 {% endblock content %}

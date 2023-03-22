@@ -688,7 +688,7 @@ def Receiver(request):
         # Return an error message if the request method is not POST
         return HttpResponse('Invalid request method')
 
-
+@csrf_exempt
 def get_Directions(request):
     """
     This function takes in a POST request object and calculates the distance 
@@ -704,7 +704,7 @@ def get_Directions(request):
 
         # Retrieve the final latitude and longitude from the POST request and save them to the user's account
         logged_account.finalLat = request.POST.get('latitude')
-        logged_account.finalLng = longitude = request.POST.get('longitude')
+        logged_account.finalLng = request.POST.get('longitude')
         logged_account.save()
 
         # Convert the starting and final latitude-longitude coordinates to radians
@@ -724,25 +724,29 @@ def get_Directions(request):
         c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
         R = 6371  # Earth's radius in km
         distance = R * c
+        
 
         # Save the calculated distance to the user's account
-        logged_account.distanceTraveled += distance
+        logged_account.distanceTraveled = distance
         # add tinker window pop
+        if distance < 1:
+            return JsonResponse({'error': "Start walking!"})
+        
         if distance == 1:
             logged_account.points += 10
             logged_account.save()
-            message = "Congratulations! You've reached a distance milestone of 1 mile."
+            return JsonResponse({'onekm':  "Congratulations! You've reached a distance milestone of 1 km."})
 
         if distance == 5:
             logged_account.points += 10
             logged_account.save()
-            message = "Congratulations! You've reached a distance milestone of 1 mile."
+            return JsonResponse({'fivekm':  "Congratulations! You've reached a distance milestone of 5 kms."})
 
         if distance == 10:
             logged_account.distanceTraveled = 0
             logged_account.points += 50
             logged_account.save()
-            message = "Wow! You've reached a distance milestone of 10 and earned 50 bonus points!"
+            return JsonResponse({'tenkm':  "Congratulations! You've reached a distance milestone of 10 kms."})
 
         logged_account.save()
 
@@ -767,11 +771,13 @@ def get_Directions(request):
                     # Number of clues is increased, as a challenge has been completed
                     logged_account.cluesUnlocked += 1
                     logged_account.account_points += 10
+
+
                     
                     logged_account.save()
 
         # Render the map template
-        return render(request, "game/map.html", message)
+        return render(request, "game/map.html")
 
     else:
         # Render the map template
@@ -781,3 +787,16 @@ def get_Directions(request):
 def logout_view(request):
     logout(request)
     return redirect(reverse_lazy('login'))
+
+@csrf_exempt
+def QRCheck(request):
+
+    logged_user =  request.user.username
+    logged_account = Account.objects.get(username = logged_user)
+
+    logged_account.daily_points += 10
+    logged_account.points += 10
+    logged_account.cluesUnlocked += 1
+
+    logged_account.save()
+    return redirect('QR')
