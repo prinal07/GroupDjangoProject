@@ -1,8 +1,12 @@
-sfrom django.test import TestCase
+from django.http import HttpResponse
+from django.test import TestCase
 
 
 import datetime
+import os
+import PIL
 from .models import *
+from .views import *
 from django.contrib.auth.models import User
 
 class AccountTestCase(TestCase):
@@ -16,7 +20,7 @@ class AccountTestCase(TestCase):
     Methods:
         setUp(): Create mock object, for use in the AccountTestCase 
         test_profile_class_type(): Tests type of the profileClass attribute
-        test_accomodation_type(): Tests type of the accomodation attribute
+        test_accommodation_type(): Tests type of the accommodation attribute
         test_email_type(): Tests type of the email attribute
         test_username_type(): Tests type of the username attribute
         test_password_type(): Tests type of the password attribute
@@ -37,8 +41,9 @@ class AccountTestCase(TestCase):
     """
 
     def setUp(self):
-        account = Account(profileClass=1,
-                          accomodation="Accom",
+        challenge = Challenge.objects.create(challengeId = 1)
+        account = Account.objects.create(profileClass=1,
+                          accommodation="Accom",
                           email="ah123@exeter.ac.uk",
                           username="username1",
                           password="password123",
@@ -46,71 +51,165 @@ class AccountTestCase(TestCase):
                           level=1,
                           points=124,
                           daily_points=50,
-                          last_day_accessed=None,
-                          staffCheck=False)
+                          last_day_accessed=date.today(),
+                          last_bin_scanned=datetime.datetime.now(),
+                          last_green_area_accessed=datetime.datetime.now(),
+                          staffCheck=False,
+                          greenCounter=1,
+                          binCounter=4,
+                          walkCounter=2)
+        account.challenges.add(challenge)
 
         self.VALID_EMAIL_DOMAIN = "exeter.ac.uk"
         self.MINIMUM_LEVEL = 1
         self.MINIMUM_POINTS = 0
+        self.MINIMUM_PROFILE_CLASS = 0
+        self.MAXIMUM_PROFILE_CLASS = 2
 
     def test_profile_class_type(self):
-        return isinstance(self.account.profileClass, int)
-
-    def test_accomodation_type(self):
-        return isinstance(self.account.accomodation, str)
+        account = Account.objects.get(username="username1")
+        self.assertTrue(isinstance(account.profileClass, int))
+        
+    def test_accommodation_type(self):
+        account = Account.objects.get(username="username1")
+        self.assertTrue(isinstance(account.accommodation, str))
 
     def test_email_type(self):
-        return isinstance(self.account.email, str)
+        account = Account.objects.get(username="username1")
+        self.assertTrue(isinstance(account.email, str))
 
     def test_username_type(self):
-        return isinstance(self.account.username, str)
+        account = Account.objects.get(username="username1")
+        self.assertTrue(isinstance(account.username, str))
 
     def test_password_type(self):
-        return isinstance(self.account.password, str)
+        account = Account.objects.get(username="username1")
+        self.assertTrue(isinstance(account.password, str))
 
     def test_group_type(self):
-        return isinstance(self.account.group, int)
+        account = Account.objects.get(username="username1")
+        self.assertTrue(isinstance(account.group, int))
 
     def test_level_type(self):
-        return isinstance(self.account.level, int)
+        account = Account.objects.get(username="username1")
+        self.assertTrue(isinstance(account.level, int))
 
     def test_points_type(self):
-        return isinstance(self.account.points, int)
+        account = Account.objects.get(username="username1")
+        self.assertTrue(isinstance(account.points, int))
 
     def test_daily_points_type(self):
-        return isinstance(self.account.daily_points, int)
+        account = Account.objects.get(username="username1")
+        self.assertTrue(isinstance(account.daily_points, int))
 
     def test_last_day_type(self):
-        return isinstance(self.account.last_day_accessed, datetime.Datetime)
+        account = Account.objects.get(username="username1")
+        self.assertTrue(isinstance(account.last_day_accessed, datetime.date))
+
+    def test_last_bin_scan_time(self):
+        account = Account.objects.get(username="username1")
+        self.assertTrue(isinstance(account.last_bin_scanned, datetime.datetime))
+        self.assertTrue(account.last_bin_scanned <= datetime.datetime.now())
+        
+    def test_last_green_area_time(self):
+        account = Account.objects.get(username="username1")
+        self.assertTrue(isinstance(account.last_green_area_accessed, datetime.datetime))
+        self.assertTrue(account.last_bin_scanned <= datetime.datetime.now())
 
     def test_staff_type(self):
-        return isinstance(self.account.staffCheck, bool)
+        account = Account.objects.get(username="username1")
+        self.assertTrue(isinstance(account.staffCheck, bool))
 
     def test_profileClass_range(self):
-        if self.account.profileClass < 0:
-            return False
-        elif self.account.profileClass > 2:
-            return False
-        else:
-            return True
+        account = Account.objects.get(username="username1")
+        self.assertTrue(isinstance(account.profileClass, int))
+        self.assertTrue(account.profileClass >= self.MINIMUM_PROFILE_CLASS)
+        self.assertTrue(account.profileClass <= self.MAXIMUM_PROFILE_CLASS)
     
     def test_exeter_email(self):
-        return self.account.email.split("@")[1] == self.VALID_EMAIL_DOMAIN
+        account = Account.objects.get(username="username1")
+        self.assertTrue(isinstance(account.email, str))
+        self.assertEquals(account.email.split("@")[1], self.VALID_EMAIL_DOMAIN)
 
     def test_level_minimum(self):
-        return self.account.level >= self.MINIMUM_LEVEL
+        account = Account.objects.get(username="username1")
+        self.assertTrue(account.level >= self.MINIMUM_LEVEL)
     
     def test_points_minimum(self):
-        return self.account.points > self.MINIMUM_POINTS
+        account = Account.objects.get(username="username1")
+        self.assertTrue(account.points >= self.MINIMUM_POINTS)
 
     def test_daily_points_minimum(self):
-        return self.account.daily_points > self.MINIMUM_POINTS
+        account = Account.objects.get(username="username1")
+        self.assertTrue(account.daily_points > self.MINIMUM_POINTS)
 
     def test_last_day_future(self):
-        return self.account.last_day_accessed > datetime.now()
+        account = Account.objects.get(username="username1")
+        self.assertTrue(account.last_day_accessed <= datetime.date.today())
 
     def test_staffCheck_null(self):
-        return staffCheck != None
+        account = Account.objects.get(username="username1")
+        self.assertTrue(isinstance(account.staffCheck, bool))
+        self.assertIsNot(account.staffCheck, None)
+    
+    def test_challenges(self):
+        pass
+    
+    def test_green_counter(self):
+        account = Account.objects.get(username="username1")
+        self.assertTrue(isinstance(account.greenCounter, int))
+        self.assertTrue(account.greenCounter >= 0)
+    
+    def test_bin_counter(self):
+        account = Account.objects.get(username="username1")
+        self.assertTrue(isinstance(account.binCounter, int))
+        self.assertTrue(account.binCounter >= 0)
+    
+    def test_walk_counter(self):
+        account = Account.objects.get(username="username1")
+        self.assertTrue(isinstance(account.walkCounter, int))
+        self.assertTrue(account.walkCounter >= 0)
+        
+    def test_start_latitude(self):
+        account = Account.objects.get(username="username1")
+        self.assertTrue(isinstance(account.startingLat, float))
+        self.assertTrue(account.startingLat >= -90.0)
+        self.assertTrue(account.startingLat <= 90.0)
+        
+    def test_start_longitude(self):
+        account = Account.objects.get(username="username1")
+        self.assertTrue(isinstance(account.startingLng, float))
+        self.assertTrue(account.startingLng >= -180.0)
+        self.assertTrue(account.startingLng <= 180.0)
+        
+    def test_distance_travelled(self):
+        account = Account.objects.get(username="username1")
+        self.assertTrue(float(account.distanceTraveled) > 0.0)
+        self.assertTrue(False not in [i in ["0","1","2","3","4","5","6","7","8","9","."] for i in account.distanceTraveled])
+    
+    def test_game_complete(self):
+        account = Account.objects.get(username="username1")
+        self.assertTrue(isinstance(account.gameCompleted, int))
+        self.assertTrue(account.gameCompleted >= 0)
+        
+    def test_clues(self):
+        account = Account.objects.get(username="username1")
+        self.assertTrue(isinstance(account.cluesUnlocked, int))
+        self.assertTrue(account.cluesUnlocked >= 0)
+        
+    def test_riddle_done(self):
+        account = Account.objects.get(username="username1")
+        self.assertTrue(isinstance(account.riddleDone, bool))
+        self.assertTrue(account.riddleDone != None)
+    
+    def test_riddle_status(self):
+        account = Account.objects.get(username="username1")
+        self.assertTrue(isinstance(account.riddle_message_status, str))
+        self.assertTrue(len(account.riddle_message_status) <= 100)
+    
+    def string_representation_test(self):
+        account = Account.objects.get(username="usernamae1")
+        self.assertEqual(str(account), account.username)
     
 class ProfileTestCase(TestCase):
     """Profile Model Test Harness
@@ -125,21 +224,61 @@ class ProfileTestCase(TestCase):
         test_user_in_database(): Tests if Profile User is in the Users database
     """
     def setUp(self):
-        if len(User.objects.all()) != 0:
-            profile = Profile(user=User.objects.all()[0],
-                              image=open("../media/default.jpg")
-        else:
-            user = User()
-            profile = Profile(user=user,
-                              image=open("../media/default.jpg")
-    def test_user_key_type():
-        return isinstance(self.profile.user, User)
+        #img_path = os.getcwd()
+        #img_path += "\\media\\default.jpg"
 
-    def test_image_type():
-        return isinstnace(self.profile.image, file)
+        #mock_user = User.objects.create(username="username1")
+        #self.profile = Profile.objects.create()
+        #self.profile.user = mock_user
 
-    def test_user_in_database():
-        if self.profile.user == User():
-            return True
-                              
-        return self.profile.user in User.objects.all():
+    def test_user_key_type(self):
+        #self.assertTrue(isinstance(self.profile.user, User))
+
+    def test_user_in_database(self):
+        #self.assertTrue(self.profile.user in User.objects.all())
+
+    def string_representation_test(self):
+        #self.assertEqual(str(self.profile.user), f"{self.profile.user.username} Profile")
+        
+class ChallengeTrackerTestCase(TestCase):
+    def setUp(self):
+        pass
+    
+    def test_tracker_account_type(self):
+        pass
+    
+    def test_tracker_challenge_type(self):
+        pass
+    
+    def test_tracker_completed_type(self):
+        pass
+    
+    def string_representation_test(self):
+        pass
+    
+    def completedTest(self):
+        pass
+    
+class WebResponseTestCase(TestCase):
+    def setUp(self):
+        account = Account.objects.create(profileClass=1,
+                    accommodation="Accom",
+                    email="ah123@exeter.ac.uk",
+                    username="username1",
+                    password="password123",
+                    group=1,
+                    level=1,
+                    points=124,
+                    daily_points=50,
+                    last_day_accessed=date.today(),
+                    last_bin_scanned=datetime.datetime.now(),
+                    last_green_area_accessed=datetime.datetime.now(),
+                    staffCheck=False,
+                    greenCounter=1,
+                    binCounter=4,
+                    walkCounter=2)
+        
+    def test_register_page(self):
+        page = self.client.get('register/')
+        self.assertTrue(isinstance(page, HttpResponse))
+        

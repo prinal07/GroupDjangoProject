@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 
 import math
 from django.db import models
@@ -37,11 +37,25 @@ class Account(models.Model):
     points = models.IntegerField(default=0)
     daily_points = models.IntegerField(default=0)
     last_day_accessed = models.DateField(default=date.today)
+    last_green_area_accessed = models.DateTimeField(default='')
+    last_bin_scanned = models.DateTimeField(default='')
     staffCheck = models.BooleanField(default=False)
     challenges = models.ManyToManyField(Challenge, related_name='accounts')
     greenCounter = models.IntegerField(default=0)
     binCounter = models.IntegerField(default=0)
     walkCounter = models.IntegerField(default=0)
+    startingLat = models.CharField(default='', max_length=100)
+    startingLng = models.CharField(default='', max_length=100)
+    finalLat = models.CharField(default='', max_length=100)
+    finalLng = models.CharField(default='', max_length=100)
+    distanceTraveled = models.CharField(default='', max_length=100)
+    # game Completed check to determine if user has completed game
+    gameCompleted = models.BooleanField(default=False)
+    storiesCompleted = models.IntegerField(default=0)
+    # number of clues unlocked to be able to use for Unity interface
+    cluesUnlocked = models.IntegerField(default=0)
+    riddleDone = models.BooleanField(default=False)
+    riddle_message_status = models.CharField(default="", max_length=100)
 
     def current_level(self):
         """Returns the level of an individual account

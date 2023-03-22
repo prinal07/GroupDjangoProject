@@ -1,7 +1,8 @@
 from django.contrib import admin
-from game.models import Fact, Bin, Story, Suspect, Challenge
+from game.models import Fact, Bin, Story, Suspect, Riddle
 
 admin.site.register(Fact)
+admin.site.register(Riddle)
 
 class BinAdmin(admin.ModelAdmin):
     """Model detailing the configuration of the Django Admin page
