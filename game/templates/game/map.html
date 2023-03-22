@@ -14,7 +14,6 @@
         <script src="https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.js"></script>
         <script>
             var bin_info = JSON.parse('{{bin_info}}');
-            var message = JSON.parse('{{ message }}');
 
         </script>
         <style>
@@ -379,10 +378,10 @@
                         document.getElementById('green-message').innerHTML = data["within_area"];
                     } else if (data["too_soon"]) {
                         console.log("user in area too soon");
-                        document.getElementById('green-message').innerHTML = data["within_area"];
+                        document.getElementById('green-message').innerHTML = data["too_soon"];
                     } else if (data["not_in_area"]) {
                         console.log("user NOT in area");
-                        document.getElementById('green-message').innerHTML = data["within_area"];
+                        document.getElementById('green-message').innerHTML = data["not_in_area"];
                     } else {
                         document.getElementById('green-message').innerHTML = "";
                     }

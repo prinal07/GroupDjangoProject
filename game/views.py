@@ -1,10 +1,11 @@
-from datetime import date, time, datetime
+from datetime import date
 import math
 from math import radians
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect
 from django.db.models import Sum
 from django.contrib import messages
+from django.utils import timezone
 from game.models import Story, Suspect, Riddle
 import requests
 from django.http import HttpResponse, JsonResponse
@@ -450,13 +451,13 @@ def map(request):
 
         if boolean_point_in_polygon(point, polygon):
             if logged_user.last_green_area_accessed == None:
-                logged_user.last_green_area_accessed = datetime.now()
+                logged_user.last_green_area_accessed = timezone.now()
 
-            print("")
-            # time_difference = datetime.now() - logged_user.last_green_area_accessed
-            if True:
+            time_difference = timezone.now() - logged_user.last_green_area_accessed
+            if time_difference.seconds > 300:
                 # Increase counter
                 logged_user.greenCounter += 1
+                logged_user.last_green_area_accessed = timezone.now()
 
                 # Add points
                 logged_user.points += 10
@@ -542,14 +543,14 @@ def update_points(request):
 
     if request.method == 'POST' and 'update_points' in request.POST:
         if logged_user.last_bin_scanned == None:
-            logged_user.last_bin_scanned = datetime.now()
-        
-        time_difference = datetime.now() - logged_user.last_bin_scanned
+            logged_user.last_bin_scanned = timezone.now()
+
+        time_difference = timezone.now() - logged_user.last_bin_scanned
 
         if time_difference.seconds > 300:
             # Bin counter of the user is incremented
             logged_user.binCounter += 1
-            logged_user.last_bin_scanned = datetime.now()
+            logged_user.last_bin_scanned = timezone.now()
 
             logged_user.cluesUnlocked += 1
             logged_user.points += 10
