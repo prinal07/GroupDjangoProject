@@ -5,11 +5,11 @@
 function sidebarToggle() {
     var sidebar = document.querySelector("#sidebar");
     var container = document.querySelector(".sidenav-container");
-    if (sidebar.classList.contains('active-nav')) {
-        sidebar.classList.remove('active-nav');
+    if (sidebar.classList.contains('active-sidebar')) {
+        sidebar.classList.remove('active-sidebar');
         container.classList.remove('active-cont');
     } else {
-        sidebar.classList.add('active-nav');
+        sidebar.classList.add('active-sidebar');
         container.classList.add('active-cont');
     }
 
