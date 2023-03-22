@@ -75,3 +75,5 @@ def register(request):
         # Create a blank form instance for rendering the registration page.
         form = UserRegistrationForm()
     return render(request, 'users/register.html', {'form': form})
+
+    

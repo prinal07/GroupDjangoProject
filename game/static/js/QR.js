@@ -26,6 +26,7 @@ function success(result) {
     for (i = 0; i < Bins.length; i++) {
         if (result.includes(Bins[i])) {
             qrChecker = true;
+
             document.getElementById('result').innerHTML = `
             <style> 
                 .btn {

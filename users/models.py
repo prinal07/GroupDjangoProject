@@ -36,7 +36,7 @@ class Account(models.Model):
     level = models.IntegerField(default=1)
     points = models.IntegerField(default=0)
     daily_points = models.IntegerField(default=0)
-    last_day_accessed = models.DateField(default=date.today())
+    last_day_accessed = models.DateField(default=date.today)
     last_green_area_accessed = models.DateTimeField(default=datetime.now())
     last_bin_scanned = models.DateTimeField(default=datetime.now())
     staffCheck = models.BooleanField(default=False)
