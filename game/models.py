@@ -1,6 +1,9 @@
+from datetime import datetime
 
 from django.db import models
 from django.core.validators import RegexValidator
+from django.utils import timezone
+
 
 class Challenge(models.Model):
     challengeId = models.IntegerField(default=1)
@@ -10,10 +13,11 @@ class Challenge(models.Model):
         ('Green Areas', 'Green Areas'),
         ('Walking', 'Walking')
     )
-    challengeType = models.TextField(choices=CHALLENGE_TYPES, default='')             
+    challengeType = models.TextField(choices=CHALLENGE_TYPES, default='')
 
     def __str__(self):
         return self.challengeDesc
+
 
 class Fact(models.Model):
     """Fact model used to store the fact of the day.
@@ -36,6 +40,7 @@ class Fact(models.Model):
             string: Formatted string using attributes from the model to show information "(date, fact)"
         """
         return f"{self.date} - {self.fact}"
+
 
 class Bin(models.Model):
     """Bin model to store information to be presented on the map at <url>/game/map/
@@ -62,6 +67,7 @@ class Bin(models.Model):
         """
         return f'{self.latitude}, {self.longitude}'
 
+
 class Suspect(models.Model):
     """Suspect model, to store information to be used in the Mystery minigame at <url>/game/unity
     Stores a Foreign Key to a Story object, an ID Number, a name, and a brief
@@ -73,12 +79,12 @@ class Suspect(models.Model):
         class Meta: Defines metadata to be used in the Django Admin site regarding this model
         save(): Increments the pk of the temporary model before committing to the database
     """
-    
+
     # Refers to a Story record in the Database
     story = models.ForeignKey('Story', on_delete=models.CASCADE, related_name='suspects', default=0)
     number = models.IntegerField(default=1)
     name = models.TextField(max_length=30, default="")
-    brief = models.TextField(max_length=500, default="")
+    brief = models.TextField(max_length=112, default="")
 
     class Meta:
         """Django admin metadata class
@@ -97,7 +103,7 @@ class Suspect(models.Model):
 
     def getDescription(self):
         return self.brief
-    
+
 
 class Story(models.Model):
     """Story model to be passed into the Mystery game at <url>/game/unity/
@@ -115,10 +121,10 @@ class Story(models.Model):
         getSpriteCodes(): Get the string of sprite_codes "12345" style
         getAllClues(): Get all clues currently created in the Story
     """
-    
+
     # Constant to limit expansion of the model contents
     MAX_SUSPECTS = 5
-    
+
     # Identification number to retrieve models by
     story_number = models.IntegerField(default=1)
 
@@ -134,23 +140,23 @@ class Story(models.Model):
     # In the unity project, a C# Function title SetSuspectSprites correlates each index to a sprite object
     sprite_codes = [sprite_1, sprite_2, sprite_3, sprite_4, sprite_5]
 
-    clue1 = models.TextField(max_length=1000, default="")
-    clue2 = models.TextField(max_length=1000, default="")
-    clue3 = models.TextField(max_length=1000, default="")
-    clue4 = models.TextField(max_length=1000, default="")
-    clue5 = models.TextField(max_length=1000, default="")
-    clue6 = models.TextField(max_length=1000, default="")
-    clue7 = models.TextField(max_length=1000, default="")
-    clue8 = models.TextField(max_length=1000, default="")
-    clue9 = models.TextField(max_length=1000, default="")
-    clue10 = models.TextField(max_length=1000, default="")
-    
+    clue1 = models.TextField(max_length=160, default="")
+    clue2 = models.TextField(max_length=160, default="")
+    clue3 = models.TextField(max_length=160, default="")
+    clue4 = models.TextField(max_length=160, default="")
+    clue5 = models.TextField(max_length=160, default="")
+    clue6 = models.TextField(max_length=160, default="")
+    clue7 = models.TextField(max_length=160, default="")
+    clue8 = models.TextField(max_length=160, default="")
+    clue9 = models.TextField(max_length=160, default="")
+    clue10 = models.TextField(max_length=160, default="")
+
     # Collects the clues to a list, to be sent to the Unity file as context
     clues = [clue1, clue2, clue3, clue4, clue5, clue6, clue7, clue8, clue9, clue10]
-    
+
     # Assigns the culprit to an index of the five available characters
-    culprit = models.CharField(max_length=1, validators=[RegexValidator(r'^[0-4]$')])
-    
+    culprit = models.CharField(max_length=1, validators=[RegexValidator(r'^[1-5]$')])
+
     def can_add_suspect(self):
         """Check to determine if the maximum number of suspects has been reached
 
@@ -165,8 +171,8 @@ class Story(models.Model):
         Returns:
             string: Formatted string, displaying the Story ID Number
         """
-        return f'Story {self.story_number}'    
-    
+        return f'Story {self.story_number}'
+
     def get_suspects(self):
         """Function to return the models of the attached Suspects to an individual Story object
 
@@ -206,4 +212,24 @@ class Story(models.Model):
             [string]: List of clue descriptions, for use in the Unity Game 
         """
         return self.clues
+
+
+class Riddle(models.Model):
+    """Riddle model to store important information about riddles """
+    date = models.DateField(default=timezone.now)
+    question = models.CharField(max_length=255, default="Question")
+    answer1 = models.CharField(max_length=255, default="Answer 1")
+    answer2 = models.CharField(max_length=255, default="Answer 2")
+    answer3 = models.CharField(max_length=255, default="Answer 3")
+    answer4 = models.CharField(max_length=255, default="Answer 4")
+    correct_answer = models.CharField(max_length=255, default="Correct Answer")
+    done = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.question
+
+    def status(self):
+        """Finds status of riddle object
+        Returns: status of riddle"""
+        return self.done
 
