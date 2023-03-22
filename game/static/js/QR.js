@@ -1,4 +1,3 @@
-let qrChecker = false;
 const scanner = new Html5QrcodeScanner('reader', {
     // Scanner will be initialized in DOM inside element with id of 'reader'
     qrbox: {
@@ -22,33 +21,53 @@ const Bins = ['qjdkiivbbunmue625ljyjy04w941jy',
     '2btu7id05cxlqzpjusofaihs1gkd4q']
 
 function success(result) {
-    //console.log(result);
     for (i = 0; i < Bins.length; i++) {
         if (result.includes(Bins[i])) {
-            qrChecker = true;
+           
 
-            document.getElementById('result').innerHTML = `
-            <style> 
-                .btn {
-                    display: inline-block;
-                    margin-top: 30px;
-                    padding: 10px 20px;
-                    font-size: 1.2rem;
-                    font-weight: bold;
-                    text-transform: uppercase;
-                    color: #fff;
-                    background-color: #333;
-                    border: none;
-                    border-radius: 5px;
-                    cursor: pointer;
-                    transition: background-color 0.3s ease;
-                    position: absolute;
-                    bottom: 550px;
-                    left: 60%;
-                    transform: translateX(-50%);
-                }
-            </style>`
+            console.log("Successful Scan!")
+            // $.ajax({
+            //     type: "POST",
+            //     url: "./Receiver",
+            //     data: {
+            //         'success': 
+                   
+            //     },
+            //     success: function(data) {
+            //         console.log("Data sent successfully");
+            //     },
+            //     error: function(xhr, status, error) {
+            //         console.log("Error sending data: " + error);
+            //     }
+            // });
+            
+            
+            
+            
+            
+            // <style> 
+            //     .btn {
+            //         display: inline-block;
+            //         margin-top: 30px;
+            //         padding: 10px 20px;
+            //         font-size: 1.2rem;
+            //         font-weight: bold;
+            //         text-transform: uppercase;
+            //         color: #fff;
+            //         background-color: #333;
+            //         border: none;
+            //         border-radius: 5px;
+            //         cursor: pointer;
+            //         transition: background-color 0.3s ease;
+            //         position: absolute;
+            //         bottom: 550px;
+            //         left: 60%;
+            //         transform: translateX(-50%);
+            //     }
+            // </style>
+            console.log("Successful scan")
             break;
+
         }
     }
 
