@@ -114,7 +114,7 @@ body {
   max-width: 800px;
 }
 
-#navsss {
+#sidenav {
   z-index: 9999;
   position: fixed;
 }

@@ -26,6 +26,7 @@
 
 <body>
 <!-- Side-Nav -->
+<div id="sidenav">
 
   <div class="side-navbar d-flex justify-content-between flex-wrap flex-column" id="sidebar">
     <ul class="nav flex-column text-white w-100">
@@ -54,14 +55,16 @@
         <a href="{% url 'logout' %}" class="mx-2"><i class="bx bxs-log-out"></i> Logout</a>
       </ul>
     </div>
-        
+    
+    
+    
     <!-- Toggle Side nav btn -->
     <div class="p-1 sidenav-container"> <!-- btn -->
       <nav class="navbar top-navbar navbar-light px-5" style="padding-top:0;">
         <a class="btn border-0" id="menu-btn" onclick="sidebarToggle()"><i class="bx bx-menu"></i></a>
       </nav>
     </div>
-
+  </div>
     <!--End Side  Nav -->
     {% block content %}
     {% endblock %}
