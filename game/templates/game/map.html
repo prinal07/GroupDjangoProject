@@ -375,15 +375,12 @@
                 success: function (data) {
                     if (data["within_area"]) {
                         console.log("user in area");
-                        document.getElementById('green-message').innerHTML = data["within_area"];
+                        window.alert(data["within_area"]);
                     } else if (data["too_soon"]) {
                         console.log("user in area too soon");
-                        document.getElementById('green-message').innerHTML = data["too_soon"];
-                    } else if (data["not_in_area"]) {
-                        console.log("user NOT in area");
-                        document.getElementById('green-message').innerHTML = data["not_in_area"];
+                        window.alert(data["too_soon"]);
                     } else {
-                        document.getElementById('green-message').innerHTML = "";
+                        console.log("User not within area at this time");
                     }
                 },
                 error: function (xhr, status, error) {
@@ -580,8 +577,8 @@
 
     {% if message %}
         <script>
-            document.getElementById('green-message').innerHTML = message;
-            console.log(message);
+            {#document.getElementById('green-message').innerHTML = message;#}
+            {#console.log(message);#}
         </script>
     {% endif %}
 
