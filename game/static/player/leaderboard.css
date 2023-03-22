@@ -1,7 +1,9 @@
 /* CSS file for leaderboard tables */
 
+
 /* Style for the user leaderboard table */
-#user_leaderboard {
+
+#leaderboard {
     border-collapse: collapse;
     width: 100%;
     max-width: 800px;
@@ -9,36 +11,28 @@
     margin-bottom: 40px;
 }
 
-#user_leaderboard th,
-#user_leaderboard td {
+#leaderboard th,
+#leaderboard td {
+    margin: 0 0;
     padding: 8px;
     text-align: left;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1.5px solid #727272;
 }
 
-#user_leaderboard th {
-    background-color: #f2f2f2;
+#leaderoard tr {
+    border-bottom: black;
+    
 }
 
-/* Style for the accommodation leaderboard table */
-#accommodation_leaderboard {
-    border-collapse: collapse;
-    width: 100%;
-    max-width: 800px;
-    margin: 0 auto;
+#leaderboard td {
+    background-color: rgb(206, 203, 203);
+    color:black
 }
 
-#accommodation_leaderboard th,
-#accommodation_leaderboard td {
-    padding: 8px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
+#leaderboard th {
+    background-color: #085611;
+    color:white
 }
-
-#accommodation_leaderboard th {
-    background-color: #f2f2f2;
-}
-
 .leaderboard-title {
     text-align: center;
     font-size: 24px;

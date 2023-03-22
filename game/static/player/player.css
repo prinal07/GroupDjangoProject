@@ -1,7 +1,13 @@
 body {
-  font-family: Arial, sans-serif;
+  font-family: Raleway;
   font-size: 16px;
   padding: 0px 20px;  
+  background-image: url(woodbackground.jpg);
+  background-size: 100vw 200vh;
+  background-repeat: no-repeat;
+  background-color: #2d2c2c;
+  color: #ffffff;
+  height: 100%;
 }
 
 .main {
@@ -41,7 +47,7 @@ body {
   height: 100%;
   position: fixed;
   margin-left: -300px;
-  background-color: black;
+  background-color: #0c3010;
   transition: 0.5s;
 }
 
@@ -76,7 +82,7 @@ body {
 }
 
 #menu-btn {
-  background-color: black;
+  background-color: #0c3010;
   color: #fff;
   margin-left: -62px;
   margin-top: 30px;
@@ -84,23 +90,6 @@ body {
 }
 
 /* pages */
-.overview {
-  width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  padding: 3px 0;
-  background-color: #dedede;
-}
-
-.fact-of-the-day {
-  filter: blur(5px);
-  margin: 0 auto;
-  text-align: center;
-}
-
-#fotd-container {
-  text-align: center;
-}
 
 @import "compass/css3";
 

@@ -1,4 +1,3 @@
-
 /**
  * Toggle the side navbar
  */
@@ -16,8 +15,7 @@ function sidebarToggle() {
 }
 
 // Updating page title depending on active page
-let activeHref = window.location.href;
-url = activeHref.split('/').filter(Boolean).pop();
+url = window.location.href.split('/').filter(Boolean).pop();
 
 /**
  * Capitalizes the first letter of a string

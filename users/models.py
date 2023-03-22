@@ -48,7 +48,7 @@ class Account(models.Model):
     startingLng = models.CharField(default='', max_length=100)
     finalLat = models.CharField(default='', max_length=100)
     finalLng = models.CharField(default='', max_length=100)
-    distanceTraveled = models.CharField(default='', max_length=100)
+    distanceTraveled = models.CharField(default=0, max_length=100)
     # game Completed check to determine if user has completed game
     gameCompleted = models.BooleanField(default=False)
     storiesCompleted = models.IntegerField(default=0)
