@@ -1,4 +1,4 @@
-from datetime import date, time, datetime
+from datetime import date
 import math
 import re
 from math import radians
@@ -6,6 +6,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect
 from django.db.models import Sum
 from django.contrib import messages
+from django.utils import timezone
+from game.models import Story, Suspect, Riddle
 from .models import Story, Suspect, Riddle, Bin, Fact
 from users.models import Account
 import requests
@@ -364,66 +366,8 @@ def profile(request):
 
 @login_required
 def map(request):
-    message = ""
-
-    logged_username = request.user.username
-    logged_user = Account.objects.get(username=logged_username)
-
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        lat = data.get("lat")
-        lon = data.get("lon")
-        print(data)
-
-        print(lat, lon)
-
-        point = Feature(geometry=Point([lat, lon]))
-        polygon = Feature(geometry=MultiPolygon(
-            [([(50.7393587, -3.54012113), (50.7381304, -3.5382954), (50.7394105, -3.537208)],),
-             (
-                 [(50.7418840, -3.5341631), (50.7403587, -3.5335790), (50.7410841, -3.5312515),
-                  (50.7422746, -3.5324632)],),
-             (
-                 [(50.7364445, -3.5293083), (50.7358839, -3.5291410), (50.7360017, -3.5298109),
-                  (50.7363348, -3.5299208)],),
-             (
-                 [(50.7287101, -3.5374679), (50.7280259, -3.5364497), (50.7280361, -3.5353282),
-                  (50.7289626, -3.5356284)],),
-             ([(50.7341617, -3.5319415), (50.7340736, -3.5314349), (50.7332753, -3.5324445),
-               (50.7330960, -3.5319436)],),
-             ([(50.7359873845501, -3.532288932448523), (50.73694531506939, -3.5334667225815792),
-               (50.736653497251154, -3.5340531117119554)],)
-
-             ]))
-        # ([(lat + 1, lon + 1), (lat - 1, lon - 1), (lat - 1, lon + 1), (lat + 1, lon - 1)],),
-
-        print(boolean_point_in_polygon(point, polygon))
-
-        if boolean_point_in_polygon(point, polygon):
-            if logged_user.last_green_area_accessed == "":
-                logged_user.last_green_area_accessed = datetime.now()
-
-            time_difference = datetime.now() - logged_user.last_green_area_accessed
-            if time_difference.seconds > 300:
-                # Increase counter
-                logged_user.greenCounter += 1
-
-                # Updates the time if it has been 5 minutes
-                logged_user.last_green_area_accessed = datetime.now()
-
-                # Add points
-                logged_user.points += 10
-                logged_user.save()
-
-                create_popup("YOU HAVE ENTERED A GREEN AREA")
-                message = {'message': 'You have entered green area! 10 points awarded'}
-                return JsonResponse(message)
-            else:
-                message = {'message': f"You won't get rewarded right now. Try again in {str(time_difference)}"}
-
-    bins = Bin.objects.all()
     """Supplies coordinates of bins to the mapbxo representation in <url>/game/map/
-    
+
     Args:
         request (_type_): _description_
 
@@ -431,6 +375,106 @@ def map(request):
         HttpResponse: Serves ./templates/map.html due to Django's file structure
         Passes a JSON structure as context, holding a 2D Array of Bin Lat/Lon Coordinates and ID Number
     """
+    message = ""
+
+    print(request.method)
+
+    logged_username = request.user.username
+    logged_user = Account.objects.get(username=logged_username)
+
+    if request.method == 'POST':
+        lat = float(request.POST.get("lat"))
+        lon = float(request.POST.get("lon"))
+
+        print(lat, lon)
+
+        point = Feature(geometry=Point([lat, lon]))
+        polygon = Feature(geometry=MultiPolygon(
+            [(
+                [
+                    (50.7393587, -3.54012113),
+                    (50.7381304, -3.5382954),
+                    (50.7394105, -3.537208),
+                ],
+            ),
+                (
+                    [
+                        (50.7418840, -3.5341631),
+                        (50.7403587, -3.5335790),
+                        (50.7410841, -3.5312515),
+                        (50.7422746, -3.5324632),
+                    ],
+                ),
+                (
+                    [
+                        (50.7364445, -3.5293083),
+                        (50.7358839, -3.5291410),
+                        (50.7360017, -3.5298109),
+                        (50.7363348, -3.5299208),
+                    ],
+                ),
+                (
+                    [
+                        (50.7287101, -3.5374679),
+                        (50.7280259, -3.5364497),
+                        (50.7280361, -3.5353282),
+                        (50.7289626, -3.5356284),
+                    ],
+                ),
+                (
+                    [
+                        (50.7341617, -3.5319415),
+                        (50.7340736, -3.5314349),
+                        (50.7332753, -3.5324445),
+                        (50.7330960, -3.5319436),
+                    ],
+                ),
+                (
+                    [
+                        (50.7359873845501, -3.532288932448523),
+                        (50.73694531506939, -3.5334667225815792),
+                        (50.736653497251154, -3.5340531117119554),
+                    ],
+                ),
+                (
+                    [
+                        (lat + 1.0, lon + 1.0),
+                        (lat - 1.0, lon - 1.0),
+                        (lat - 1.0, lon + 1.0),
+                        (lat + 1.0, lon - 1.0),
+                    ],
+                )
+
+            ]))
+        # ([(lat + 1, lon + 1), (lat - 1, lon - 1), (lat - 1, lon + 1), (lat + 1, lon - 1)],),
+
+        print(boolean_point_in_polygon(point, polygon))
+
+        if boolean_point_in_polygon(point, polygon):
+            if logged_user.last_green_area_accessed == None:
+                logged_user.last_green_area_accessed = timezone.now()
+
+            time_difference = timezone.now() - logged_user.last_green_area_accessed
+            if time_difference.seconds > 300:
+                # Increase counter
+                logged_user.greenCounter += 1
+                logged_user.last_green_area_accessed = timezone.now()
+
+                # Updates the time if it has been 5 minutes
+                logged_user.last_green_area_accessed = datetime.now()
+
+                # Add points
+                logged_user.points += 10
+                logged_user.daily_points += 10
+                logged_user.save()
+
+                return JsonResponse({'within_area': "You have been rewarded!"})
+            else:
+                return JsonResponse({'too_soon': f"You can't be rewarded at this time. Come back later."})
+        else:
+            return JsonResponse({'not_in_area': "NOT IN AN AREA"})
+
+    print(message)
 
     # Collect all Bin records from the Database Table
     bins = Bin.objects.all()
@@ -503,14 +547,14 @@ def update_points(request):
 
     if request.method == 'POST' and 'update_points' in request.POST:
         if logged_user.last_bin_scanned == None:
-            logged_user.last_bin_scanned = datetime.now()
-        
-        time_difference = datetime.now() - logged_user.last_bin_scanned
+            logged_user.last_bin_scanned = timezone.now()
+
+        time_difference = timezone.now() - logged_user.last_bin_scanned
 
         if time_difference.seconds > 300:
             # Bin counter of the user is incremented
             logged_user.binCounter += 1
-            logged_user.last_bin_scanned = datetime.now()
+            logged_user.last_bin_scanned = timezone.now()
 
             logged_user.cluesUnlocked += 1
             logged_user.points += 10
