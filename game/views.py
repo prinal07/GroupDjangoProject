@@ -1,5 +1,6 @@
 from datetime import date
 import math
+import re
 from math import radians
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect
@@ -7,13 +8,16 @@ from django.db.models import Sum
 from django.contrib import messages
 from django.utils import timezone
 from game.models import Story, Suspect, Riddle
+from .models import Story, Suspect, Riddle, Bin, Fact
+from users.models import Account
 import requests
 from django.http import HttpResponse, JsonResponse
-
-from game.forms import UserUpdateForm, ProfileUpdateForm, AccountUpdateForm, DeleteAccountForm
+from django.contrib.auth import logout
+from django.contrib.auth import logout
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
+from .forms import UserUpdateForm, ProfileUpdateForm, AccountUpdateForm, DeleteAccountForm
 from users.models import Account
-from game.models import Bin
-from .models import Fact
 from django.contrib.auth.decorators import login_required
 
 import json
@@ -152,9 +156,6 @@ def home(request):
 
     # Resets the value of last_day_accessed to prevent Daily points resets until tomorrow
     logged_user.last_day_accessed = date.today()
-    logged_user.save()
-
-    logged_user.cluesUnlocked += 1
     logged_user.save()
 
     # get user points
@@ -459,6 +460,9 @@ def map(request):
                 logged_user.greenCounter += 1
                 logged_user.last_green_area_accessed = timezone.now()
 
+                # Updates the time if it has been 5 minutes
+                logged_user.last_green_area_accessed = datetime.now()
+
                 # Add points
                 logged_user.points += 10
                 logged_user.daily_points += 10
@@ -571,6 +575,7 @@ def update_points(request):
 
 
 @login_required
+@csrf_exempt
 def unity(request):
     """Serves the Unity Game at <url>/game/unity>
     Uses the pre-built Unity WebGL html file to load a gameInstance and serve a project to the user
@@ -611,6 +616,7 @@ def unity(request):
         culprit = ""
         clues = []
 
+
         # Ensure that user can always go right to game after completing challenge with updated clue count
         green_checker(request)
         bin_checker(request)
@@ -638,10 +644,10 @@ def unity(request):
         # get information from a stored Story model
         for suspect in suspects:
             description.append(suspect.brief)
-        desc_str = "[SPLIT]".join(description)  # [SPLIT] recognised by the Unity C# Script as the delimiter
-        culprit = story.culprit
-        clues_str = "[SPLIT]".join(clues)
-        sprites = [story.sprite_1, story.sprite_2, story.sprite_3, story.sprite_4, story.sprite_5]
+            desc_str = "[SPLIT]".join(description)  # [SPLIT] recognised by the Unity C# Script as the delimiter
+            culprit = story.culprit
+            clues_str = "[SPLIT]".join(clues)
+            sprites = [story.sprite_1, story.sprite_2, story.sprite_3, story.sprite_4, story.sprite_5]
 
         context = {
             "spriteCodes": sprites,
@@ -650,7 +656,7 @@ def unity(request):
             "clues": clues_str
         }
 
-        return render(request, template_name="game/unity.html", context=context)
+    return render(request, template_name="game/unity.html", context=context)
 
 
 @csrf_exempt
@@ -693,6 +699,8 @@ def get_Directions(request):
     It then saves the distance to the database and returns a rendered template.
     """
     if request.method == 'POST':
+
+
         # Get the username and account object for the logged-in user
         logged_username = request.user.username
         logged_account = Account.objects.get(username=logged_username)
@@ -741,9 +749,38 @@ def get_Directions(request):
 
         logged_account.save()
 
+
+        # Get the challenges list for the logged in user
+        challenges_tracker_list = logged_account.challengetracker_set.filter(completed=False)
+
+        pattern = r'\d+'  # match one or more digits
+
+        # Loop through the challenges and check if any challenge is related to walking
+        for challenge_tracker in challenges_tracker_list:
+            challenge = challenge_tracker.challenge
+            if challenge.challengeType == 'Walking':
+                match = re.search(pattern, challenge.challengeDesc)
+                target = int(match.group())
+
+                if logged_account.distanceTraveled >= target:
+                    # Update the challenge tracker status to completed
+                    challenge_tracker.completed = True
+                    challenge_tracker.save()
+
+                    # Number of clues is increased, as a challenge has been completed
+                    logged_account.cluesUnlocked += 1
+                    logged_account.account_points += 10
+                    
+                    logged_account.save()
+
         # Render the map template
         return render(request, "game/map.html", message)
 
     else:
         # Render the map template
         return render(request, "game/map.html")
+    
+
+def logout_view(request):
+    logout(request)
+    return redirect(reverse_lazy('login'))

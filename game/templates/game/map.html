@@ -12,6 +12,7 @@
         <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet"/>
         <link href="https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.css" rel="stylesheet">
         <script src="https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.js"></script>
+        
         <script>
             var bin_info = JSON.parse('{{bin_info}}');
 
@@ -543,8 +544,8 @@
     <div id='green-message'></div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-        <button id="location-button" , onclick="getLocation()">Get Location</button>
-        <button id="final-location-button", onclick="getFinalLocation()">Get Final Location</button>
+        <button id="location-button" , onclick="getLocation()">Start Exploration</button>
+        <button id="final-location-button", onclick="getFinalLocation()">End Exploration</button>
         <style>
             #location-button {
             position: absolute;
@@ -582,9 +583,11 @@
         </script>
     {% endif %}
 
+    {% load static %}
+    <script src="{% static '/js/map.js' %}"></script>
+    
     </body>
     </html>
-
 
 
 {% endblock content %}

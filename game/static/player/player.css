@@ -1,6 +1,7 @@
 body {
   font-family: Arial, sans-serif;
   font-size: 16px;
+  padding: 20px;  
 }
 
 .main {
@@ -33,6 +34,7 @@ body {
   background-color: #fff;
 }
 
+/* Side navbar */
 .side-navbar {
   width: 250px;
   height: 100%;
@@ -57,17 +59,16 @@ body {
   background-color: rgb(137, 137, 137);
 }
 
-.active-nav {
+.active-sidebar {
   margin-left: 0;
 }
 
-
+/* side navbar button */
 .sidenav-container input {
   border-radius: 2rem;
   padding: 2px 20px;
 }
 
-/* for main section */
 .active-cont {
   margin-left: 250px;
 }
@@ -80,6 +81,7 @@ body {
   position: fixed;
 }
 
+/* pages */
 .overview {
   width: 100%;
   margin: 0 auto;
@@ -113,6 +115,10 @@ body {
   max-width: 800px;
 }
 
+#sidenav {
+  z-index: 9999;
+  position: fixed;
+}
 /*styling of riddle form*/
 
 #riddle-form {
@@ -173,4 +179,3 @@ input[type="submit"] {
 input[type="submit"]:hover {
   background-color: #3e8e41;
 }
-
