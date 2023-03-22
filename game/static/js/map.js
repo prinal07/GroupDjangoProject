@@ -76,17 +76,6 @@ for (const feature of geojson.features) {
         .addTo(map);
 }
 
-// for (var i = 0; i < bin_info.length; i++) {
-//     let lat = parseFloat(bin_info[i][0]);
-//     let lon = parseFloat(bin_info[i][1]);
-
-//     popup = new mapboxgl.Popup({offset: 25}).setText(bin_info[i][2]);
-
-//     marker = new mapboxgl.Marker()
-//         .setLngLat([lon, lat])
-//         .setPopup(popup)
-//         .addTo(map);
-// }
 
 map.on('load', () => {
 // Add a data source containing GeoJSON data.
@@ -309,26 +298,9 @@ geolocate.on('geolocate', function (e) {
             console.log("Error sending data: " + error);
         }
     });
-    /*
-    let xhr = new XMLHttpRequest();
-    xhr.open("POST", "
-    {% url 'map' %}");
-    xhr.setRequestHeader("Accept", "application/json");
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.setRequestHeader("X-CSRFToken", '
-    {{ csrf_token }}')
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4) {
-            console.log(xhr.status);
-            console.log(xhr.response);
-        }
-    };
-    let data = `{"lon": ` + lon + `, "lat":` + lat + `}`;
-    xhr.send(data);
-    console.log("READY STATE" + xhr.readyState);*/
 });
-// add markers to map
 
+// add markers to map
 map.on('load', function () {
     // Add a new GeoJSON source with the geojson object
     map.addSource('markers', {
@@ -363,10 +335,11 @@ map.on('mousemove', (e) => {
 });
 
 
-/* Gets the current geolocation of the user and sends it to the locationParser function.
-* If geolocation is not supported by the browser, displays an error message.
-*/
 
+/**
+ * Gets the current geolocation of the user and sends it to the locationParser function.
+ * If geolocation is not supported by the browser, displays an error message.
+ */
 function getLocation() {
 if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(showPosition);
@@ -376,7 +349,7 @@ if (navigator.geolocation) {
 }
 }
 
-/* Callback function for getCurrentPosition. Extracts the latitude and longitude from the position object,
+/** Callback function for getCurrentPosition. Extracts the latitude and longitude from the position object,
 * and passes them to the locationParser function. Also logs the current location to the console.
 * 
 * @param {Object} position - The position object returned by getCurrentPosition.
@@ -387,10 +360,11 @@ let lng = position.coords.longitude;
 locationParserToReceiver(lat, lng);
 console.log("Latitude: " + position.coords.latitude + ", Longitude: " + position.coords.longitude);
 }
-/* Sends a POST request to the specified URL with the provided latitude and longitude data.
-* 
-* @param {number} latitude - The latitude of the user's current location.
-* @param {number} longitude - The longitude of the user's current location.
+
+/** 
+ * Sends a POST request to the specified URL with the provided latitude and longitude data.
+ * @param {number} latitude - The latitude of the user's current location.
+ * @param {number} longitude - The longitude of the user's current location.
 */
 function locationParserToReceiver(latitude, longitude){
 $.ajax({
@@ -409,8 +383,9 @@ $.ajax({
     }
 });
 }
-/* Requests the user's geolocation and calls showFinalPosition with the position data.
-* If geolocation is not supported by the browser, displays an error message.
+/**
+ * Requests the user's geolocation and calls showFinalPosition with the position data.
+ * If geolocation is not supported by the browser, displays an error message.
 */
 function getFinalLocation() {
 if (navigator.geolocation) {
@@ -420,18 +395,19 @@ if (navigator.geolocation) {
     console.log("Geolocation is not supported by this browser.");
 }
 } 
-/* Parses the user's position data to retrieve latitude and longitude,
+
+/** Parses the user's position data to retrieve latitude and longitude,
 * and calls locationParserToget_Directions to retrieve directions based on the user's location.
 * @param {Object} position - the user's position data, obtained from navigator.geolocation.getCurrentPosition
 */
 function showFinalPosition(position) {
-let lat = position.coords.latitude;
-let lng = position.coords.longitude;
-locationParserToget_Directions(lat, lng);
-console.log("Latitude: " + position.coords.latitude + ", Longitude: " + position.coords.longitude);
+    let lat = position.coords.latitude;
+    let lng = position.coords.longitude;
+    locationParserToget_Directions(lat, lng);
+    console.log("Latitude: " + position.coords.latitude + ", Longitude: " + position.coords.longitude);
 }
 
-/* Sends an AJAX request to retrieve directions based on the user's location.
+/** Sends an AJAX request to retrieve directions based on the user's location.
 * @param {number} latitude - the user's latitude
 * @param {number} longitude - the user's longitude
 */

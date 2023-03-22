@@ -2,128 +2,38 @@
 
 
 {% block content %}
+{% load static %}
 
     <html>
     <head>
-        <meta charset="utf-8">
-        <title>Add a default marker to a web map</title>
-        <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
-
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet"/>
         <link href="https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.css" rel="stylesheet">
         <script src="https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.js"></script>
+        <link rel="stylesheet" href="{% static '/player/map.css' %}">
+        
         
         <script>
             var bin_info = JSON.parse('{{bin_info}}');
 
         </script>
-        <style>
-            body {
-                margin: 0;
-                padding: 0;
-            }
 
-            #map {
-                position: absolute;
-                margin: 40px;
-                top: 0;
-                bottom: 0;
-                width: 80%;
-            }
-
-            .marker {
-                background-image: url('../../static/bin.png');
-                background-size: cover;
-                width: 50px;
-                height: 50px;
-                border-radius: 50%;
-                cursor: pointer;
-            }
-
-            .mapboxgl-popup {
-                max-width: 200px;
-            }
-
-            .mapboxgl-popup-content {
-                text-align: center;
-                font-family: 'Open Sans', sans-serif;
-            }
-        </style>
         ]
 
     </head>
 
     <body>
 
-    <style type="text/css">
-        #info {
-            display: table;
-            position: relative;
-            margin: 0px auto;
-            word-wrap: anywhere;
-            white-space: pre-wrap;
-            padding: 10px;
-            border: none;
-            border-radius: 3px;
-            font-size: 12px;
-            text-align: center;
-            color: #222;
-            background: #fff;
-        }
-    </style>
-
-
     <div id="map"></div>
     <pre id="info"></pre>
 
  
-
-    <style>
-        #green-message {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-    </style>
-
     <div id='green-message'></div>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-        <button id="location-button" , onclick="getLocation()">Start Exploration</button>
-        <button id="final-location-button", onclick="getFinalLocation()">End Exploration</button>
-        <style>
-            #location-button {
-            position: absolute;
-            bottom: 10px;
-            left: 20%;
-            transform: translateX(-5%);
-            padding: 10px;
-            border: none;
-            background-color: #1c1c1c;
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-    
-        #final-location-button {
-            position: absolute;
-            bottom: 10px;
-            right: 5%;
-            transform: translateX(5%);
-            padding: 10px;
-            border: none;
-            background-color: #1c1c1c;
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        </style>
+    <button id="location-button" , onclick="getLocation()">Start Exploration</button>
+    <button id="final-location-button", onclick="getFinalLocation()">End Exploration</button>
 
-    {% load static %}
     <script src="{% static '/js/map.js' %}"></script>
-    
     </body>
     </html>
 
