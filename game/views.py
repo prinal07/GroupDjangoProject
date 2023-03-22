@@ -55,6 +55,7 @@ def green_checker(request):
 
                 # Number of clues is increased, as a challenge has been completed
                 logged_user.cluesUnlocked += 1
+                logged_user.save()
 
 @login_required
 def bin_checker(request):
@@ -590,7 +591,7 @@ def unity(request):
 
         # Make the number of unlocked clues viewable in Unity
         for ctr in range(cluesUnlocked):
-            clues.append(allClues[ctr])
+            clues.append(allClues[ctuwar])
 
         # Make the number of not unlocked clues viewable as 'Complete a Challenge to unlock next clue'
         for ctr2 in range(10 - cluesUnlocked):
@@ -684,7 +685,24 @@ def get_Directions(request):
         distance = R * c
 
         # Save the calculated distance to the user's account
-        logged_account.distanceTraveled = distance
+        logged_account.distanceTraveled += distance
+        # add tinker window pop
+        if distance == 1:
+            logged_account.points += 10
+            logged_account.save()
+            message = "Congratulations! You've reached a distance milestone of 1 mile."
+
+        if distance == 5:
+            logged_account.points += 10
+            logged_account.save()
+            message = "Congratulations! You've reached a distance milestone of 1 mile."
+
+        if distance == 10:
+            logged_account.distanceTraveled = 0
+            logged_account.points += 50
+            logged_account.save()
+            message = "Wow! You've reached a distance milestone of 10 and earned 50 bonus points!"
+
         logged_account.save()
 
 
@@ -712,7 +730,7 @@ def get_Directions(request):
                     logged_account.save()
 
         # Render the map template
-        return render(request, "game/map.html")
+        return render(request, "game/map.html", message)
 
     else:
         # Render the map template
