@@ -591,7 +591,7 @@ def unity(request):
 
         # Make the number of unlocked clues viewable in Unity
         for ctr in range(cluesUnlocked):
-            clues.append(allClues[ctuwar])
+            clues.append(allClues[ctr])
 
         # Make the number of not unlocked clues viewable as 'Complete a Challenge to unlock next clue'
         for ctr2 in range(10 - cluesUnlocked):
