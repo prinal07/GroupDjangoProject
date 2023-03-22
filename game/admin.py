@@ -1,5 +1,5 @@
 from django.contrib import admin
-from game.models import Fact, Bin, Story, Suspect, Riddle
+from game.models import Fact, Bin, Story, Suspect, Riddle,GreenArea
 
 admin.site.register(Fact)
 admin.site.register(Riddle)
@@ -44,3 +44,4 @@ class StoryAdmin(admin.ModelAdmin):
     """
     inlines = [SuspectInline]
 
+admin.site.register(GreenArea)

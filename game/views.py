@@ -5,9 +5,11 @@ from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect
 from django.db.models import Sum
 from django.contrib import messages
-from game.models import Story, Suspect, Riddle
+from django.contrib.auth import logout
+from game.models import Story, Suspect, Riddle,GreenArea
 import requests
 from django.http import HttpResponse, JsonResponse
+from json import dumps
 
 from game.forms import UserUpdateForm, ProfileUpdateForm, AccountUpdateForm, DeleteAccountForm
 from users.models import Account
@@ -19,7 +21,9 @@ import json
 from django.http import JsonResponse
 from turfpy.measurement import boolean_point_in_polygon
 from geojson import Point, MultiPolygon, Feature
+from geojson import Polygon
 
+from django.core import serializers
 
 def green_checker(request):
     """ Uses green counter to set status of incomplete Green activities to done
@@ -43,7 +47,7 @@ def green_checker(request):
         challenge = challenge_tracker.challenge
         if challenge.challengeType == 'Green Areas':
             # Check if the green counter matches the target for this challenge
-            target = int(challenge.challengeDesc.split(' ')[1])  # Get the target number of green areas
+            target = challenge.bin_or_area_id # Get the target number of green areas
             print(target)
             if logged_user.greenCounter >= target:
                 # Update the challenge tracker status to completed
@@ -76,7 +80,7 @@ def bin_checker(request):
         challenge = challenge_tracker.challenge
         if challenge.challengeType == 'Bin':
             # Check if the green counter matches the target for this challenge
-            target = int(challenge.challengeDesc.split(' ')[1])  # Get the target number of bins
+            target = challenge.bin_or_area_id  # Get the target number of bins
             if logged_user.binCounter >= target:
                 # Update the challenge tracker status to completed
                 challenge_tracker.completed = True
@@ -367,7 +371,11 @@ def map(request):
 
     logged_username = request.user.username
     logged_user = Account.objects.get(username=logged_username)
-
+    # calling all green areas from database
+    allAreas = GreenArea.objects.all()
+    # put the data in json format
+    serialized_areas = json.loads(serializers.serialize('json',list(allAreas), fields=('name','corner1lon','corner1lat','corner2lon','corner2lat','corner3lon','corner3lat','corner4lon','corner4lat')))
+    print(serialized_areas[0]["fields"]["corner1lon"])
     if request.method == 'POST':
         data = json.loads(request.body)
         lat = data.get("lat")
@@ -376,24 +384,21 @@ def map(request):
 
         print(lat, lon)
 
-        point = Feature(geometry=Point([lat, lon]))
-        polygon = Feature(geometry=MultiPolygon(
-            [([(50.7393587, -3.54012113), (50.7381304, -3.5382954), (50.7394105, -3.537208)],),
-             (
-                 [(50.7418840, -3.5341631), (50.7403587, -3.5335790), (50.7410841, -3.5312515),
-                  (50.7422746, -3.5324632)],),
-             (
-                 [(50.7364445, -3.5293083), (50.7358839, -3.5291410), (50.7360017, -3.5298109),
-                  (50.7363348, -3.5299208)],),
-             (
-                 [(50.7287101, -3.5374679), (50.7280259, -3.5364497), (50.7280361, -3.5353282),
-                  (50.7289626, -3.5356284)],),
-             ([(50.7341617, -3.5319415), (50.7340736, -3.5314349), (50.7332753, -3.5324445),
-               (50.7330960, -3.5319436)],),
-             ([(50.7359873845501, -3.532288932448523), (50.73694531506939, -3.5334667225815792),
-               (50.736653497251154, -3.5340531117119554)],)
+        green_areas = []
+        for i in serialized_areas:
+            green_areas.append(
+                (
+                    [
+                        (i["fields"]["corner1lat"], i["fields"]["corner1lon"]),
+                        (i["fields"]["corner2lat"], i["fields"]["corner2lon"]),
+                        (i["fields"]["corner3lat"], i["fields"]["corner3lon"]),
+                        (i["fields"]["corner4lat"], i["fields"]["corner4lon"])
+                    ]
+                )
+            )   
 
-             ]))
+        point = Feature(geometry=Point([lat, lon]))
+        polygon = Feature(geometry=MultiPolygon(green_areas))
         # ([(lat + 1, lon + 1), (lat - 1, lon - 1), (lat - 1, lon + 1), (lat + 1, lon - 1)],),
 
         print(boolean_point_in_polygon(point, polygon))
@@ -435,11 +440,17 @@ def map(request):
     for o in bins:
         bin_info.append([o.latitude, o.longitude, o.bin_number])
 
+
+    
+    # context to pass data to map template
     context = {
         'bin_info': bin_info,
-        'message': message
+        'message': message,
+        
+        'GreenAreas': serialized_areas
     }
-
+    print('bins: ')
+    print(bin_info)
     # Serve game/map.html 
     return render(request, 'game/map.html', context=context)
 
@@ -681,3 +692,18 @@ def get_Directions(request):
     else:
         # Render the map template
         return render(request, "game/map.html")
+
+def logout_view(request):
+    logout(request)
+    return redirect('site-home')
+
+
+def green_areas_pass(request):
+     green_dict={'park5':
+     [[-3.5319415, 50.7341617],
+    [-3.5314349, 50.7340736],
+    [-3.5324445, 50.7332753],
+    [-3.5319436, 50.7330960]]}
+     dataJSON = dumps(green_dict)
+     return render(request,'game/map.html',{'green_dict':dataJSON})
+     

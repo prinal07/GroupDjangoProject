@@ -4,6 +4,7 @@ from django.db import models
 from django.core.validators import RegexValidator
 from django.utils import timezone
 
+# from django.contrib.gis.db import models as gis_models
 
 class Challenge(models.Model):
     challengeId = models.IntegerField(default=1)
@@ -14,6 +15,8 @@ class Challenge(models.Model):
         ('Walking', 'Walking')
     )
     challengeType = models.TextField(choices=CHALLENGE_TYPES, default='')
+    bin_or_area_id= models.IntegerField(default=1)
+    # challenge_model_id = models.IntegerField(default=1)
 
     def __str__(self):
         return self.challengeDesc
@@ -232,3 +235,33 @@ class Riddle(models.Model):
         """Finds status of riddle object
         Returns: status of riddle"""
         return self.done
+class GreenArea(models.Model):
+    """Green areas class to store green areas coordinates and the name of the green area 
+    Args:
+        models.Model (super): Built-in Django type structure, adapted by the attributes of this class
+
+    Returns:
+            string: Formatted string using attributes from the model to show information "(Lat, Lon)"
+        """
+    name= models.CharField(max_length=20)
+
+    corner1lon = models.FloatField(default=0,max_length=20)
+    corner1lat= models.FloatField(default=0,max_length=20)
+    corner2lon = models.FloatField(default=0,max_length=20)
+    corner2lat= models.FloatField(default=0,max_length=20)
+    corner3lon = models.FloatField(default=0,max_length=20)
+    corner3lat= models.FloatField(default=0,max_length=20)
+    corner4lon = models.FloatField(default=0,max_length=20)
+    corner4lat= models.FloatField(default=0,max_length=20)
+
+
+
+    def __str__(self):
+        """Method to represent the model to the user within the program
+
+        Returns:
+            string: Formatted string using attributes from the model to show information "(Lat, Lon)"
+        """
+        return f'{self.corner1lat}, {self.corner1lon}'
+    
+    
