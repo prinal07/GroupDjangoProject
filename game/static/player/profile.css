@@ -36,10 +36,6 @@
     width: 200px;
 }
 
-td {
-    vertical-align: top;
-    margin-top: 10px;
-}
 
 #deleteTick {
     height: 20px;
@@ -50,4 +46,29 @@ td {
 .profileBadge {
     height: 100px;
     width: 100px
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+td {
+    vertical-align: top;
+    margin-top: 10px;
+    padding: 10px;
+}
+
+@media (max-width: 767px) {
+    th {
+        display: block;
+        width: 100%;
+        text-align: left;
+    }
+
+    td {
+        display: block;
+        width: 100%;
+        text-align: left;
+    }
 }

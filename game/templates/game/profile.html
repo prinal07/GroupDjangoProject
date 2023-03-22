@@ -4,78 +4,84 @@
 {% block content %}
 {% load static %}
     
-    <div class="main">
-        <table style="width:100%">
-            <td style="width:50%">
-                <div class="profile">
-                    <img class="rounded-circle account-img profile_image" src="{{ user.profile.image.url }}">
-                    <div class="media-body">
-                        <h2 class="account-heading" style="padding-bottom: 10px;">{{ user.username }}</h2>
-                        <h4 class="text-secondary">{{ user.email }}</h4>
+    <div>
+        <table>
+            <tr>
+                <td>
+                    <div class="profile">
+                        <img class="rounded-circle account-img profile_image" src="{{ user.profile.image.url }}">
+                        <div class="media-body">
+                            <h2 class="account-heading" style="padding-bottom: 10px;">{{ user.username }}</h2>
+                            <h4 class="text-secondary">{{ user.email }}</h4>
+                        </div>
                     </div>
-                </div>
-            </td>
-            <td style="width:50%; vertical-align:middle;">
-                
-                <div id='level-progress'>
-                    <h4 id="current-level">Level: {{ current_level }}</h4>
-                    <h4 id="level-progress-title">Progress to next level:</h4>
-                    <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: {{ level_progress }}%; background-color: rgb(170, 225, 170) !important;">{{ level_progress }}%</div>
+                </td>
+                <td vertical-align:middle;">
+                    
+                    <div id='level-progress'>
+                        <h4 id="current-level">Level: {{ current_level }}</h4>
+                        <h4 id="level-progress-title">Progress to next level:</h4>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" style="width: {{ level_progress }}%; background-color: rgb(170, 225, 170) !important;">{{ level_progress }}%</div>
+                        </div>
+    
                     </div>
-
-                </div>
-
-            </td>
+    
+                </td>
+            </tr>
         </table>
         <hr>
-        <table style="width:100%">
-            <td style="width:50%">
-                <div>
-                    <form method="POST" enctype="multipart/form-data">
-                        {% csrf_token %}
+        <table>
+            <tr>
+                <td>
+                    
+                        <h3> Eco Achievments: </h3>
+                        <h3 id="eco1"><img class="profileBadge" src="{% static 'player/badges/lowlevel.png' %}"> Earth Newbie </h3>
+                        <h3 id="eco2" style="display:none"><img class="profileBadge" src="{% static 'player/badges/midlevel.png' %}"> Environmentalist </h3>
+                        <h3 id="eco3" style="display:none"><img class="profileBadge" src="{% static 'player/badges/highlevel.png' %}"> Greta's Protégé</h3>
+                        <br>
+                        <h3> Story Achievments: </h3>
+                        <h3 id="story1"><img class="profileBadge" src="{% static 'player/badges/lowstory.png' %}"> Rookie Detective</h3>
+                        <h3 id="story2" style="display:none"><img class="profileBadge" src="{% static 'player/badges/midstory.png' %}"> Journeyman Detective</h3>
+                        <h3 id="story3" style="display:none"><img class="profileBadge" src="{% static 'player/badges/highstory.png' %}"> Expert Detective</h3>
+    
+                </td>
+            </tr> 
+            <tr>   
+                <td>
+                    <div>
+                        <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
                             <h3> Update Username: </h3>
                             {% render_field user_update_form.username placeholder="username" id+="u_form" %} <br><br>
                             <h3> Update Email: </h3>
                             {% render_field user_update_form.email placeholder="email" id+="u_form" %} <br><br>
                             <h3> Update Image: </h3>
                             {% render_field picture_update_form.image id+="u_form" %}
-                </div>
+                    </div>
+                        <br><br>
+                        <div class="form-group">
+                            <button id="uFormSubmitBtn" type="submit"
+                                    style="background-color: #4CAF50; border: 1.5px solid green;">Update
+                            </button>
+                        </div>
+
+                    </form>
                     <br><br>
+                
                     <div class="form-group">
-                        <button id="uFormSubmitBtn" type="submit"
-                                style="background-color: #4CAF50; border: 1.5px solid green;">Update
-                        </button>
+                        <form method="POST">
+                            {% csrf_token %}
+                            <h3><b>Delete Account:</b></h3><br>
+                                <h4><input type="submit" name="delete" value="Delete" id="uFormSubmitBtn"
+                                    style="background-color: red; border: 1.5px solid black;"> 
+                                    <br><br>Confirm Deletion {% render_field user_delete_form.confirm_delete id+="deleteTick" %} </h4>
+                                <small>*In compliance with the GDPR, all your data will be deleted.</small>
+                        </form>
                     </div>
 
-                </form>
-                <br><br>
-                
-                <div class="form-group">
-                    <form method="POST">
-                        {% csrf_token %}
-                        <h3><b>Delete Account:</b></h3><br>
-                            <h4><input type="submit" name="delete" value="Delete" id="uFormSubmitBtn"
-                                style="background-color: red; border: 1.5px solid black;"> 
-                                <br><br>Confirm Deletion {% render_field user_delete_form.confirm_delete id+="deleteTick" %} </h4>
-                            <small>*In compliance with the GDPR, all your data will be deleted.</small>
-                    </form>
-                </div>
-
-            </td>
-            <td style="width:50%">
-                
-                    <h3> Eco Achievments: </h3>
-                    <h3 id="eco1"><img class="profileBadge" src="{% static 'player/badges/lowlevel.png' %}"> Earth Newbie </h3>
-                    <h3 id="eco2" style="display:none"><img class="profileBadge" src="{% static 'player/badges/midlevel.png' %}"> Environmentalist </h3>
-                    <h3 id="eco3" style="display:none"><img class="profileBadge" src="{% static 'player/badges/highlevel.png' %}"> Greta's Protégé</h3>
-                    
-                    <h3> Story Achievments: </h3>
-                    <h3 id="story1"><img class="profileBadge" src="{% static 'player/badges/lowstory.png' %}"> Rookie Detective</h3>
-                    <h3 id="story2" style="display:none"><img class="profileBadge" src="{% static 'player/badges/midstory.png' %}"> Journeyman Detective</h3>
-                    <h3 id="story3" style="display:none"><img class="profileBadge" src="{% static 'player/badges/highstory.png' %}"> Expert Detective</h3>
-
-            </td>
+                </td>
+            </tr>
         </table>
 
     </div>
