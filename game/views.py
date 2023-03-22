@@ -800,7 +800,8 @@ def QRCheck(request):
         logged_account.points += 10
         logged_account.cluesUnlocked += 1
 
-    time_difference = timezone.now() - logged_user.last_bin_scanned
+    time_difference = timezone.now() - logged_account.last_bin_scanned
+
 
     if time_difference.seconds > 300:
             # Bin counter of the user is incremented
