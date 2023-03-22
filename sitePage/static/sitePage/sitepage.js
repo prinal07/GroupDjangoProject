@@ -12,11 +12,14 @@ let activeHref = window.location.href;
 url = activeHref.split('/').filter(Boolean).pop();
 
 // update the URL to display the specific page
-if (url != "localhost:8000") {
+if (url != "eco-mystery.herokuapp.com") {
     x = url.replace('-', ' ');
-    newUrl = "EcoExeter - ".concat(capitalizeFirstLetter(url))
+    newUrl = "EcoMystery - ".concat(capitalizeFirstLetter(url))
     document.title = newUrl
-} else{
-    newUrl2 = "EcoExeter - ".concat("Home")
+} if (url != "eco-mystery.herokuapp.com/") {
+    newUrl2 = "EcoMystery - ".concat("Home")
+    document.title = newUrl2
+} else {
+    newUrl2 = "EcoMystery - ".concat("Home")
     document.title = newUrl2
 }

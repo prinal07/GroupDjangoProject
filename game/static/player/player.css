@@ -1,7 +1,7 @@
 body {
   font-family: Arial, sans-serif;
   font-size: 16px;
-  padding: 20px;  
+  padding: 0px 20px;  
 }
 
 .main {
@@ -36,6 +36,7 @@ body {
 
 /* Side navbar */
 .side-navbar {
+  text-align: left;
   width: 250px;
   height: 100%;
   position: fixed;
@@ -46,6 +47,7 @@ body {
 
 .sidenav-container {
   transition: 0.4s;
+  margin-left: -10px;
 }
 
 .side-navbar a {
@@ -60,7 +62,7 @@ body {
 }
 
 .active-sidebar {
-  margin-left: 0;
+  margin-left: -20px;
 }
 
 /* side navbar button */
@@ -70,7 +72,7 @@ body {
 }
 
 .active-cont {
-  margin-left: 250px;
+  margin-left: 230px;
 }
 
 #menu-btn {

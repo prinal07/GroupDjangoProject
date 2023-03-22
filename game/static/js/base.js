@@ -29,9 +29,9 @@ function capitalizeFirstLetter(string) {
 }
 if (url != "game") {
     x = url.replace('-', ' ');
-    newUrl = "Eco-Detective - ".concat(capitalizeFirstLetter(url))
+    newUrl = "EcoMystery - ".concat(capitalizeFirstLetter(url))
     document.title = newUrl
 } else {
-    newUrl2 = "Eco-Detective - ".concat("Home")
+    newUrl2 = "EcoMystery - ".concat("Home")
     document.title = newUrl2
 }
