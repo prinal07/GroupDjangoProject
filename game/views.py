@@ -402,9 +402,9 @@ def map(request):
         if boolean_point_in_polygon(point, polygon):
             if logged_user.last_green_area_accessed == "":
                 logged_user.last_green_area_accessed = datetime.now()
-               
-            time_difference = datetime.now() - logged_user.last_green_area_accessed 
-            if time_difference.total_seconds() > 300:
+
+            time_difference = datetime.now() - logged_user.last_green_area_accessed
+            if time_difference.seconds > 300:
                 # Increase counter
                 logged_user.greenCounter += 1
 
@@ -506,8 +506,8 @@ def update_points(request):
             logged_user.last_bin_scanned = datetime.now()
         
         time_difference = datetime.now() - logged_user.last_bin_scanned
-        
-        if time_difference.total_seconds() > 300:    
+
+        if time_difference.seconds > 300:
             # Bin counter of the user is incremented
             logged_user.binCounter += 1
             logged_user.last_bin_scanned = datetime.now()
