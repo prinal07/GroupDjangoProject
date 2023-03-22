@@ -132,8 +132,21 @@
 
       //unityShowBanner('WebGL builds are not supported on mobile devices.');
 
-      canvas.style.width = window.innerWidth + "px";
-      canvas.style.height = (window.innerHeight * 0.6) + "px";
+      const canvas = document.querySelector('canvas');
+
+      const aspectRatio = 16 / 9; // Set the aspect ratio to 16:9
+      let canvasHeight = window.innerHeight * 0.6; // Set the canvas height based on the window height
+
+      // Adjust the canvas height to maintain the aspect ratio
+      let canvasWidth = canvasHeight * aspectRatio;
+      if (canvasWidth > window.innerWidth) {
+        canvasWidth = window.innerWidth;
+        canvasHeight = canvasWidth / aspectRatio;
+      }
+
+      // Apply the width and height styles to the canvas element
+      canvas.style.width = canvasWidth + 'px';
+      canvas.style.height = canvasHeight + 'px';
 
 
     } else {
