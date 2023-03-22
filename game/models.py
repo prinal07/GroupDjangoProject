@@ -84,7 +84,7 @@ class Suspect(models.Model):
     story = models.ForeignKey('Story', on_delete=models.CASCADE, related_name='suspects', default=0)
     number = models.IntegerField(default=1)
     name = models.TextField(max_length=30, default="")
-    brief = models.TextField(max_length=500, default="")
+    brief = models.TextField(max_length=112, default="")
 
     class Meta:
         """Django admin metadata class
@@ -140,22 +140,22 @@ class Story(models.Model):
     # In the unity project, a C# Function title SetSuspectSprites correlates each index to a sprite object
     sprite_codes = [sprite_1, sprite_2, sprite_3, sprite_4, sprite_5]
 
-    clue1 = models.TextField(max_length=1000, default="")
-    clue2 = models.TextField(max_length=1000, default="")
-    clue3 = models.TextField(max_length=1000, default="")
-    clue4 = models.TextField(max_length=1000, default="")
-    clue5 = models.TextField(max_length=1000, default="")
-    clue6 = models.TextField(max_length=1000, default="")
-    clue7 = models.TextField(max_length=1000, default="")
-    clue8 = models.TextField(max_length=1000, default="")
-    clue9 = models.TextField(max_length=1000, default="")
-    clue10 = models.TextField(max_length=1000, default="")
+    clue1 = models.TextField(max_length=112, default="")
+    clue2 = models.TextField(max_length=112, default="")
+    clue3 = models.TextField(max_length=112, default="")
+    clue4 = models.TextField(max_length=112, default="")
+    clue5 = models.TextField(max_length=112, default="")
+    clue6 = models.TextField(max_length=112, default="")
+    clue7 = models.TextField(max_length=112, default="")
+    clue8 = models.TextField(max_length=112, default="")
+    clue9 = models.TextField(max_length=112, default="")
+    clue10 = models.TextField(max_length=112, default="")
 
     # Collects the clues to a list, to be sent to the Unity file as context
     clues = [clue1, clue2, clue3, clue4, clue5, clue6, clue7, clue8, clue9, clue10]
 
     # Assigns the culprit to an index of the five available characters
-    culprit = models.CharField(max_length=1, validators=[RegexValidator(r'^[0-4]$')])
+    culprit = models.CharField(max_length=1, validators=[RegexValidator(r'^[1-5]$')])
 
     def can_add_suspect(self):
         """Check to determine if the maximum number of suspects has been reached
@@ -232,3 +232,4 @@ class Riddle(models.Model):
         """Finds status of riddle object
         Returns: status of riddle"""
         return self.done
+

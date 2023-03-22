@@ -17,7 +17,8 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from users import views as user_views
-
+from game import views as game_views 
+# from GroupDjangoProject import views as group_Views 
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -28,8 +29,11 @@ urlpatterns = [
     path('', include('sitePage.urls')),
     path('register/', user_views.register, name='register'),
     path('login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(template_name='sitePage/home.html'), name='logout'),
+    # path('logout/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
     path('game/', include('game.urls')),
+    path('logout/', game_views.logout_view, name='logout'),
+
+    
 ]
 
 # Request is made to image location in media directory which means it should NOT be under 'game/' media url at top level
