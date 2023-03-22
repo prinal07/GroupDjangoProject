@@ -34,20 +34,21 @@
         <table>
             <tr>
                 <td>
-                    
-                        <h3> Eco Achievments: </h3>
-                        <h3 id="eco1"><img class="profileBadge" src="{% static 'player/badges/lowlevel.png' %}"> Earth Newbie </h3>
-                        <h3 id="eco2" style="display:none"><img class="profileBadge" src="{% static 'player/badges/midlevel.png' %}"> Environmentalist </h3>
-                        <h3 id="eco3" style="display:none"><img class="profileBadge" src="{% static 'player/badges/highlevel.png' %}"> Greta's Protégé</h3>
-                        <br>
-                        <h3> Story Achievments: </h3>
-                        <h3 id="story1"><img class="profileBadge" src="{% static 'player/badges/lowstory.png' %}"> Rookie Detective</h3>
-                        <h3 id="story2" style="display:none"><img class="profileBadge" src="{% static 'player/badges/midstory.png' %}"> Journeyman Detective</h3>
-                        <h3 id="story3" style="display:none"><img class="profileBadge" src="{% static 'player/badges/highstory.png' %}"> Expert Detective</h3>
+                    <div class="badges">
+                        <p class="badgeTitle"> Eco Achievments: </p>
+                        <a id="eco1"><img class="profileBadge" src="{% static 'player/badges/lowlevel.png' %}"> Earth Newbie </a>
+                        <a id="eco2" style="display:none"><img class="profileBadge" src="{% static 'player/badges/midlevel.png' %}"> Environmentalist </a>
+                        <a id="eco3" style="display:none"><img class="profileBadge" src="{% static 'player/badges/highlevel.png' %}"> Greta's Protégé</a>
+                    </div>
+                    <div class="badges">
+                        <p class="badgeTitle"> Story Achievments: </p>
+                        <a id="story1"><img class="profileBadge" src="{% static 'player/badges/lowstory.png' %}"> Rookie Detective</a>
+                        <a id="story2" style="display:none"><img class="profileBadge" src="{% static 'player/badges/midstory.png' %}"> Journeyman Detective</a>
+                        <a id="story3" style="display:none"><img class="profileBadge" src="{% static 'player/badges/highstory.png' %}"> Expert Detective</a>
+                    </div>
     
                 </td>
-            </tr> 
-            <tr>   
+                
                 <td>
                     <div>
                         <form method="POST" enctype="multipart/form-data">

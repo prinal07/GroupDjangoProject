@@ -48,15 +48,24 @@
     width: 100px
 }
 
+.badges {
+    font-size: x-large;
+}
+
+.badgeTitle {
+    font-size: xx-large;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
 }
 
 td {
-    vertical-align: top;
     margin-top: 10px;
     padding: 10px;
+    width: 50%;
+    vertical-align: top;
 }
 
 @media (max-width: 767px) {
