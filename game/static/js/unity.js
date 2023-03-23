@@ -94,6 +94,7 @@ function unityShowBanner(msg, type) {
   updateBannerVisibility();
 }
 
+
 var loaderUrl = "../unity/Build/Build.loader.js";
 var config = {
   dataUrl: "../unity/Build/Build.data",
@@ -105,6 +106,13 @@ var config = {
   productVersion: "1.0",
   showBanner: unityShowBanner,
 };
+
+function updateConfig(load, data, framework, code) {
+    loaderUrl = load;
+    dataUrl = data;
+    frameworkUrl = framework;
+    codeUrl = code;
+}
 
 // By default Unity keeps WebGL canvas render target size matched with
 // the DOM size of the canvas element (scaled by window.devicePixelRatio)
@@ -155,29 +163,3 @@ if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
 
 loadingBar.style.display = "block";
 
-var script = document.createElement("script");
-script.setAttribute("src", loaderUrl);
-script.setAttribute("type", "text/javascript");
-script.onload = () => {
-  console.log("SCRIPT load");
-
-  createUnityInstance(canvas, config, (progress) => {
-    progressBarFull.style.width = 100 * progress + "%";
-  }).then((unityInstance) => {
-    loadingBar.style.display = "none";
-
-    console.log("UNITY INSTANCE");
-
-    unityInstance.SendMessage('LogicObject', 'SetSuspectSprites', String("{{spriteCodes}}"));
-    unityInstance.SendMessage('LogicObject', 'SetCorrectSuspect', String("{{culprit}}"));
-    unityInstance.SendMessage('LogicObject', 'SetClueDescriptions', String("{{clues}}"));
-    unityInstance.SendMessage('LogicObject', 'SetSuspectDescriptions', String("{{descriptions}}"));
-
-    fullscreenButton.onclick = () => {
-      unityInstance.SetFullscreen(1);
-    };
-  }).catch((message) => {
-    alert(message);
-  });
-};
-document.body.appendChild(script);    
