@@ -3,15 +3,19 @@ h1 {
     font-size: 36px;
     font-weight: bold;
     text-transform: uppercase;
-    color: #333;
+    color: white;
 }
 
-main {
+#scannerBox {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 100px auto;
+    margin: 0px auto;
     max-width: 600px;
+}
+
+.verticalMid{
+    padding-top: 150px;
 }
 
 #reader {

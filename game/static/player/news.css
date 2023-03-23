@@ -1,14 +1,17 @@
 	.news-title {
-		font-size: 2rem;
+		font-size: 1.5rem;
+		color:black;
 	}
 
 	.news-summary {
-		font-size: 1.5rem;
+		font-size: 1.2rem;
 		text-justify: distribute;
+		color:black;
+
 	}
 
 	.news-link {
-		font-size: 1.2rem;
+		font-size: 1rem;
 		padding: 15px;
 		background-color: #00ca96;
 		border-radius: 10px;
@@ -16,12 +19,18 @@
 		text-align: center;
 		text-decoration: none;
 		font-weight: bold;
+		
 	}
 
 	.news-link:hover {
 		cursor: pointer;
 		background-color: #81ffdf;
 		color: black;
+	}
+
+
+	.news-date{
+		color:black;
 	}
 
 	.newsBlock {

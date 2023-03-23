@@ -19,6 +19,7 @@ from django.urls import reverse_lazy
 from .forms import UserUpdateForm, ProfileUpdateForm, AccountUpdateForm, DeleteAccountForm
 from users.models import Account
 from django.contrib.auth.decorators import login_required
+import re 
 
 import json
 from django.http import JsonResponse
@@ -42,14 +43,19 @@ def green_checker(request):
 
     # Get the challenges list for the logged in user
     challenges_tracker_list = logged_user.challengetracker_set.filter(completed=False)
+    pattern = r'\d+'  # match one or more digits
 
     # Loop through the challenges and check if any challenge is related to green areas
+  
     for challenge_tracker in challenges_tracker_list:
         challenge = challenge_tracker.challenge
         if challenge.challengeType == 'Green Areas':
+            match = re.search(pattern, challenge.challengeDesc)
+            target = int(match.group())
+
             # Check if the green counter matches the target for this challenge
-            target = int(challenge.challengeDesc.split(' ')[1])  # Get the target number of green areas
-            print(target)
+            # target = int(challenge.challengeDesc.split(' ')[1])  # Get the target number of green areas
+            # print(target)
             if logged_user.greenCounter >= target:
                 # Update the challenge tracker status to completed
                 challenge_tracker.completed = True

@@ -10,26 +10,24 @@
                 <td>
                     <div class="profile">
                         <img class="rounded-circle account-img profile_image" src="{{ user.profile.image.url }}">
+                    </div>
+                    <td>
                         <div class="media-body">
-                            <h2 class="account-heading" style="padding-bottom: 10px;">{{ user.username }}</h2>
-                            <h4 class="text-secondary">{{ user.email }}</h4>
-                        </div>
-                    </div>
-                </td>
-                <td vertical-align:middle;">
-                    
-                    <div id='level-progress'>
-                        <h4 id="current-level">Level: {{ current_level }}</h4>
-                        <h4 id="level-progress-title">Progress to next level:</h4>
-                        <div class="progress">
-                            <div class="progress-bar" role="progressbar" style="width: {{ level_progress }}%; background-color: rgb(170, 225, 170) !important;">{{ level_progress }}%</div>
-                        </div>
-    
-                    </div>
-    
+                                <h2 class="account-heading" style="padding-bottom: 10px;">{{ user.username }}</h2>
+                                <h4>{{ user.email }}</h4>
+                            </div>
+                    </td>
                 </td>
             </tr>
+
         </table>
+        <div>
+            <h4 id="current-level">Level: {{ current_level }}</h4>
+            <h4 id="level-progress-title">Progress to next level:</h4>
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: {{ level_progress }}%; background-color: rgb(170, 225, 170) !important;">{{ level_progress }}%</div>
+            </div>
+        </div>
         <hr>
         <table>
             <tr>
