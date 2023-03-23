@@ -35,12 +35,17 @@
   
   <script src="{% static 'js/unity.js' %}"></script>
   <script>
-    updateConfig(
-      "{% static 'unity/Build/Builder.loader.js' %}",
-      "{% static 'unity/Build/Build.data' %}",
-      "{% static 'unity/Build/Build.framework.js' %}",
-      "{% static 'unity/Build/Build.wasm' %}"
-    );
+    var loaderUrl = "{% static 'unity/Build/Build.loader.js' %}";
+    var config = {
+      dataUrl: "{% static 'unity/Build/Build.data' %}",
+      frameworkUrl: "{% static 'unity/Build/Build.framework.js' %}",
+      codeUrl: "{% static 'unity/Build/Build.wasm' %}",
+      streamingAssetsUrl: "StreamingAssets",
+      companyName: "DefaultCompany",
+      productName: "EcoDetective",
+      productVersion: "1.0",
+      showBanner: unityShowBanner,
+    };
 
     var script = document.createElement("script");
     script.setAttribute("src", loaderUrl);
