@@ -1,10 +1,10 @@
-# EcoExeter
+# EcoMystery
 
-Welcome to EcoExeter - the app where you can unleash your sustainable desires.
+Welcome to EcoMystery - the app where you can unleash your sustainable desires.
 
 ## Description
 
-EcoExeter is a Django Web-app designed to encourage students to participate in sustainable activities rleated to the university, in a func and engaging manner. Users can create customizable accounts, perform daily challenges, discover green trails across campus, and compete against other players and accomodations.
+EcoMystery is a Django Web-app designed to encourage students to participate in sustainable activities rleated to the university, in a func and engaging manner. Users can create customizable accounts, perform daily challenges, discover green trails across campus, and compete against other players and accomodations.
 
 ## Installation
 

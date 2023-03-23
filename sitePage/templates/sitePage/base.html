@@ -19,18 +19,12 @@
     <script src="{% static 'sitePage/sitepage.js' %}"></script>
     <link rel="shortcut icon" href="{% static 'sitePage/unilogo.png' %}" type="image/x-icon">
 
-    <meta charset="UTF-8">
-    {% if title %}
-        <title> Eco-Detective - {{ title }}</title>
-    {% else %}
-        <title>Eco-Detective</title>
-    {% endif %}
 </head>
 <body>
 <header class="site-header">
     <nav class="navbar navbar-expand-md navbar-light bg-steel fixed-top">
         <div class="container">
-            <a class="navbar-brand mr-4" style="color:black" href="{% url 'site-home' %}">Eco-Detective</a>
+            <a class="navbar-brand mr-4" style="color:black" href="{% url 'site-home' %}">EcoMystery</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle"
                     aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
