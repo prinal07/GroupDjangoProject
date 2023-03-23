@@ -13,7 +13,6 @@
   <link rel="shortcut icon" href="{% static 'unity/TemplateData/favicon.ico' %}">
   <link rel="stylesheet" href="{% static 'unity/TemplateData/style.css' %}">
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-  <script src="{% static 'js/unity.js' %}"></script>
 </head>
 
 <body>
@@ -33,8 +32,9 @@
     </div>
     <div id="end-status" style="visibility: hidden"></div>
   </div>
-  <script>
-  </script>
+  
+  <script src="{% static 'js/unity.js' %}"></script>
+  
 </body>
 </html>
 {% endblock %}
