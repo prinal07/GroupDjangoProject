@@ -1,4 +1,5 @@
-from datetime import date, datetime
+from datetime import date
+from django.utils import timezone
 
 import math
 from django.db import models
@@ -37,8 +38,8 @@ class Account(models.Model):
     points = models.IntegerField(default=0)
     daily_points = models.IntegerField(default=0)
     last_day_accessed = models.DateField(default=date.today)
-    last_green_area_accessed = models.DateTimeField(default=datetime.now())
-    last_bin_scanned = models.DateTimeField(default=datetime.now())
+    last_green_area_accessed = models.DateTimeField(default=timezone.now)
+    last_bin_scanned = models.DateTimeField(default=timezone.now)
     staffCheck = models.BooleanField(default=False)
     challenges = models.ManyToManyField(Challenge, related_name='accounts')
     greenCounter = models.IntegerField(default=0)
