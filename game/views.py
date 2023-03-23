@@ -594,7 +594,7 @@ def unity(request):
     STORY_POINT_REWARD = 100
 
     if request.method == "POST":
-        give_points = request.POST.get("give_points");
+        give_points = request.POST.get("give_points")
 
         user = Account.objects.get(user=request.user.username)
         
