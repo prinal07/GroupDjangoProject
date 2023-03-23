@@ -4,10 +4,18 @@
 <!DOCTYPE html>
 
 {% load static %}
+<html lang="en-us">
 
-<link rel="shortcut icon" href="{% static 'unity/TemplateData/favicon.ico' %}">
-<link rel="stylesheet" href="{% static 'unity/TemplateData/style.css' %}">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Unity WebGL Player | ECM2434_Prototype_2</title>
+  <link rel="shortcut icon" href="{% static 'unity/TemplateData/favicon.ico' %}">
+  <link rel="stylesheet" href="{% static 'unity/TemplateData/style.css' %}">
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
 
+<body>
   <div id="unity-container" class="unity-desktop">
     <canvas id="unity-canvas"></canvas>
     <div id="unity-loading-bar">
@@ -209,5 +217,6 @@
     };
     document.body.appendChild(script);    
   </script>
-
+</body>
+</html>
 {% endblock %}
