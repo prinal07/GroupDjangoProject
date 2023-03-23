@@ -594,8 +594,7 @@ def unity(request):
     STORY_POINT_REWARD = 100
 
     if request.method == "POST":
-        data = json.loads(request.body)
-        give_points = data.get("give_points")
+        give_points = request.POST.get("give_points");
 
         user = Account.objects.get(user=request.user.username)
         
@@ -610,9 +609,10 @@ def unity(request):
                 user.storiesCompleted += 1
             
                 user.save()
+                return HttpResponse("success");
             
         # redirect to the overview
-        return redirect("game")
+        return HttpReponse("handled");
 
     else:
         # construct all information to pass to the unity game
