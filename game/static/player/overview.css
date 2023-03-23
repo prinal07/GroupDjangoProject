@@ -1,4 +1,32 @@
 /* Style for the user leaderboard table */
+.overview {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 3px 0;
+  border-radius: 10px;
+}
+
+@media (max-width: 768px){
+  .overview {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+.fact-of-the-day {
+  filter: blur(5px);
+  margin: 0 auto;
+  text-align: center;
+}
+
+#fotd-container {
+  text-align: center;
+}
+
+
+
 #user_leaderboard {
   border-collapse: collapse;
   width: 100%;
@@ -59,7 +87,6 @@
   width: 100%;
   height: 100%;
   filter: blur(10px);
-  margin-top: 40px;
 }
 
 #fact-progress-title {
@@ -69,10 +96,6 @@
 
 /*game info styling*/
 
-#overview-title {
-  text-align: center;
-  margin-top: 40px;
-}
 
 #current-level {
   text-align: center;
@@ -82,3 +105,65 @@
   text-align: center
 }
 
+
+
+
+/* The Modal (background) */
+.modal {
+  display: none; 
+  position: fixed;
+  z-index: 1; 
+  padding-top: 100px;
+  left: 0;
+  top: 0;
+  width: 100%;
+}
+
+/* Modal Content */
+.modal-content {
+  position: relative;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 0;
+  border: 1px solid #888;
+  width: 80%;
+  animation-name: animatetop;
+  animation-duration: 0.4s
+}
+
+/* Add Animation */
+@-webkit-keyframes animatetop {
+  from {top:-300px; opacity:0} 
+  to {top:0; opacity:1}
+}
+
+@keyframes animatetop {
+  from {top:-300px; opacity:0}
+  to {top:0; opacity:1}
+}
+
+/* The Close Button */
+.close {
+  color: black;
+  float: right;
+  font-size: xx-large;
+  font-weight: bold;
+  padding: 10px 10px;
+
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-header {
+  padding: 2px 4px;
+  background-color: #f5deb3;
+  font-size: large;
+  color: black;
+}
+
+.modal-body {padding: 2px 16px;}

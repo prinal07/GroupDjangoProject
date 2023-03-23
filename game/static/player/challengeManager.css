@@ -9,7 +9,7 @@
 
 
 #challenge-body {
-    font-family: Arial, sans-serif;
+    font-family: Raleway;
     font-size: 16px;
     background-color: #ffffff;
     text-align: center;
@@ -17,13 +17,18 @@
 
 
 .challenge-container {
-    background-color: #8B4513;
     padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+
 }
 
 .challenge {
+    border: 2px solid #c7b593;
+    color:black;
+    border-radius: 10px;
     margin-bottom: 20px;
-    background-color: #F5DEB3;
+    background-color: #f5deb3;
     padding: 20px;
     position: relative; /* to make the bar positioning relative to this element */
 }
@@ -35,7 +40,14 @@
     top: 0;
     height: 100%;
     width: 10px;
-    background-color: #8B4513;
+}
+
+.completeBorder{
+border: 2px solid rgb(26, 128, 26);
+}
+
+.incompleteBorder{
+border: 2px solid red;
 }
 
 .challenge-desc {

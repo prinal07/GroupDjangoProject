@@ -140,16 +140,16 @@ class Story(models.Model):
     # In the unity project, a C# Function title SetSuspectSprites correlates each index to a sprite object
     sprite_codes = [sprite_1, sprite_2, sprite_3, sprite_4, sprite_5]
 
-    clue1 = models.TextField(max_length=160, default="")
-    clue2 = models.TextField(max_length=160, default="")
-    clue3 = models.TextField(max_length=160, default="")
-    clue4 = models.TextField(max_length=160, default="")
-    clue5 = models.TextField(max_length=160, default="")
-    clue6 = models.TextField(max_length=160, default="")
-    clue7 = models.TextField(max_length=160, default="")
-    clue8 = models.TextField(max_length=160, default="")
-    clue9 = models.TextField(max_length=160, default="")
-    clue10 = models.TextField(max_length=160, default="")
+    clue1 = models.TextField(max_length=180, default="")
+    clue2 = models.TextField(max_length=180, default="")
+    clue3 = models.TextField(max_length=180, default="")
+    clue4 = models.TextField(max_length=180, default="")
+    clue5 = models.TextField(max_length=180, default="")
+    clue6 = models.TextField(max_length=180, default="")
+    clue7 = models.TextField(max_length=180, default="")
+    clue8 = models.TextField(max_length=180, default="")
+    clue9 = models.TextField(max_length=180, default="")
+    clue10 = models.TextField(max_length=180, default="")
 
     # Collects the clues to a list, to be sent to the Unity file as context
     clues = [clue1, clue2, clue3, clue4, clue5, clue6, clue7, clue8, clue9, clue10]

@@ -18,4 +18,5 @@ urlpatterns = [path('', player_views.home, name='overview'),
                path('Receiver/', player_views.Receiver, name='Receiver'),
                path('get_Directions/', player_views.get_Directions, name='get_Directions'),
                path('riddle_handler/', player_views.riddle_handler, name='riddle_handler'),
+               path('QRCheck/', player_views.QRCheck, name='QRCheck'),
                ]

@@ -3,10 +3,11 @@
 
 
 {% block content %}
+    <link rel="stylesheet" href="{% static 'player/overview.css' %}">
 
-
+    <br><br>
     <div class="overview">
-        <h1>Welcome Detective</h1>
+        <b><h1>Welcome Detective</h1></b>
     </div><br>
 
 
@@ -16,7 +17,7 @@
 
         <div id="progress-container">
             <div class="progress">
-                <div class="progress-bar" role="progressbar" style="width: {{ fact_progress }}%; background-color: rgb(170, 225, 170) !important;">{{ fact_progress }}%</div>
+                <div class="progress-bar" role="progressbar" style="width: {{ fact_progress }}%; background-color: rgb(170, 225, 170) !important; color:#484848;">{{ fact_progress }}%</div>
             </div>
 
         </div>
@@ -33,33 +34,32 @@
     <h1 id="challenge-bar-title"> Challenges</h1>
 
     {% for challenge in challenge_list %}
-        <div class="challenge-container">
-            <div class="challenge">
+    <b> <div class="challenge-container">
+            <div class="challenge {% if challenge.status %}completeBorder{% else %}incompleteBorder{% endif %}">
                 <div class="challenge-desc">{{ challenge.description }}</div>
-                <div class="challenge-status {% if challenge.status %}completed{% else %}todo{% endif %}">
+              <b> <div class="challenge-status {% if challenge.status %}completed{% else %}todo{% endif %}">
                     {% if challenge.status %}
-                        Status: complete!
+                        Status: Complete!
                     {% else %}
-                        Status: To do
+                        Status: Incomplete!
                     {% endif %}
-                </div>
+                </div></b>
             </div>
         </div>
     {% endfor %}
 
 
-    </body>
 
+    <div style="text-align: center;">
+        <h4> Distance Walked: <div id="distanceTraveled">{{ distanceTraveled }} </div> </h4>
 
-
-
+    </div>
     <!-- Leaderboards -->
 
     <div class=leaderboards>
 
         <h2 class="leaderboard-title">User Leaderboard Top 5:</h2>
-
-        <table id='user_leaderboard'>
+        <table id='leaderboard'>
             <thead>
             <tr>
                 <th>Username</th>
@@ -78,9 +78,9 @@
 
         <h2 class="leaderboard-title">Accommodation Leaderboard Top 5:</h2>
 
-        <table id='accommodation_leaderboard'>
+        <table id='leaderboard'>
             <thead>
-            <tr>
+            <tr style="border-width: 2px;">
                 <th>Accommodation</th>
                 <th>Points</th>
             </tr>
@@ -99,41 +99,7 @@
 
 
 
-    <div id="riddle-section">
-
-        {% if not done %}
-            <form id="riddle-form">
-                {% csrf_token %}
-
-                <div class="question">
-                    {{ question }}
-                </div>
-
-                <input type="radio" name="answer" id="answer1" value="{{ answer1 }}">
-                <label for="answer1">{{ answer1 }}</label><br>
-
-                <input type="radio" name="answer" id="answer2" value="{{ answer2 }}">
-        <label for="answer2">{{ answer2 }}</label><br>
-
-                <input type="radio" name="answer" id="answer3" value="{{ answer3 }}">
-                <label for="answer3">{{ answer3 }}</label><br>
-
-                <input type="radio" name="answer" id="answer4" value="{{ answer4 }}">
-                <label for="answer4">{{ answer4 }}</label><br>
-
-                <div style="text-align: center;">
-                    <input type="submit" value="Submit">
-                </div>
-            </form>
-        {% else %}
-            <p>{{ riddle_status }} </p>
-
-        {% endif %}
-
-    </div>
-
-
-
+   
 
     <script>
         window.addEventListener("load", () => {
@@ -180,5 +146,60 @@
 
     </script>
 
+
+</head>
+<body>
+
+<!-- Trigger/Open The Modal -->
+<button id="modalBtn" onclick="openModal()">Riddle of the day</button>
+</style>
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <div class="modal-header">
+      <span class="close">&times;</span>
+      <h2>Modal Header</h2>
+    </div>
+    <div class="modal-body">
+        <div id="riddle-section">
+
+            {% if not done %}
+                <form id="riddle-form">
+                    {% csrf_token %}
+    
+                    <div class="question">
+                        {{ question }}
+                    </div>
+    
+                    <input type="radio" name="answer" id="answer1" value="{{ answer1 }}">
+                    <label for="answer1">{{ answer1 }}</label><br>
+    
+                    <input type="radio" name="answer" id="answer2" value="{{ answer2 }}">
+            <label for="answer2">{{ answer2 }}</label><br>
+    
+                    <input type="radio" name="answer" id="answer3" value="{{ answer3 }}">
+                    <label for="answer3">{{ answer3 }}</label><br>
+    
+                    <input type="radio" name="answer" id="answer4" value="{{ answer4 }}">
+                    <label for="answer4">{{ answer4 }}</label><br>
+    
+                    <div style="text-align: center;">
+                        <input type="submit" value="Submit">
+                    </div>
+                </form>
+            {% else %}
+                <p>{{ riddle_status }} </p>
+    
+            {% endif %}
+    
+        </div>
+    </div>
+
+  </div>
+
+</div>
+<script src="{% static 'js/base.js' %}"></script>
 
 {% endblock %}

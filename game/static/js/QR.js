@@ -1,4 +1,4 @@
-const qrChecker = false;
+let qrChecker = false
 const scanner = new Html5QrcodeScanner('reader', {
     // Scanner will be initialized in DOM inside element with id of 'reader'
     qrbox: {
@@ -22,44 +22,29 @@ const Bins = ['qjdkiivbbunmue625ljyjy04w941jy',
     '2btu7id05cxlqzpjusofaihs1gkd4q']
 
 function success(result) {
+    for (i = 0; i < Bins.length; i++) {
+        if (result.includes(Bins[i])) {
+           
 
-    for (i = 0; i < Bins.length; i++) { 
-
-
-        if (result == Bins[i]) {
-            document.getElementById('result').innerHTML = `
-          
-            <style> 
-        .btn {
-            display: inline-block;
-            margin-top: 30px;
-            padding: 10px 20px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            color: #fff;
-            background-color: #333;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            position: absolute;
-            bottom: 550px;
-            left: 60%;
-            transform: translateX(-50%);
-        }
-    </style>
-        `
-
-
-        } else if (i == 8) {
-            document.getElementById('result').innerHTML = `
-            <h2>Invalid Qr code!</h2>
-            <button onClick="window.location.reload();">Try again</button>
-            `
+            console.log("Successful Scan!")
+            $.ajax({
+                type: "POST",
+                url: "game/QRCheck",
+                
+            });
+            
+            console.log("Successful scan")
+            break;
 
         }
     }
+
+    if (!qrChecker) {
+        document.getElementById('result').innerHTML = `
+        <h2>Invalid Qr code!</h2>
+        <button onClick="window.location.reload();">Try again</button>`
+    }
+
     // Prints result as a link inside result element
 
     scanner.clear();
@@ -67,10 +52,9 @@ function success(result) {
 
     document.getElementById('reader').remove();
     // Removes reader element from DOM since no longer needed
-
 }
 
 function error(err) {
-    console.error(err);
+    //console.error(err);
     // Prints any errors to the console
 }

@@ -1,6 +1,13 @@
 body {
-  font-family: Arial, sans-serif;
+  font-family: Raleway;
   font-size: 16px;
+  padding: 0px 20px;  
+  background-image: url(woodbackground.jpg);
+  background-size: 100vw 1000vh;
+  background-repeat: no-repeat;
+  background-color: #2d2c2c;
+  color: #ffffff;
+  height: 100%;
 }
 
 .main {
@@ -35,16 +42,18 @@ body {
 
 /* Side navbar */
 .side-navbar {
+  text-align: left;
   width: 250px;
   height: 100%;
   position: fixed;
   margin-left: -300px;
-  background-color: black;
+  background-color: #0c3010;
   transition: 0.5s;
 }
 
 .sidenav-container {
   transition: 0.4s;
+  margin-left: -10px;
 }
 
 .side-navbar a {
@@ -59,7 +68,7 @@ body {
 }
 
 .active-sidebar {
-  margin-left: 0;
+  margin-left: -20px;
 }
 
 /* side navbar button */
@@ -69,11 +78,11 @@ body {
 }
 
 .active-cont {
-  margin-left: 250px;
+  margin-left: 230px;
 }
 
 #menu-btn {
-  background-color: black;
+  background-color: #0c3010;
   color: #fff;
   margin-left: -62px;
   margin-top: 30px;
@@ -81,23 +90,6 @@ body {
 }
 
 /* pages */
-.overview {
-  width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  padding: 3px 0;
-  background-color: #dedede;
-}
-
-.fact-of-the-day {
-  filter: blur(5px);
-  margin: 0 auto;
-  text-align: center;
-}
-
-#fotd-container {
-  text-align: center;
-}
 
 @import "compass/css3";
 
@@ -177,4 +169,32 @@ input[type="submit"] {
 
 input[type="submit"]:hover {
   background-color: #3e8e41;
+}
+
+#location-button {
+  position: absolute;
+  bottom: 10px;
+  left: 20%;
+  transform: translateX(-5%);
+  padding: 10px;
+  border: none;
+  background-color: #1c1c1c;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#final-location-button {
+position: absolute;
+bottom: 10px;
+right: 5%;
+transform: translateX(5%);
+padding: 10px;
+border: none;
+background-color: #1c1c1c;
+color: white;
+font-size: 16px;
+font-weight: bold;
+cursor: pointer;
 }
