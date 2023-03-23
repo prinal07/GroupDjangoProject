@@ -609,10 +609,10 @@ def unity(request):
                 user.storiesCompleted += 1
             
                 user.save()
-                return HttpResponse("success");
+                return JsonResponse({"result": "success"})
             
         # redirect to the overview
-        return HttpReponse("handled");
+        return JsonResponse({"result": "success"})
 
     else:
         # construct all information to pass to the unity game
