@@ -595,7 +595,7 @@ def unity(request):
 
     if request.method == "POST":
         give_points = request.POST.get("give_points")
-
+        
         user = Account.objects.get(user=request.user.username)
         
         # check that story has been completed
