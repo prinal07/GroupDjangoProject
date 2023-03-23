@@ -30,7 +30,9 @@
 
 #leaderboard th {
     background-color: #085611;
-    color:white
+    color:white;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
 }
 .leaderboard-title {
     text-align: center;
