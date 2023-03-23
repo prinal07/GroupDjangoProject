@@ -16,9 +16,6 @@ if (url != "eco-mystery.herokuapp.com") {
     x = url.replace('-', ' ');
     newUrl = "EcoMystery - ".concat(capitalizeFirstLetter(url))
     document.title = newUrl
-} if (url != "eco-mystery.herokuapp.com/") {
-    newUrl2 = "EcoMystery - ".concat("Home")
-    document.title = newUrl2
 } else {
     newUrl2 = "EcoMystery - ".concat("Home")
     document.title = newUrl2
