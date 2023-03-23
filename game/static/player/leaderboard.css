@@ -14,8 +14,7 @@
 #leaderboard th,
 #leaderboard td {
     margin: 0 0;
-    padding: 8px;
-    text-align: left;
+    padding: 15px;
     border-bottom: 1.5px solid #727272;
 }
 
@@ -37,4 +36,11 @@
     text-align: center;
     font-size: 24px;
     margin-bottom: 20px;
+}
+
+.floatRight{
+    float:right;
+}
+.floatLeft{
+    float:left;
 }
