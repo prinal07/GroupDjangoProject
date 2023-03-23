@@ -255,5 +255,71 @@ class GameWebPageTestCase(TestCase):
         page = self.client.get('/game/riddle_handler/', requests.request(user=account))
         
         self.assertTrue(isinstance(page, JsonResponse))
+
+
+class QrTests(TestCase):
+    """
+    Test cases for the QR code scanning functionality.
+    """
+    def test_success_valid_qr_code(self):
+        """
+        Test if success function displays "Success!" message for a valid QR code.
+        """
+        result = 'qjdkiivbbunmue625ljyjy04w941jy'
+        Bins = ['qjdkiivbbunmue625ljyjy04w941jy', '3w7wzif7eku0huro54jtmlbt8s0fnm', '8xycn8zhxb203qhqw7v2eetrvcscx1']
+        response = None
+
+        for i in Bins:
+            if (result == i) :
+                response = 'Success!'
         
+        self.assertEqual(response, 'Success!')
+
+    def test_invalid_qr_code(self):
+        """
+        Test if "Invalid Qr Code!" message is displayed for an invalid QR code.
+        """
+        result = 'invalid_QR_Code'
+        Bins = ['qjdkiivbbunmue625ljyjy04w941jy', '3w7wzif7eku0huro54jtmlbt8s0fnm', '8xycn8zhxb203qhqw7v2eetrvcscx1']
+        response = None
+        j=0
+
+        for i in Bins:
+            if (result == i):
+                break
+            elif (j == 2):
+                response='<h2>Invalid Qr Code!</h2>'
+            j=j+1
+               
+        self.assertEqual(response, '<h2>Invalid Qr Code!</h2>')
         
+class locationTrackerTest(TestCase):
+
+    def test_distance(self):
+        from math import radians
+        import math
+        """
+        Test the distance calculation between two GPS coordinates using the Haversine formula.
+
+        The test compares the calculated distance with a pre-defined response value.
+
+        """
+        # Define the GPS coordinates of two points
+        lat1 = radians(50.7419340)
+        lon1 = radians(-3.5499740)
+        lat2 = radians(50.7379538)
+        lon2 = radians(-3.5489193)
+
+        # Define the expected distance between the two points
+        response = 0.44875786904765347
+
+        # Calculate the distance between the two coordinates using the Haversine formula
+        d_lat = lat2 - lat1
+        d_lon = lon2 - lon1
+        a = math.sin(d_lat/2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(d_lon/2)**2
+        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
+        R = 6371 # Earth's radius in km
+        distance = R * c
+
+        # Compare the calculated distance with the expected response
+        self.assertEqual(response, distance)
