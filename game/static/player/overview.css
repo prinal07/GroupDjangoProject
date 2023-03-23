@@ -87,6 +87,8 @@
   width: 100%;
   height: 100%;
   filter: blur(10px);
+  font-weight: bold;
+  color:white;
 }
 
 #fact-progress-title {
