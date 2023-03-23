@@ -3,7 +3,7 @@ function checkState() {
   if (status.innerHTML == "CORRECT") {
       $.ajax({
     type: "POST",
-    url: ".",
+    url: "./unity",
     data: {
         "give_points": "true"
     },
@@ -33,7 +33,7 @@ function checkState() {
   else if (status.innerHTML == "INCORRECT") {
     $.ajax({
         type: "POST",
-        url: ".",
+        url: "./unity",
         data: {
       "give_points": "false"
         },
