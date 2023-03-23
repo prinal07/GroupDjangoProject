@@ -42,7 +42,9 @@
       type: "POST",
       url: ".",
       data: {
-          "give_points": "true"
+          "give_points": "true",
+          csrfmiddlewaretoken: "{{ csrf_token }}"
+
       },
       success: function(data) {
           console.log("Data Sent Successfully");
