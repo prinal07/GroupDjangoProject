@@ -47,61 +47,41 @@
             </div>
         </div>
     {% endfor %}
+<br><br><h2>Riddle of the day:</h2>
+    <div id="riddle-section">
 
+        {% if not done %}
+            <form id="riddle-form">
+                {% csrf_token %}
 
-    <!-- Trigger/Open The Modal -->
-<button id="myBtn" class="RiddleBtn">Attempt Daily Riddle</button>
-<!-- The Modal -->
-<div id="myModal" class="modal">
+                <div class="question">
+                    {{ question }}
+                </div>
 
-  <!-- Modal content -->
-  <div class="modal-content">
-    <div class="modal-header">
-        <h2>Riddle of the day</h2>
-      <span class="close">&times;</span>
+                <input type="radio" name="answer" id="answer1" value="{{ answer1 }}">
+                <label for="answer1">{{ answer1 }}</label><br>
+
+                <input type="radio" name="answer" id="answer2" value="{{ answer2 }}">
+        <label for="answer2">{{ answer2 }}</label><br>
+
+                <input type="radio" name="answer" id="answer3" value="{{ answer3 }}">
+                <label for="answer3">{{ answer3 }}</label><br>
+
+                <input type="radio" name="answer" id="answer4" value="{{ answer4 }}">
+                <label for="answer4">{{ answer4 }}</label><br>
+
+                <div style="text-align: center;">
+                    <input type="submit" value="Submit">
+                </div>
+            </form>
+        {% else %}
+            <p>{{ riddle_status }} </p>
+
+        {% endif %}
+
     </div>
-    <div class="modal-body">
-        <div id="riddle-section">
-
-            {% if not done %}
-                <form id="riddle-form">
-                    {% csrf_token %}
-    
-                    <div class="question">
-                        {{ question }}
-                    </div>
-    
-                    <input type="radio" name="answer" id="answer1" value="{{ answer1 }}">
-                    <label for="answer1">{{ answer1 }}</label><br>
-    
-                    <input type="radio" name="answer" id="answer2" value="{{ answer2 }}">
-            <label for="answer2">{{ answer2 }}</label><br>
-    
-                    <input type="radio" name="answer" id="answer3" value="{{ answer3 }}">
-                    <label for="answer3">{{ answer3 }}</label><br>
-    
-                    <input type="radio" name="answer" id="answer4" value="{{ answer4 }}">
-                    <label for="answer4">{{ answer4 }}</label><br>
-    
-                    <div style="text-align: center;">
-                        <input type="submit" value="Submit">
-                    </div>
-                </form>
-            {% else %}
-                <p>Riddle Complete, Come back tomorrow </p>
-    
-            {% endif %}
-    
-        </div>
-    </div>
-
-  </div>
-
-</div>
 
 <br><br>
-
-
     <div style="text-align: center;">
         <h4> Distance Walked: <div id="distanceTraveled">{{ distanceTraveled }} </div> </h4>
 
