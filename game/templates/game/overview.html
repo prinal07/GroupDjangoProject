@@ -49,6 +49,58 @@
     {% endfor %}
 
 
+    <!-- Trigger/Open The Modal -->
+<button id="myBtn" class="RiddleBtn">Attempt Daily Riddle</button>
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <div class="modal-header">
+        <h2>Riddle of the day</h2>
+      <span class="close">&times;</span>
+    </div>
+    <div class="modal-body">
+        <div id="riddle-section">
+
+            {% if not done %}
+                <form id="riddle-form">
+                    {% csrf_token %}
+    
+                    <div class="question">
+                        {{ question }}
+                    </div>
+    
+                    <input type="radio" name="answer" id="answer1" value="{{ answer1 }}">
+                    <label for="answer1">{{ answer1 }}</label><br>
+    
+                    <input type="radio" name="answer" id="answer2" value="{{ answer2 }}">
+            <label for="answer2">{{ answer2 }}</label><br>
+    
+                    <input type="radio" name="answer" id="answer3" value="{{ answer3 }}">
+                    <label for="answer3">{{ answer3 }}</label><br>
+    
+                    <input type="radio" name="answer" id="answer4" value="{{ answer4 }}">
+                    <label for="answer4">{{ answer4 }}</label><br>
+    
+                    <div style="text-align: center;">
+                        <input type="submit" value="Submit">
+                    </div>
+                </form>
+            {% else %}
+                <p>{{ riddle_status }} </p>
+    
+            {% endif %}
+    
+        </div>
+    </div>
+
+  </div>
+
+</div>
+
+<br><br>
+
 
     <div style="text-align: center;">
         <h4> Distance Walked: <div id="distanceTraveled">{{ distanceTraveled }} </div> </h4>
@@ -161,82 +213,26 @@
     </script>
 
 
-</head>
-<body>
 
-<!-- Trigger/Open The Modal -->
-<button id="modalBtn" onclick="openModal()">Riddle of the day</button>
-</style>
-<!-- The Modal -->
-<div id="myModal" class="modal">
 
-  <!-- Modal content -->
-  <div class="modal-content">
-    <div class="modal-header">
-      <span class="close">&times;</span>
-      <h2>Modal Header</h2>
-    </div>
-    <div class="modal-body">
-        <div id="riddle-section">
-
-            {% if not done %}
-                <form id="riddle-form">
-                    {% csrf_token %}
-    
-                    <div class="question">
-                        {{ question }}
-                    </div>
-    
-                    <input type="radio" name="answer" id="answer1" value="{{ answer1 }}">
-                    <label for="answer1">{{ answer1 }}</label><br>
-    
-                    <input type="radio" name="answer" id="answer2" value="{{ answer2 }}">
-            <label for="answer2">{{ answer2 }}</label><br>
-    
-                    <input type="radio" name="answer" id="answer3" value="{{ answer3 }}">
-                    <label for="answer3">{{ answer3 }}</label><br>
-    
-                    <input type="radio" name="answer" id="answer4" value="{{ answer4 }}">
-                    <label for="answer4">{{ answer4 }}</label><br>
-    
-                    <div style="text-align: center;">
-                        <input type="submit" value="Submit">
-                    </div>
-                </form>
-            {% else %}
-                <p>{{ riddle_status }} </p>
-    
-            {% endif %}
-    
-        </div>
-    </div>
-
-  </div>
-
-</div>
 <script>
-    // Get the modal
+// Get the modal
 var modal = document.getElementById("myModal");
 
 // Get the button that opens the modal
-var btn = document.getElementById("modalBtn");
+var btn = document.getElementById("myBtn");
 
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
 
-/** 
- * When the user clicks the button, open the modal 
- */
-function openModal() {
-    modal.style.display = "block";
+// When the user clicks the button, open the modal 
+btn.onclick = function() {
+  modal.style.display = "block";
 }
 
 // When the user clicks on <span> (x), close the modal
-/**
- * 
- */
-function closeModal(){
-    modal.style.display = "none";
+span.onclick = function() {
+  modal.style.display = "none";
 }
 
 // When the user clicks anywhere outside of the modal, close it
@@ -244,15 +240,6 @@ window.onclick = function(event) {
   if (event.target == modal) {
     modal.style.display = "none";
   }
-}
-
-
-// Update distance travelled if its set to null
-distanceTraveled = document.querySelector("#distanceTraveled")
-
-if (distanceTraveled == " "){
-    console.log("hi");
-   distanceTraveled.innerHTML = "0km";
 }
 </script>
 <script src="{% static 'js/base.js' %}"></script>

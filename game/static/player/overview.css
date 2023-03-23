@@ -109,19 +109,32 @@
 
 
 
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
 
-/* The Modal (background) */
+.modal-header {
+  padding: 2px 4px;
+  background-color: #f5deb3;
+  font-size: large;
+  color: black;
+}
+
+.modal-body {padding: 2px 16px;}
+
 .modal {
   display: none; 
-  position: fixed;
+  position: fixed; 
   z-index: 1; 
   padding-top: 100px;
   left: 0;
   top: 0;
-  width: 100%;
+  width: 100%; 
 }
 
-/* Modal Content */
 .modal-content {
   position: relative;
   background-color: #fefefe;
@@ -133,7 +146,6 @@
   animation-duration: 0.4s
 }
 
-/* Add Animation */
 @-webkit-keyframes animatetop {
   from {top:-300px; opacity:0} 
   to {top:0; opacity:1}
@@ -144,7 +156,6 @@
   to {top:0; opacity:1}
 }
 
-/* The Close Button */
 .close {
   color: black;
   float: right;
@@ -164,8 +175,16 @@
 .modal-header {
   padding: 2px 4px;
   background-color: #f5deb3;
-  font-size: large;
   color: black;
 }
 
 .modal-body {padding: 2px 16px;}
+
+.RiddleBtn{
+  padding:10px; 
+  border-radius:5px;
+  background-color: #c7b595;;
+}
+.RiddleBtn:hover{
+background-color: #f5deb3;;
+}
