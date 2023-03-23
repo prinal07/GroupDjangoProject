@@ -599,18 +599,18 @@ def unity(request):
         user = Account.objects.get(user=request.user.username)
         
         # check that story has been completed
-        if not user.gameCompleted or user.last_day_accessed != date.today():
-            if give_points == "true":
-                # give points to logged in user
-                user.gameCompleted = True
-                user.points += STORY_POINT_REWARD
-                user.daily_points += STORY_POINT_REWARD
+        #if not user.gameCompleted or user.last_day_accessed != date.today():
+        if give_points == "true":
+            # give points to logged in user
+            user.gameCompleted = True
+            user.points += STORY_POINT_REWARD
+            user.daily_points += STORY_POINT_REWARD
 
-                user.storiesCompleted += 1
-            
-                user.save()
-                return JsonResponse({"result": "success"})
-            
+            user.storiesCompleted += 1
+        
+            user.save()
+            return JsonResponse({"result": "success"})
+        
         # redirect to the overview
         return JsonResponse({"result": "success"})
 
